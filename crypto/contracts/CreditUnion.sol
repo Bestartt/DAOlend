@@ -15,6 +15,7 @@ contract CreditUnion {
     }
 
     struct Credit {
+        uint32 id;
         string deptor;
         uint32 amount;
         uint32 repaidAmount;
@@ -35,6 +36,8 @@ contract CreditUnion {
 
 
     Credit[] public credits;
+    uint32 public creditCounter;
+
     CreditRequest[] public creditRequests;
     uint32 public creditRequestCounter;
 
@@ -77,6 +80,7 @@ contract CreditUnion {
         });
 
         creditRequestCounter = 0;
+        creditCounter = 0;
 
     }
 
@@ -160,6 +164,8 @@ contract CreditUnion {
 
     function createCreditRequest(uint32 amount, string memory deptor) public {
         require(msg.sender == owner, "only owner can create credit request");
+        require(amount <= totalDeposit, "amount must be less than total deposit");
+
         address[] memory approvedMembers;
         creditRequests.push(CreditRequest(
             creditRequestCounter, 
@@ -178,7 +184,9 @@ contract CreditUnion {
         CreditRequest memory request = creditRequests[id];
 
         if (isCreditRequestApproved(id)) {
-            credits.push(Credit(request.deptor, request.amount, 0));
+            credits.push(Credit(creditCounter, request.deptor, request.amount, 0));
+            totalDeposit -= request.amount;
+            creditCounter++;
         }
 
     }
@@ -211,11 +219,6 @@ contract CreditUnion {
         return creditRequests[Id].approvedMembers;
     }
 
-    function createCredit(string memory deptor, uint32 amount) public {
-        require(msg.sender == owner, "you must be owner to create credit");
-        credits.push(Credit(deptor, amount, 0));
-        totalDeposit -= amount;
-    }
 
     function getCredits() public view returns (Credit[] memory) {
         return credits;

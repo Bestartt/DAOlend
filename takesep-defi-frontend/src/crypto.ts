@@ -105,6 +105,10 @@ export class Contract {
         return await this.contract.getCredits();
     }
 
+    async repayCredit(id: number, amount: number) {
+        return await this.contract.repay(id, amount);
+    }
+
     async createCreditRequest(amount: number, debtor: string) {
         await this.contract.createCreditRequest(amount, debtor);
     }
@@ -116,6 +120,7 @@ export class Contract {
     async getCreditRequests() {
         return await this.contract.getCreditRequests();
     }
+
 
 }
 

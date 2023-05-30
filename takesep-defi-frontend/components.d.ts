@@ -17,6 +17,7 @@ declare module '@vue/runtime-core' {
     MyUnionModal: typeof import('./src/components/my-union-modal.vue')['default']
     MyUnionTabs: typeof import('./src/components/MyUnionTabs.vue')['default']
     Navbar: typeof import('./src/components/navbar.vue')['default']
+    RepayModal: typeof import('./src/components/repay-modal.vue')['default']
     RequestCreditModal: typeof import('./src/components/request-credit-modal.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
