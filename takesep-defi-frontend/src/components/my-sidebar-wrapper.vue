@@ -2,14 +2,12 @@
     import { get_my_union } from "~/localstorage";
     import { Contract } from "~/crypto";
 
-    let route = useRoute();
-    let address = route.params.address;
+    let address = get_my_union();
     let contract: Contract;
     let data = ref<any>(null);
     
     
     if (address != null) {
-        // @ts-ignore
         contract = new Contract(address);
         contract.getData().then(d => data.value = d);
     }
@@ -19,6 +17,13 @@
 
 
 <template>
+    <div v-if="address == null">
+        <h3>
+            У вас нет организации. 
+        </h3>
+
+        <router-link to="/create-union">создать</router-link>
+    </div>
 
     <div v-if="data != null">
         <br>

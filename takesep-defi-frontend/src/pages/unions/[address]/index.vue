@@ -21,14 +21,7 @@
 </script>
 
 <template>
-    <div v-if="data != null">
-        
-        <h3 mt-5>Организация: {{ data.name }}</h3>
-
-        <union-menu></union-menu>
-
-        <br>
-
+    <sidebar-wrapper>
         <h4>Данные</h4>
 
         <table class="table" max-w-lg>
@@ -64,8 +57,8 @@
             Добавить вложение
         </button>
 
-        <add-deposit-modal :contract-address="address" @on-complete="updateData()"/>
+        <add-deposit-modal :contract-address="address" @on-complete="updateData()"/>        
+    </sidebar-wrapper>
 
-    </div>
 
 </template>

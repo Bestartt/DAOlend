@@ -27,7 +27,7 @@
 
 <template>
 
-    <sidebar-wrapper>
+    <my-sidebar-wrapper>
         <template v-for="request in requests">
             <div max-w-500px class="card card-body">
                 <span tex-gray>Имя: </span>
@@ -47,6 +47,6 @@
                 </button>
             </div>
         </template> 
-    </sidebar-wrapper>
+    </my-sidebar-wrapper>
 
 </template>

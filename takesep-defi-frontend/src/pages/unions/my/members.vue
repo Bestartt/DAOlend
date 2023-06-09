@@ -17,7 +17,7 @@
 
 <template>
 
-    <sidebar-wrapper>
+    <my-sidebar-wrapper>
         <h4>Участники организации</h4>
         <span text-gray>и их вложения</span>
 
@@ -39,6 +39,6 @@
                 </tr>
             </tbody>
         </table>        
-    </sidebar-wrapper>
+    </my-sidebar-wrapper>
 
 </template>

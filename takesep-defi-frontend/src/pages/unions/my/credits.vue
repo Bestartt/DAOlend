@@ -32,14 +32,17 @@
 
 <template>
 
-    <sidebar-wrapper>
+    <my-sidebar-wrapper>
+
+        <h4>Кредиты</h4>
+        <br>
 
         <div v-if="credits.length == 0">
             <h2 text-gray>Пусто</h2>
         </div>
 
         <template v-for="credit in credits">
-            <div class="card card-body" max-w-500px>
+            <div class="card card-body" max-w-400px>
                 <p>
                     заемщик: {{ credit[1] }} <br>
                     сумма: {{ credit[2] }} <br>  
@@ -52,13 +55,13 @@
                     data-bs-target="#repay"
                     @click="currentCredit = credit[0]" 
                     class="btn btn-dark" 
-                    max-w-200px>
+                >
                     Создать погашение
                 </button>
 
             </div>
         </template>        
-    </sidebar-wrapper>
+    </my-sidebar-wrapper>
 
 
     <div class="modal fade" id="repay">

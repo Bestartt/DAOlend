@@ -122,8 +122,8 @@ export class Contract {
         return await this.contract.repay(id, amount, month);
     }
 
-    async createCreditRequest(amount: number, debtor: string) {
-        await this.contract.createCreditRequest(amount, debtor);
+    async createCreditRequest(amount: number, term: number, debtor: string) {
+        await this.contract.createCreditRequest(amount, term, debtor);
     }
 
     async approveCreditRequest(id) {

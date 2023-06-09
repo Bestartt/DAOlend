@@ -25,14 +25,7 @@
 
 <template>
 
-    <div v-if="data != null">
-        
-        <h3 mt-5>Заявки на кредит</h3>
-
-        <my-union-menu></my-union-menu>
-
-        <br>
-
+    <sidebar-wrapper>
         <template v-for="credit_request in data">
             <div class="card card-body" max-w-500px>
                 <p>
@@ -45,9 +38,7 @@
                 <button @click="approve(credit_request[0])" class="btn btn-dark" max-w-200px>подтвердить</button>
 
             </div>
-        </template>
-
-
-    </div>
+        </template>        
+    </sidebar-wrapper>
 
 </template>

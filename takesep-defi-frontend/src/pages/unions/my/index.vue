@@ -21,7 +21,7 @@
 
 <template>
 
-    <sidebar-wrapper>
+    <my-sidebar-wrapper>
         <h4>Данные</h4>
 
         <table class="table" max-w-lg>
@@ -66,7 +66,7 @@
 
         <add-deposit-modal :contract-address="address" @on-complete="updateData()"/>
         <request-credit-modal :contract-address="address" @on-complete="updateData()"/>   
-    </sidebar-wrapper>
+    </my-sidebar-wrapper>
 
 
 </template>

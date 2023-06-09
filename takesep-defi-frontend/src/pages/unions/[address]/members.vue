@@ -17,13 +17,31 @@
 </script>
 
 <template>
-    <h3 mt-5>Участники</h3>
 
-    <union-menu></union-menu>
+    <sidebar-wrapper>
+        <h4>Участники организации</h4>
+        <span text-gray>и их вложения</span>
 
-    <br>
+        <br>
 
-    <ul>
-        <li v-for="member in members">{{ member }}</li>
-    </ul>
+        <table class="table table-striped" min-w-400px max-w-800px mt-5>
+            <thead>
+                <tr>
+                    <th>Имя</th>
+                    <th>Вложение</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr v-for="member in members">
+                    <td>{{ member[2] }}</td>
+                    <td>{{ member[0] }}</td>
+                </tr>
+            </tbody>
+        </table>   
+    </sidebar-wrapper>
+
+    
+
 </template>

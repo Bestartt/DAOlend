@@ -17,12 +17,7 @@
 
 <template>
 
-    <div v-if="data != null">
-        
-        <h3 mt-5>Кредиты</h3>
-
-        <my-union-menu></my-union-menu>
-        <br>
+    <sidebar-wrapper>
         <div v-if="data.length == 0">
             <h2 text-gray>Пусто</h2>
 
@@ -37,10 +32,8 @@
                 </p>
 
             </div>
-        </template>
-
-
-    </div>
+        </template>        
+    </sidebar-wrapper>
 
 
 </template>

@@ -6,13 +6,14 @@
 
     let amount = ref(0);
     let debtor = ref("");
+    let term = ref(0);
 
     let loading = ref(false);
     let contract = new Contract(contractAddress.value);
 
     async function call() {
         loading.value = true;
-        await contract.createCreditRequest(amount.value, debtor.value);
+        await contract.createCreditRequest(amount.value, term.value, debtor.value);
         
         onComplete();
 
@@ -33,6 +34,9 @@
             <div class="modal-body">
                 <label class="form-label" for="amount">Сумма</label>
                 <input v-model="amount" id="amount" class="form-control">
+
+                <label class="form-label" for="term">Срок</label>
+                <input v-model="term" id="term" class="form-control">
 
                 <label class="form-label" for="debtor">Имя заемщика</label>
                 <input v-model="debtor" id="debtor" class="form-control">  

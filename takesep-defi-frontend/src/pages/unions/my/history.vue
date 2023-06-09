@@ -18,7 +18,7 @@
 
 <template>
 
-    <sidebar-wrapper>
+    <my-sidebar-wrapper>
         <h3 mt-5>История</h3>
 
         <div v-if="data.length == 0">
@@ -27,7 +27,7 @@
         </div>
 
         {{ data }}        
-    </sidebar-wrapper> 
+    </my-sidebar-wrapper> 
 
     
 </template>

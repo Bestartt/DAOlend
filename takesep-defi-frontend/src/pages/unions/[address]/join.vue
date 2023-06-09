@@ -28,28 +28,28 @@
 </script>
 
 <template>
-    <h3 mt-5>Запросы на вступление</h3>
+    <sidebar-wrapper>
+        <h3 mt-5>Запросы на вступление</h3>
 
-    <union-menu></union-menu>
+        <template v-for="request in requests">
+            <div max-w-500px class="card card-body">
+                <h3>{{ request[1] }}</h3>
 
-    <br>
+                <i>адрес: {{ request[0] }}</i>
+                
+                <b v-if="request[2].length == 0">никто не подтвердил</b>
 
-    <template v-for="request in requests">
-        <div max-w-500px class="card card-body">
-            <h3>{{ request[1] }}</h3>
+                <ul v-else>
+                    <li v-for="member in request[2]">{{ member }}</li>
+                </ul>    
+                
+                <button class="btn btn-dark" @click="approve(request[0])">
+                    Подтвердить 
+                </button>
+            </div>
+        </template>        
+    </sidebar-wrapper>
 
-            <i>адрес: {{ request[0] }}</i>
-            
-            <b v-if="request[2].length == 0">никто не подтвердил</b>
 
-            <ul v-else>
-                <li v-for="member in request[2]">{{ member }}</li>
-            </ul>    
-            
-            <button class="btn btn-dark" @click="approve(request[0])">
-                Подтвердить 
-            </button>
-        </div>
-    </template>
 
 </template>

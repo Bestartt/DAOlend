@@ -18,12 +18,17 @@
         contract.approveCreditRequest(id)
     }
 
-    function getMemberName(address: string) {
-        let contract = new Contract(address);
-        contract.getMember(address).then((member) => {
+    function getMemberName(member_address: string) {
+
+        if (address != null) {
+            // @ts-ignore
+            let contract = new Contract(address);
             debugger;
-            return member.name
-        });
+            contract.getMember(member_address).then((member) => {
+                return member.name
+            });            
+        }
+
     }
 
 
@@ -31,18 +36,21 @@
 
 <template>
 
-    <sidebar-wrapper>
+    <my-sidebar-wrapper>
+        <h4>Заявки на кредит</h4>
+        <br>
+
         <div v-if="data.length == 0">
             <h2 text-gray>Пусто</h2>
 
         </div>
 
         <template v-for="credit_request in data">
-            <div class="card card-body" max-w-500px>
+            <div class="card card-body" max-w-400px>
                 <p>
                     заемщик: {{ credit_request[1] }} <br>
                     сумма: {{ credit_request[2] }} <br>
-                    подтвержденные члены: 
+                    подтвердившие участники: 
                     <ol>
                         <li v-for="member in credit_request[3]">
                             {{ getMemberName(member) }}
@@ -52,10 +60,10 @@
                 </p>
 
 
-                <button @click="approve(credit_request[0])" class="btn btn-dark" max-w-200px>подтвердить</button>
+                <button @click="approve(credit_request[0])" class="btn btn-dark">подтвердить</button>
 
             </div>
         </template>        
-    </sidebar-wrapper>
+    </my-sidebar-wrapper>
 
 </template>
