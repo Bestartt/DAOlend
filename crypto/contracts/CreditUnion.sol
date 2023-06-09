@@ -18,13 +18,21 @@ contract CreditUnion {
         uint32 id;
         string deptor;
         uint32 amount;
+        uint32 term;
         uint32 repaidAmount;
+    }
+
+    struct Repayment {
+        uint32 month;
+        uint32 amount;
+        uint32 creditId;
     }
 
     struct CreditRequest {
         uint32 id;
         string deptor;
         uint32 amount;
+        uint32 term;
         address[] approvedMembers;
     }
 
@@ -34,9 +42,11 @@ contract CreditUnion {
         address[] approvedMembers;
     }
 
-
     Credit[] public credits;
     uint32 public creditCounter;
+
+    Repayment[] public repayments;
+    uint32 public repaymentCounter;
 
     CreditRequest[] public creditRequests;
     uint32 public creditRequestCounter;
@@ -45,7 +55,7 @@ contract CreditUnion {
     JoinRequest[MAX_JOIN_REQUESTS] public joinRequests; // Fixed-size array to store join requests
     uint numJoinRequests;
 
-    address[] membersList;
+    address[] public membersList;
     mapping(address => Member) public members;
 
 
@@ -98,10 +108,26 @@ contract CreditUnion {
 
     }
 
+    function getMembers() view public returns(Member[] memory) {
+        Member[] memory allMembers = new Member[](membersList.length);
+
+        for (uint i = 0; i < membersList.length; i++) {
+            allMembers[i] = members[membersList[i]];
+        }
+
+        return allMembers;
+    }
+
+    function getMembersAddresses() view public returns(address[] memory) {
+        return membersList;
+    }
+
     function deposit(uint32 number) public {
         require(members[msg.sender].joined, "only members can deposit, join first");
         totalDeposit += number;
         members[msg.sender].contribution += number;
+
+
 
     }
 
@@ -162,7 +188,7 @@ contract CreditUnion {
         return creditRequests;
     }
 
-    function createCreditRequest(uint32 amount, string memory deptor) public {
+    function createCreditRequest(uint32 amount, uint32 term, string memory deptor) public {
         require(msg.sender == owner, "only owner can create credit request");
         require(amount <= totalDeposit, "amount must be less than total deposit");
 
@@ -171,6 +197,7 @@ contract CreditUnion {
             creditRequestCounter, 
             deptor, 
             amount, 
+            term,
             approvedMembers
         ));
 
@@ -184,7 +211,15 @@ contract CreditUnion {
         CreditRequest memory request = creditRequests[id];
 
         if (isCreditRequestApproved(id)) {
-            credits.push(Credit(creditCounter, request.deptor, request.amount, 0));
+            credits.push(
+                Credit(
+                    creditCounter, 
+                    request.deptor, 
+                    request.amount, 
+                    request.term, 
+                    0
+                )
+            );
             totalDeposit -= request.amount;
             creditCounter++;
         }
@@ -224,10 +259,13 @@ contract CreditUnion {
         return credits;
     }
 
-    function repay(uint32 id, uint32 amount) public {
+    function repay(uint32 id, uint32 amount, uint32 month) public {
         require(msg.sender == owner, "you must be owner to create repayment");
 
         credits[id].repaidAmount += amount;
+        repayments.push(
+            Repayment(month, amount, id)
+        );
         totalDeposit += amount;
 
     }

@@ -18,42 +18,44 @@
         contract.approveCreditRequest(id)
     }
 
+    function getMemberName(address: string) {
+        let contract = new Contract(address);
+        contract.getMember(address).then((member) => {
+            debugger;
+            return member.name
+        });
+    }
+
 
 </script>
 
 <template>
 
-    <div v-if="address == null">
-        <h3>
-            У вас нет организации. 
-        </h3>
+    <sidebar-wrapper>
+        <div v-if="data.length == 0">
+            <h2 text-gray>Пусто</h2>
 
-        <router-link to="/create-union">создать</router-link>
-    </div>
-
-    <div v-if="data != null">
-        
-        <h3 mt-5>Заявки на кредит</h3>
-
-        <my-union-menu></my-union-menu>
-
-        <br>
+        </div>
 
         <template v-for="credit_request in data">
             <div class="card card-body" max-w-500px>
                 <p>
                     заемщик: {{ credit_request[1] }} <br>
                     сумма: {{ credit_request[2] }} <br>
-                    подтвержденные члены: {{ credit_request[3] }}                    
+                    подтвержденные члены: 
+                    <ol>
+                        <li v-for="member in credit_request[3]">
+                            {{ getMemberName(member) }}
+                        </li>
+                    </ol>               
+
                 </p>
 
 
                 <button @click="approve(credit_request[0])" class="btn btn-dark" max-w-200px>подтвердить</button>
 
             </div>
-        </template>
-
-
-    </div>
+        </template>        
+    </sidebar-wrapper>
 
 </template>

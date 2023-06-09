@@ -11,7 +11,7 @@
 
     <main>
       <Navbar />
-      <div px-16 px-md-32 block>
+      <div px-24 px-md-32 block>
         <RouterView />
       </div>
       

@@ -65,10 +65,23 @@ export class Contract {
 
     }
 
-    async getMembers() {
+    async getMemberNames() {
         let members: string[] = await this.contract.getMemberNames();
 
         return members
+    }
+
+    async getMembers() {
+        return await this.contract.getMembers();
+    }
+
+    async getMember(address: string) {
+        let result = await this.contract.members(address);
+        return result;
+    }
+
+    async getMemberAddresses(): Promise<string[]> {
+        return await this.contract.getMembersAddresses();
     }
 
     async deposit(quantity: number) {
@@ -105,8 +118,8 @@ export class Contract {
         return await this.contract.getCredits();
     }
 
-    async repayCredit(id: number, amount: number) {
-        return await this.contract.repay(id, amount);
+    async repayCredit(id: number, amount: number, month: number) {
+        return await this.contract.repay(id, amount, month);
     }
 
     async createCreditRequest(amount: number, debtor: string) {
@@ -120,7 +133,6 @@ export class Contract {
     async getCreditRequests() {
         return await this.contract.getCreditRequests();
     }
-
 
 }
 

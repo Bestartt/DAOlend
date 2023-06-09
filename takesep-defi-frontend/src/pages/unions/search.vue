@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { Contract } from "~/crypto";
+    import { Contract, connection } from "~/crypto";
     import { set_join_request } from "~/localstorage";
     import { useRouter } from "vue-router";
 
@@ -8,6 +8,7 @@
 
     let data = ref<any>(null);
     let not_found = ref(false);
+    let has_joined = ref(false);
 
     let username = ref("");
     let loading = ref(false);
@@ -19,9 +20,19 @@
 
         try {
             let contract = new Contract(contract_address.value);
-            data.value = await contract.getData();            
+            data.value = await contract.getData();    
+
+            let members = await contract.getMemberAddresses();
+            let signer = connection.getSigner();
+            let address = await signer.getAddress();
+
+            if (members.includes(address)) {
+                has_joined.value = true;
+            }
+
         } catch (e) {
             not_found.value = true;
+            console.error(e);
         }
     }
 
@@ -56,12 +67,30 @@
                 <button class="btn btn-dark" @click="find()">найти</button>
             </div>   
 
-            <div mt-5 max-w-500px class="card card-body" v-if="data !== null">
+            <div v-if="data !== null" 
+                mt-5 max-w-500px 
+                class="card card-body"
+            >
+
                 <b text-green-7>Найдено!</b>
                 <h4>{{ data.name }}</h4>
                 <p>создатель {{ data.ownerName }}</p>
 
-                <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#join">присоединиться</button>
+                <template v-if="has_joined">
+                    <b>Вы уже член организации</b>
+
+                    <router-link :to="`/unions/${contract_address}/`" class="btn btn-dark">
+                        перейти
+                    </router-link>
+                </template>
+
+                <button v-else 
+                    class="btn btn-dark" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#join">
+                    присоединиться
+                </button>
+
             </div>
 
             <h5 v-if="not_found">Не найдено</h5>

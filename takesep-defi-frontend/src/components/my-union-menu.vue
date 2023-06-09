@@ -33,7 +33,7 @@
 </script>
 
 <template>
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-pills flex-column sidenav">
 
         <li v-for="item in menu" class="nav-item">
 
@@ -47,3 +47,14 @@
         </li>   
     </ul>
 </template>
+
+
+<style>
+    .nav-pills .nav-link.active {
+        background-color: #474b4f;
+    }
+
+    .sidenav .nav-link {
+        color: black;
+    }
+</style>

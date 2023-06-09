@@ -50,3 +50,8 @@ export function get_join_requests(): JoinRequest[] {
        return JSON.parse(requests_json); 
     }
 }
+
+
+export function clear_join_requests() {
+    localStorage.setItem('join_requests', '[]');
+}

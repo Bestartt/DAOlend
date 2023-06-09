@@ -12,7 +12,7 @@
             d => requests.value = d.filter(
                 (request) => request[0] != "0x0000000000000000000000000000000000000000"
             )
-        )
+        );
 
     }
 
@@ -27,25 +27,11 @@
 
 <template>
 
-    <div v-if="address == null">
-        <h3>
-            У вас нет организации. 
-        </h3>
-
-        <router-link to="/create-union">создать</router-link>
-    </div>
-
-    <div v-else>
-
-        <h3 mt-5>Запросы на вступление</h3>
-
-        <my-union-menu></my-union-menu>
-
-        <br>
-
+    <sidebar-wrapper>
         <template v-for="request in requests">
             <div max-w-500px class="card card-body">
-                <h3>{{ request[1] }}</h3>
+                <span tex-gray>Имя: </span>
+                <h4>{{ request[1] }}</h4>
 
                 <i>адрес: {{ request[0] }}</i>
                 
@@ -55,14 +41,12 @@
                     <li v-for="member in request[2]">{{ member }}</li>
                 </ul>    
                 
+                <br>
                 <button class="btn btn-dark" @click="approve(request[0])">
                     Подтвердить 
                 </button>
             </div>
-        </template>
+        </template> 
+    </sidebar-wrapper>
 
-
-
-
-    </div>
 </template>

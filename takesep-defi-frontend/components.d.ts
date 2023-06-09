@@ -21,6 +21,7 @@ declare module '@vue/runtime-core' {
     RequestCreditModal: typeof import('./src/components/request-credit-modal.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SidebarWrapper: typeof import('./src/components/sidebar-wrapper.vue')['default']
     TheFooter: typeof import('./src/components/TheFooter.vue')['default']
     UnionMenu: typeof import('./src/components/union-menu.vue')['default']
   }

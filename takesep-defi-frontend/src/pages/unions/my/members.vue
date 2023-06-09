@@ -5,7 +5,7 @@
     let address = get_my_union();
     let contract: Contract;
     let members = ref();
-    
+
     
     if (address != null) {
         contract = new Contract(address);
@@ -17,25 +17,28 @@
 
 <template>
 
-    <div v-if="address == null">
-        <h3>
-            У вас нет организации. 
-        </h3>
-
-        <router-link to="/create-union">создать</router-link>
-    </div>
-
-    <div v-else>
-
-        <h3 mt-5>Участники</h3>
-
-        <my-union-menu></my-union-menu>
+    <sidebar-wrapper>
+        <h4>Участники организации</h4>
+        <span text-gray>и их вложения</span>
 
         <br>
 
-        <ul>
-            <li v-for="member in members">{{ member }}</li>
-        </ul>
+        <table class="table table-striped" min-w-400px max-w-800px mt-5>
+            <thead>
+                <tr>
+                    <th>Имя</th>
+                    <th>Вложение</th>
+                </tr>
+            </thead>
 
-    </div>
+            <tbody>
+
+                <tr v-for="member in members">
+                    <td>{{ member[2] }}</td>
+                    <td>{{ member[0] }}</td>
+                </tr>
+            </tbody>
+        </table>        
+    </sidebar-wrapper>
+
 </template>

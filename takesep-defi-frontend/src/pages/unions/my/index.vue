@@ -20,22 +20,8 @@
 </script>
 
 <template>
-    <div v-if="address == null">
-        <h3>
-            У вас нет организации. 
-        </h3>
 
-        <router-link to="/create-union">создать</router-link>
-    </div>
-
-    <div v-if="data != null">
-        
-        <h3 mt-5>Организация: {{ data.name }}</h3>
-
-        <my-union-menu></my-union-menu>
-
-        <br>
-
+    <sidebar-wrapper>
         <h4>Данные</h4>
 
         <table class="table" max-w-lg>
@@ -79,8 +65,8 @@
         </button>
 
         <add-deposit-modal :contract-address="address" @on-complete="updateData()"/>
-        <request-credit-modal :contract-address="address" @on-complete="updateData()"/>
+        <request-credit-modal :contract-address="address" @on-complete="updateData()"/>   
+    </sidebar-wrapper>
 
-    </div>
 
 </template>

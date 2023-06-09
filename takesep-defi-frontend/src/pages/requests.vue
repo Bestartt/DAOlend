@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { Contract, checkRequestStatus } from '~/crypto';
 
-    import { get_join_requests } from '~/localstorage';
+    import { get_join_requests, clear_join_requests } from '~/localstorage';
     
 
     let requests = get_join_requests();
@@ -19,8 +19,7 @@
                     unions.value.push(data);
                     unions.value = unions.value.reverse();
                 });
-
-                        
+       
         });
 
     }
@@ -31,7 +30,11 @@
 <template>
 
     <div px-16 py-6>
-        <h4>Ваши запросы на вступление</h4>
+        <div flex justify-between>
+            <h4>Ваши запросы на вступление</h4>
+            <button @click="clear_join_requests(); unions = []" class="btn btn-danger">очистить</button>
+        </div>
+        
 
         <div v-for="union in unions" mt-3 max-w-600px class="card card-body">
             <h3>{{ union.name }}</h3>

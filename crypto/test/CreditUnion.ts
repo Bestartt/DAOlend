@@ -14,9 +14,11 @@ describe("Credit Union", function() {
 
 
         beforeEach(async () => {
-            const Factory = await ethers.getContractFactory("CreditUnion");
-
+            let Factory = await ethers.getContractFactory("CreditUnion");
+            
             [owner, member1, member2, member3] = await ethers.getSigners();
+            Factory = Factory.connect(owner);
+
             contract = await Factory.deploy(
                 "test", 
                 [member1.address, member2.address, member3.address],
@@ -26,7 +28,15 @@ describe("Credit Union", function() {
         });
 
         it("get member names", async function() {
-            expect(await contract.getMemberNames()).to.deep.eq(memberNames);
+            let allMembers = memberNames;
+            allMembers.push("Owner Name");
+            expect(await contract.getMemberNames()).to.deep.eq(allMembers);
+        });
+
+        it("get members full info", async function() {
+            contract.connect(member1).deposit(100);
+            let _members = await contract.getMembers();
+            // write assert later
         })
 
 
@@ -66,6 +76,9 @@ describe("Credit Union", function() {
                 await contract.approveJoinRequest(0);
 
                 contract = await contract.connect(member3);
+                await contract.approveJoinRequest(0);
+
+                contract = await contract.connect(owner);
                 await contract.approveJoinRequest(0);
 
                 let result = await contract.members(joiningUser.address);
@@ -126,7 +139,8 @@ describe("Credit Union", function() {
             let debtorName = "Alex";
 
             beforeEach(async () => {
-                await contract.connect(owner).createCreditRequest(4_500_000, debtorName);                
+                await contract.connect(owner).deposit(100);
+                await contract.connect(owner).createCreditRequest(50, 5, debtorName);                
             })
 
             it("should approve credit request", async function () {
@@ -164,9 +178,13 @@ describe("Credit Union", function() {
         let debtor;
         let member;
 
+        let debtorName = "Alex";
+
         beforeEach(async() => {
-            [owner, debtor, member] = await ethers.getSigners();
-            const Factory = await ethers.getContractFactory("CreditUnion", owner);
+            [owner, member] = await ethers.getSigners();
+            let Factory = await ethers.getContractFactory("CreditUnion", owner);
+            Factory = Factory.connect(owner);
+
             contract = await Factory.deploy(
                 "test", 
                 [member.address], 
@@ -175,13 +193,13 @@ describe("Credit Union", function() {
             );
 
             await contract.connect(member).deposit(100);
+            await contract.connect(owner).createCreditRequest(100, 5, debtorName); 
+            await contract.connect(member).approveCreditRequest(0);    
 
             expect(await contract.owner()).to.eq(owner.address);
-
-            await contract.createCredit(debtor.address, 100);
-            expect((await contract.credits(0)).deptor).to.eq(debtor.address);
+            expect((await contract.credits(0)).deptor).to.eq(debtorName);
             expect(await contract.totalDeposit()).to.eq(0);           
-        })
+        });
 
         it("creates credit repayment", async function() {
             await contract.repay(0, 50);
