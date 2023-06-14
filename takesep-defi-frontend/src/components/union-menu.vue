@@ -35,7 +35,7 @@
 </script>
 
 <template>
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-pills flex-column sidenav">
 
         <li v-for="item in menu" class="nav-item">
 

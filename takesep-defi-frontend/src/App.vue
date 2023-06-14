@@ -12,10 +12,7 @@
     <main>
       <Navbar />
       <div px-24 px-md-32 block>
-        <router-view v-slot="{ Component }">
-          <transition name="fade">
-            <component :is="Component" />
-          </transition>
+        <router-view>
         </router-view>
       </div>
       
@@ -28,7 +25,7 @@
 <style>
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.5s ease;
+  transition: opacity 0.1s ease;
 }
 
 .fade-enter-from,

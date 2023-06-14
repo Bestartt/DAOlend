@@ -29,7 +29,7 @@
         <hr>    
 
         <div flex gap-12>
-            <my-union-menu></my-union-menu>
+            <union-menu></union-menu>
 
             <div block style="width: 100%;"><slot /></div>
 

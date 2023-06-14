@@ -18,17 +18,15 @@
         contract.approveCreditRequest(id)
     }
 
-    function getMemberName(member_address: string) {
+    async function getMemberName(member_address: string) {
 
-        if (address != null) {
-            // @ts-ignore
-            let contract = new Contract(address);
-            debugger;
-            contract.getMember(member_address).then((member) => {
-                return member.name
-            });            
-        }
-
+        // @ts-ignore
+        let contract = new Contract(address);
+        return (await contract.getMember(member_address)).name
+        
+        // .then((member) => {
+        //     return member.name
+        // });          
     }
 
 
@@ -50,9 +48,10 @@
                 <p>
                     заемщик: {{ credit_request[1] }} <br>
                     сумма: {{ credit_request[2] }} <br>
+                    срок: {{ credit_request[3] }} <br>
                     подтвердившие участники: 
                     <ol>
-                        <li v-for="member in credit_request[3]">
+                        <li v-for="member in credit_request[4]">
                             {{ getMemberName(member) }}
                         </li>
                     </ol>               

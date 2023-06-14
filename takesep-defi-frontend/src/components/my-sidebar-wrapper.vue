@@ -11,8 +11,6 @@
         contract = new Contract(address);
         contract.getData().then(d => data.value = d);
     }
-
-
 </script>
 
 

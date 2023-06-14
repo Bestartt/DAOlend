@@ -15,6 +15,7 @@
             data["address"] = request.address;
             checkRequestStatus(request.address, request.username)
                 .then(value => {
+                    debugger;
                     data["joined"] = value;
                     unions.value.push(data);
                     unions.value = unions.value.reverse();

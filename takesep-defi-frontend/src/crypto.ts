@@ -161,8 +161,7 @@ export async function createContract(
  */
 export async function checkRequestStatus(address: string, name: string): Promise<boolean> {
     let contract = new Contract(address);
-    let members = await contract.getMembers();
-    debugger;
+    let members = await contract.getMemberNames();
     return members.includes(name);
     
 }
