@@ -1,6 +1,6 @@
 import { ethers, ContractFactory } from "ethers";
 import contractInterface from "~/contract";
-
+import { CreditUnion } from "./typechain/types";
 
 
 export const connection = {
@@ -22,6 +22,10 @@ export const connection = {
         return null;
     },
 
+    getHardhatProvider() {
+        
+    },
+
     async requestAccount() {
         let provider = this.getProvider();
         await provider?.send("eth_requestAccounts", []);
@@ -30,16 +34,40 @@ export const connection = {
     getSigner() {
         let provider = this.getProvider();
         return provider?.getSigner();
-    }    
+    }
+}
+
+
+let singleton: Contract | null = null;
+
+
+export async function contractExists(address: string | null) {
+    if (address == null) {
+        return false;
+    }
+
+    try {
+        let provider = connection.getProvider();
+        const code = await provider?.getCode(address); 
+        return code !== "0x"
+        
+    } catch(error) {
+        console.error("Error occured while checking if contact exists", error);
+        return false
+    }
 }
 
 
 export class Contract {
-    contract: ethers.Contract;
+    contract: CreditUnion;
     address: string;
-    signer;
+    signer;   
 
     constructor(address: string, signer?) {
+        if (singleton && singleton.address == address) {
+            return singleton;
+        }
+
         // if signer is not specified use default
         this.signer = typeof signer !== "undefined" ? signer : connection.getSigner();
 
@@ -47,13 +75,14 @@ export class Contract {
             address, 
             contractInterface.abi, 
             this.signer
-        );
+        ) as CreditUnion;
 
         this.address = address;
-
+        singleton = this;
         connection.requestAccount();
 
     }
+
 
     async getData() {
 
@@ -134,6 +163,10 @@ export class Contract {
         return await this.contract.getCreditRequests();
     }
 
+    async getRepaymentsByCredit(creditId: number) {
+        return await this.contract.getRepaymentsByCredit(creditId);
+    }
+
 }
 
 
@@ -164,4 +197,30 @@ export async function checkRequestStatus(address: string, name: string): Promise
     let members = await contract.getMemberNames();
     return members.includes(name);
     
+}
+
+
+type JoinRequest = {address: string, username: string}
+
+
+export async function getRequestsData(requests: JoinRequest[]) {
+    let unions: any = [];
+
+    for (let i = 0; i < requests.length; i++) {
+        let request = requests[i];
+        let contract = new Contract(request.address);
+
+        let data = await contract.getData();
+        let is_joined = await checkRequestStatus(request.address, request.username);
+
+        data["joined"] = is_joined;
+        data["address"] = request.address;
+
+        unions.push(data);
+        unions = unions.reverse();
+
+    }
+
+    return unions;
+
 }

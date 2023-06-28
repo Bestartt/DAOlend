@@ -4,6 +4,7 @@
 
     let address = get_my_union();
     let requests = ref<any[]>([]);
+    let loading = ref(false);
     
     
     if (address != null) {
@@ -16,10 +17,12 @@
 
     }
 
-    function approve(requestAddress: string) {
+    async function approve(requestAddress: string) {
+        loading.value = true;
         // @ts-ignore
         let contract = new Contract(address);
-        contract.approveJoinRequest(requestAddress);
+        await contract.approveJoinRequest(requestAddress);
+        loading.value = false;
     }
 
 
@@ -43,7 +46,7 @@
                 
                 <br>
                 <button class="btn btn-dark" @click="approve(request[0])">
-                    Подтвердить 
+                    <button-loading :loading="loading">Подтвердить</button-loading>
                 </button>
             </div>
         </template> 

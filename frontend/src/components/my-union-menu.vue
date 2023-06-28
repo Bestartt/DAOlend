@@ -22,6 +22,10 @@
         {
             name: "Запросы на вступление",
             route: "/unions/my/join"
+        },
+        {
+            name: "История",
+            route: "/unions/my/history"
         }
     ];
 

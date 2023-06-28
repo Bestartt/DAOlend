@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { Contract, checkRequestStatus } from '~/crypto';
+    import { getRequestsData } from '~/crypto';
 
     import { get_join_requests, clear_join_requests } from '~/localstorage';
     
@@ -8,22 +8,9 @@
     let unions = ref<any[]>([]);
 
 
-    for (let i = 0; i < requests.length; i++) {
-        let request = requests[i];
-        new Contract(request.address).getData().then((data) => {
-
-            data["address"] = request.address;
-            checkRequestStatus(request.address, request.username)
-                .then(value => {
-                    debugger;
-                    data["joined"] = value;
-                    unions.value.push(data);
-                    unions.value = unions.value.reverse();
-                });
-       
-        });
-
-    }
+    onMounted(async () => {
+        unions.value = await getRequestsData(requests);
+    })
 
 
 </script>

@@ -10,6 +10,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AddDepositModal: typeof import('./src/components/add-deposit-modal.vue')['default']
+    ButtonLoading: typeof import('./src/components/button-loading.vue')['default']
     Footer: typeof import('./src/components/footer.vue')['default']
     JoinModal: typeof import('./src/components/JoinModal.vue')['default']
     Loading: typeof import('./src/components/Loading.vue')['default']
@@ -18,6 +19,7 @@ declare module '@vue/runtime-core' {
     MyUnionModal: typeof import('./src/components/my-union-modal.vue')['default']
     MyUnionTabs: typeof import('./src/components/MyUnionTabs.vue')['default']
     Navbar: typeof import('./src/components/navbar.vue')['default']
+    Notification: typeof import('./src/components/notification.vue')['default']
     RepayModal: typeof import('./src/components/repay-modal.vue')['default']
     RequestCreditModal: typeof import('./src/components/request-credit-modal.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

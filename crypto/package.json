@@ -10,6 +10,8 @@
   "license": "ISC",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^2.0.2",
+    "@typechain/ethers-v5": "^11.0.0",
+    "@typechain/hardhat": "^8.0.0",
     "hardhat": "^2.14.0",
     "hardhat-abi-exporter": "^2.10.1",
     "ts-node": "^10.9.1",

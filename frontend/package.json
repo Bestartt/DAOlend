@@ -12,7 +12,6 @@
     "postinstall": "npx simple-git-hooks"
   },
   "dependencies": {
-    "@kyvg/vue3-notification": "^2.9.0",
     "@metamask/detect-provider": "^2.0.0",
     "@popperjs/core": "^2.11.7",
     "@vueuse/core": "^9.13.0",

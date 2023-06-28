@@ -2,6 +2,7 @@
     import { createContract } from '~/crypto';
     import { useRouter } from 'vue-router';
     import { set_my_union, get_my_union } from '~/localstorage';
+    import { contractExists } from '~/crypto';
 
     let loading = ref(false);
     let router = useRouter();
@@ -15,7 +16,7 @@
     let members = ref<string[]>([]);
     let memberNames = ref<string[]>([]);
     
-
+    let myUnionExists = ref(false);
 
     function addMember() {
         members.value.push(member_id.value); 
@@ -46,6 +47,11 @@
         }
 
     }
+
+    onMounted(async () => {
+        myUnionExists.value = await contractExists(get_my_union());
+    })
+
 </script>
 
 
@@ -53,11 +59,11 @@
 
     <!-- alert -->
     <div 
-        v-if="get_my_union !== null" 
+        v-if="myUnionExists" 
         class="alert alert-warning"
     >
         У вас уже есть организация. 
-        <router-link to="/my-union">перейти</router-link>
+        <router-link to="/unions/my/">перейти</router-link>
     </div>
 
 
@@ -101,10 +107,16 @@
             </li> 
         </ul>
 
-        <button mt-5 @click="create()" class="btn btn-dark">создать</button>
+        <button mt-5 @click="create()" class="btn btn-dark">
+            <template v-if="loading">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                ожидание...
+            </template>
+            <template v-else>
+                создать
+            </template>
+        </button>
 
     </div>
-    
-    <h3 v-if="loading">ожидаем ваше подтверждение...</h3>
 
 </template>

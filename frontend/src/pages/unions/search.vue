@@ -15,6 +15,7 @@
 
 
     async function find() {
+        loading.value = true;
         not_found.value = false;
         data.value = null;
 
@@ -34,13 +35,14 @@
             not_found.value = true;
             console.error(e);
         }
+
+        loading.value = false;
     }
 
 
 
     async function callJoin() {
         let contract = new Contract(contract_address.value);
-        loading.value = true;
 
         try {
             await contract.join(username.value);
@@ -66,6 +68,10 @@
                 <input type="text" v-model="contract_address" class="form-control" placeholder="введите адрес контракта"/>
                 <button class="btn btn-dark" @click="find()">найти</button>
             </div>   
+
+            <div mt-26 ms-26 class="spinner-border" role="status" v-if="loading">
+              <span class="visually-hidden">Loading...</span>
+            </div>
 
             <div v-if="data !== null" 
                 mt-5 max-w-500px 

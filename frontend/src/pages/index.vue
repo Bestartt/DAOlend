@@ -1,25 +1,38 @@
 <script setup lang="ts" generic="T extends any, O extends any">
   import { get_my_union } from '~/localstorage';
+  import { contractExists } from '~/crypto';
 
-  let myorg = get_my_union();
+
+  let my_union_address = get_my_union();
+  let my_union_exists = ref(false);
+
+  onBeforeMount(async () => {
+    my_union_exists.value = await contractExists(my_union_address);
+  })
+
 </script>
 
 <template>
 
-  <div flex flex-col items-center>
-    <h1 mt-16>Takesep DeFi</h1>
+  <notification></notification>  
+
+  <div>
+    <h1 mt-24>Takesep DeFi</h1>
+    <h3>Платформа для кредитных организации</h3>
     <span>Введите свои отчеты прозрачно через блокчейн</span>
 
 
-    <div flex gap-2 mt-3>
-      <router-link to="unions/my" v-if="myorg != null" class="btn btn-outline-dark">перейти к моей организации</router-link>
+    <div flex gap-2 mt-3  v-if="my_union_exists">
+      <router-link to="unions/my" class="btn btn-outline-dark">перейти к моей организации</router-link>
     </div>    
   </div>  
 
   <br>
 
 
-  <div flex justify-center>
+  <h3 mt-24>С чего начать?</h3>
+
+  <div flex>
     <div max-w-800px class="row gap-2">
       <div class="col-5 card card-body">
         <p class="card-text">

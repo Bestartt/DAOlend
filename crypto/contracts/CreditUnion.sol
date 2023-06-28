@@ -1,8 +1,9 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
 
-contract CreditUnion {
 
+contract CreditUnion {
     uint32 public totalDeposit = 0;
     address public owner;
     string public ownerName;
@@ -127,8 +128,6 @@ contract CreditUnion {
         totalDeposit += number;
         members[msg.sender].contribution += number;
 
-
-
     }
 
     function createJoinRequest(string memory username) public {
@@ -136,6 +135,17 @@ contract CreditUnion {
         require(msg.sender != owner, "you are owner. No need to create join request");
 
         address[] memory approvedMembers;
+        bool alreadyRequested = false;
+
+        for (uint i = 0; i < numJoinRequests; i++) {
+            if (msg.sender == joinRequests[i].user) {
+                alreadyRequested = true;
+                break;
+            }
+        }
+
+        require(!alreadyRequested, "You already created join request");
+
         joinRequests[numJoinRequests] = JoinRequest(msg.sender, username, approvedMembers);
         numJoinRequests++;
     }
@@ -267,7 +277,27 @@ contract CreditUnion {
             Repayment(month, amount, id)
         );
         totalDeposit += amount;
+    }
 
+    function getRepaymentsByCredit(uint32 _creditId) public view returns (Repayment[] memory) {
+        uint256 count = 0;
+        for (uint256 i = 0; i < repayments.length; i++) {
+            if (repayments[i].creditId == _creditId) {
+                count++;
+            }
+        }
+        
+        Repayment[] memory result = new Repayment[](count);
+        uint256 index = 0;
+        
+        for (uint256 i = 0; i < repayments.length; i++) {
+            if (repayments[i].creditId == _creditId) {
+                result[index] = repayments[i];
+                index++;
+            }
+        }
+        
+        return result;
     }
 
 }

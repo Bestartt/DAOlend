@@ -52,7 +52,7 @@
                     подтвердившие участники: 
                     <ol>
                         <li v-for="member in credit_request[4]">
-                            {{ getMemberName(member) }}
+                            {{ getMemberName(member).then(v => v) }}
                         </li>
                     </ol>               
 

@@ -50,8 +50,9 @@
                     погашено: {{ credit[4] }}              
                 </p>
 
-
+                <router-link :to="`/unions/my/${credit[0]}/repayments`" class="btn btn-outline-dark">погашения</router-link>
                 <button 
+                    mt-2
                     data-bs-toggle="modal"
                     data-bs-target="#repay"
                     @click="currentCredit = credit[0]" 

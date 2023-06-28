@@ -1,12 +1,3 @@
-<script setup>
-  import { ref } from 'vue';
-
-  let drawer = ref(false);
-
-</script>
-
-
-
 <template>
 
     <main>
