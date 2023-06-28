@@ -3,6 +3,7 @@
     <main>
       <Navbar />
       <div px-24 px-md-32 block>
+        <notification></notification>
         <router-view>
         </router-view>
       </div>

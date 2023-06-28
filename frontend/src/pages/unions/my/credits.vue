@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import { get_my_union } from "~/localstorage";
     import { Contract } from "~/crypto";
+    import { useNotification } from "~/store";
 
 
     let address = get_my_union();
@@ -9,6 +10,7 @@
     let currentCredit = ref(-1);
     let repayAmount = ref(0);
     let month = ref(0);
+    let notif = useNotification();
     
     
     if (address != null) {
@@ -22,9 +24,10 @@
     async function repay () {
         try {
             await contract.repayCredit(currentCredit.value, repayAmount.value, month.value);
+            notif.notify("Транзакция в очереди", "погашение скоро будет в силе")
         }catch (e) {
             console.error("Error occured while calling repay function");
-            alert("Ошибка")
+            notif.notify("Произошла ошибка", "не удалось создать транзакцию")
         }
     }
 

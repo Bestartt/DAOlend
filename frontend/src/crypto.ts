@@ -42,6 +42,7 @@ let singleton: Contract | null = null;
 
 
 export async function contractExists(address: string | null) {
+    debugger;
     if (address == null) {
         return false;
     }

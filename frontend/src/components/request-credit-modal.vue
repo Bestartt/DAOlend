@@ -1,5 +1,6 @@
 <script lang="ts" setup>
     import { Contract } from '~/crypto';
+    import { useNotification } from '~/store';
 
     let contractAddress = defineProp<string>("contractAddress");
     let onComplete = defineEmit("onComplete")
@@ -7,6 +8,7 @@
     let amount = ref(0);
     let debtor = ref("");
     let term = ref(0);
+    let notif = useNotification();
 
     let loading = ref(false);
     let contract = new Contract(contractAddress.value);
@@ -16,7 +18,10 @@
         await contract.createCreditRequest(amount.value, term.value, debtor.value);
         
         onComplete();
-
+        notif.notify(
+            "Транзакция в очереди", 
+            "скоро запрос на кредит будет создан"
+        )
     }
 
 </script>

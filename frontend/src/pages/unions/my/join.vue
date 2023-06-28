@@ -1,10 +1,12 @@
 <script lang="ts" setup>
     import { get_my_union } from "~/localstorage";
     import { Contract } from "~/crypto";
+    import { useNotification } from "~/store";
 
     let address = get_my_union();
     let requests = ref<any[]>([]);
     let loading = ref(false);
+    let notif = useNotification();
     
     
     if (address != null) {
@@ -23,6 +25,7 @@
         let contract = new Contract(address);
         await contract.approveJoinRequest(requestAddress);
         loading.value = false;
+        notif.notify("Транзакция в очереди", "скоро вы будете в списке подтвердивших");
     }
 
 

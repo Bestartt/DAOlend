@@ -1,10 +1,12 @@
 <script lang="ts" setup>
     import { Contract } from "~/crypto";
+    import { useNotification } from "~/store";
 
     let route = useRoute();
     let address = route.params.address;
     let requests = ref<any[]>([]);
-    
+    let loading = ref(false);
+    let notif = useNotification();
     
     if (address != null) {
 
@@ -19,9 +21,12 @@
     }
 
     function approve(requestAddress: string) {
+        loading.value = true;
         // @ts-ignore
         let contract = new Contract(address);
         contract.approveJoinRequest(requestAddress);
+        loading.value = false;
+        notif.notify("Транзакция в очереди", "скоро вы будете в списке подтвердивших");
     }
 
 
@@ -44,7 +49,7 @@
                 </ul>    
                 
                 <button class="btn btn-dark" @click="approve(request[0])">
-                    Подтвердить 
+                    <button-loading :loading="loading">Подтвердить</button-loading>
                 </button>
             </div>
         </template>        

@@ -1,19 +1,19 @@
 <script lang="ts" setup>
     import { Contract } from '~/crypto';
+    import { useNotification } from '~/store';
 
     let contractAddress = defineProp<string>("contractAddress");
     let onComplete = defineEmit("onComplete")
 
     let quantity = ref(0);
-    let loading = ref(false);
     let contract = new Contract(contractAddress.value);
+    let notification = useNotification();
 
     async function callAddDeposit() {
-        loading.value = true;
         await contract.deposit(quantity.value);
         
+        notification.notify("Транзакция в очереди", "Скоро депозит пополниться");
         onComplete();
-
     }
 
 </script>

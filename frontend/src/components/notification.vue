@@ -16,7 +16,10 @@
             
 
             <p>{{ notif.description }}</p>
-            <router-link :to="notif.link" class="btn btn-dark">link</router-link>
+            <template v-if="notif.link !== ''">
+                <router-link :to="notif.link" class="btn btn-dark">link</router-link>
+            </template>
+            
             
         </div>
     </div>    
