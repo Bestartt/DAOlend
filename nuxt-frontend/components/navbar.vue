@@ -49,7 +49,7 @@
                                 <router-link :to="`/unions/${union.address}/`" class="dropdown-item">{{ union.name }}</router-link>
                             </template>
                             
-                            <li><hr class="dropdown-divider"></li>
+                            <li v-if="unions.length > 0"><hr class="dropdown-divider"></li>
 
                             <button class="dropdown-item btn btn-dark" @click.stop="update">обновить</button>
 
