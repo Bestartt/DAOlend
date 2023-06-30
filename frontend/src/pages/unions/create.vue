@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { createContract } from '~/crypto';
+    import { createContract, connection } from '~/crypto';
     import { useRouter } from 'vue-router';
     import { set_my_union, get_my_union } from '~/localstorage';
     import { contractExists } from '~/crypto';
@@ -29,6 +29,9 @@
         loading.value = true;
 
         try {
+            connection.getProvider();
+            connection.getSigner();
+
             let address = await createContract(
                 union_name.value, 
                 members.value, 
