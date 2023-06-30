@@ -209,14 +209,19 @@ export async function getRequestsData(requests: JoinRequest[]) {
         let request = requests[i];
         let contract = new Contract(request.address);
 
-        let data = await contract.getData();
-        let is_joined = await checkRequestStatus(request.address, request.username);
+        try {
+            let data = await contract.getData();
+            let is_joined = await checkRequestStatus(request.address, request.username);
 
-        data["joined"] = is_joined;
-        data["address"] = request.address;
+            data["joined"] = is_joined;
+            data["address"] = request.address;
 
-        unions.push(data);
-        unions = unions.reverse();
+            unions.push(data);
+            unions = unions.reverse();            
+        } catch (e) {
+            
+        }
+
 
     }
 

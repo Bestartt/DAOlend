@@ -22,7 +22,10 @@
 
 <template>
     <div>
-        <h4>Данные</h4>
+        <div flex justify-between>
+            <h4>Данные</h4>
+            <button @click="updateData()" class="btn btn-dark">обновить</button>
+        </div>
 
         <table class="table" max-w-lg v-if="data !== null">
             <tbody>

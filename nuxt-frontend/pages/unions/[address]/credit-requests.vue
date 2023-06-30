@@ -16,8 +16,7 @@
         contract.approveCreditRequest(id)
     }
 
-
-    onMounted(async() => {
+    async function updateData() {
         let contract = new Contract(address);
         let _data = await contract.getCreditRequests();
         
@@ -40,15 +39,19 @@
             
         }
 
-        credit_requests.value = data;
-    })
+        credit_requests.value = data.reverse();        
+    }
 
+    onMounted(updateData)
 
 </script>
 
 <template>
     <div>
-        <h4>Заявки на кредит</h4>
+        <div flex justify-between>
+            <h4>Заявки на кредит</h4>
+            <button class="btn btn-dark" @click="updateData()">обновить</button>
+        </div>
         <br>
 
         <div v-if="credit_requests.length == 0">
@@ -57,7 +60,7 @@
         </div>
 
         <template v-for="credit_request in credit_requests">
-            <div class="card card-body" max-w-400px>
+            <div class="card card-body" max-w-400px mt-3>
                 <p>
                     заемщик: {{ credit_request.deptor }} <br>
                     сумма: {{ credit_request.amount }} <br>

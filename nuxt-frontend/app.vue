@@ -10,8 +10,6 @@
 
   .page-enter-active,
   .page-leave-active {
-    transition: opacity 0.1s ease;
-    position: absolute;
   }
   .page-enter-from,
   .page-leave-to {

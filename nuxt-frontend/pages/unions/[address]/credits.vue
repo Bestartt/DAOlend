@@ -10,16 +10,22 @@
     let credits = ref<any>([]);
     
     // @ts-ignore
-    contract = new Contract(address);
-    contract.getCredits().then(d => credits.value = d);
+    function update() {
+        contract = new Contract(address);
+        contract.getCredits().then(d => credits.value = d);        
+    }
 
+    onMounted(update); 
 
 </script>
 
 <template>
 
     <div>
-        <h4>Кредиты</h4>
+        <div flex justify-between>
+            <h4>Кредиты</h4>
+            <button class="btn btn-dark" @click="update()">обновить</button>
+        </div>
         <br>
         
         <div v-if="credits.length == 0">

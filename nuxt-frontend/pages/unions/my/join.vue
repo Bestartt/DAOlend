@@ -15,19 +15,21 @@
         loading.value = false;
         notif.notify("Транзакция в очереди", "скоро вы будете в списке подтвердивших");
     }
-
-    onMounted(async () => {
+    async function update() {
         let contract = new Contract(address);
         let data = await contract.getJoinRequests();
         requests.value = data.filter((request) => request[0] != "0x0000000000000000000000000000000000000000");
-    })
+    }
 
-
+    onMounted(update);
 </script>
 
 <template>
     <div>
-        <h4>Запросы на вступление</h4>
+        <div flex justify-between>
+            <h4>Запросы на вступление</h4>
+            <button class="btn btn-dark" @click="update()">обновить</button>
+        </div>
         <br>
 
         <div v-if="requests && requests.length == 0">
@@ -48,7 +50,7 @@
                 </ul>    
                 
                 <br>
-                <button class="btn btn-dark" @click="approve(request[0])">
+                <button max-w-200px class="btn btn-dark" @click="approve(request[0])">
                     <button-loading :loading="loading">Подтвердить</button-loading>
                 </button>
             </div>

@@ -10,16 +10,20 @@
 
 
 <template>
-    <div>
+    <div text-center flex flex-col items-center>
       <div>
         <h1 mt-24>Takesep DeFi</h1>
         <h3>Платформа для кредитных организации</h3>
         <span>Введите свои отчеты прозрачно через блокчейн</span>
     
-    
-        <div flex gap-2 mt-3>
-          <nuxt-link to="unions/my" v-if="my_union_exists" class="btn btn-outline-dark">перейти к моей организации</nuxt-link>
-        </div>    
+        <br>
+        <nuxt-link 
+          mt-3
+          to="unions/my" 
+          v-if="my_union_exists" 
+          class="btn btn-outline-dark">перейти к моей организации
+        </nuxt-link>
+   
       </div>  
     
       <br>

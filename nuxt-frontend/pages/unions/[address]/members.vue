@@ -15,13 +15,21 @@
         contract.getMembers().then(d => members.value = d);
     }
 
+    function update() {
+        contract.getMembers().then(d => members.value = d);
+    }
 
 </script>
 
 <template>
 
     <div>
-        <h4>Участники организации</h4>
+        <div flex justify-between>
+            <h4>Участники организации</h4>
+            <button class="btn btn-dark" @click="update()">
+                обновить
+            </button>
+        </div>
         <span text-gray>и их вложения</span>
 
         <br>
