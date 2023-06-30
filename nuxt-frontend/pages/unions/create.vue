@@ -10,8 +10,9 @@
 
     let members = ref<string[]>([]);
     let memberNames = ref<string[]>([]);
+
+    let notif = useNotification();
     
-    let myUnionExists = ref(false);
 
     function addMember() {
         members.value.push(member_id.value); 
@@ -25,6 +26,8 @@
 
         try {
             connection.getProvider();
+            connection.getSigner();
+
             let address = await createContract(
                 union_name.value, 
                 members.value, 
@@ -45,27 +48,23 @@
     }
 
     onMounted(async () => {
-        myUnionExists.value = await contractExists(get_my_union());
+        let myUnionExists = await contractExists(get_my_union());
+        if (myUnionExists) {
+            notif.notify(
+                "У вас уже есть организация!", 
+                "нажмите на 'организации' в меню и перейдите в 'моя организация'"
+            )
+        }
     })
 
 </script>
 
 
 <template>
-    <div>
-    <div 
-            v-if="myUnionExists" 
-            class="alert alert-warning"
-        >
-            У вас уже есть организация. 
-            <router-link to="/unions/my/">перейти</router-link>
-        </div>
+    <div flex flex-col items-center>
+        <h3 mt-10>Создать организацию</h3>
 
-
-
-        <h3 mt-5>Создать организацию</h3>
-
-        <div max-w-700px>
+        <div max-w-600px>
             <input type="text" v-model="union_name" class="form-control" placeholder="имя вашей организации">
             <input type="text" v-model="owner_name" class="form-control mt-3" placeholder="ваше имя">
 

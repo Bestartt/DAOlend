@@ -85,7 +85,6 @@ export class Contract {
 
 
     async getData() {
-
         let totalDeposit:   number = await this.contract.totalDeposit();
         let ownerName:      string = await this.contract.ownerName();
         let name:           string = await this.contract.name();

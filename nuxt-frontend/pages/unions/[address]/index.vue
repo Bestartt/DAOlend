@@ -1,6 +1,8 @@
 <script lang="ts" setup>
     import { Contract } from "~/utils/crypto";
 
+    definePageMeta({layout: "union"})
+
     let route = useRoute();
     let address = route.params.address;
     let contract: Contract;
@@ -21,10 +23,10 @@
 </script>
 
 <template>
-    <sidebar-wrapper>
+    <div>
         <h4>Данные</h4>
 
-        <table class="table" max-w-lg>
+        <table class="table" max-w-lg v-if="data">
             <tbody>
                 <tr>
                     <td>Создатель:</td>
@@ -58,7 +60,7 @@
         </button>
 
         <add-deposit-modal :contract-address="address" @on-complete="updateData()"/>        
-    </sidebar-wrapper>
+    </div>
 
 
 </template>

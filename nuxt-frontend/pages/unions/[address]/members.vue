@@ -1,6 +1,8 @@
 <script lang="ts" setup>
     import { Contract } from "~/utils/crypto";
 
+    definePageMeta({layout: "union"})
+
     let route = useRoute();
     let address = route.params.address;
     let contract: Contract;
@@ -18,7 +20,7 @@
 
 <template>
 
-    <sidebar-wrapper>
+    <div>
         <h4>Участники организации</h4>
         <span text-gray>и их вложения</span>
 
@@ -40,7 +42,7 @@
                 </tr>
             </tbody>
         </table>   
-    </sidebar-wrapper>
+    </div>
 
     
 

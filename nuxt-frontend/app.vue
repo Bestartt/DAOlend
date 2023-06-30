@@ -5,12 +5,38 @@
   </template>
 
 <style>
-.page-enter-active,
-.page-leave-active {
-  transition: all 0.4s;
-}
-.page-enter-from,
-.page-leave-to {
-  opacity: 0;
-}
+  @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,400;0,500;0,700;1,400&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=PT+Sans&family=Ubuntu:ital,wght@0,400;0,500;0,700;1,400&display=swap');
+
+  .page-enter-active,
+  .page-leave-active {
+    transition: opacity 0.1s ease;
+    position: absolute;
+  }
+  .page-enter-from,
+  .page-leave-to {
+    opacity: 0;
+  }
+
+  html,
+  body,
+  #app {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'PT sans', sans-serif;
+    color: #3c3c3c;
+  }
+
+  html.dark {
+    background: #121212;
+  }
+
+
+  h1, h2, h3, h4 {
+    font-family: 'Ubuntu', sans-serif;
+  }
+
+
+
 </style>

@@ -1,6 +1,8 @@
 <script lang="ts" setup>
     import { Contract } from "~/utils/crypto";
 
+    definePageMeta({layout: "union"})
+
     let route = useRoute();
     let address = route.params.address;
     let requests = ref<any[]>([]);
@@ -32,8 +34,13 @@
 </script>
 
 <template>
-    <sidebar-wrapper>
-        <h3 mt-5>Запросы на вступление</h3>
+    <div>
+        <h4>Запросы на вступление</h4>
+        <br>
+
+        <div v-if="requests && requests.length == 0">
+            <h2 text-gray>Пусто</h2>
+        </div>
 
         <template v-for="request in requests">
             <div max-w-500px class="card card-body">
@@ -52,7 +59,7 @@
                 </button>
             </div>
         </template>        
-    </sidebar-wrapper>
+    </div>
 
 
 

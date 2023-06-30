@@ -1,11 +1,11 @@
 <script setup lang="ts">
-    let loading = defineProp<boolean>("loading");
+    let props = defineProps<{loading: boolean}>();
 
 </script>
 
 
 <template>
-    <template v-if="loading">
+    <template v-if="props.loading">
         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
         ожидание...
     </template>

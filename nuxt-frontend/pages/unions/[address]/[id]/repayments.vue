@@ -2,21 +2,16 @@
     import { Contract } from "~/utils/crypto";
 
     let route = useRoute();
+    let address = route.params.address;
 
-    let address = get_my_union();
     let contract: Contract;
-    let repayments = ref<any>(null);
+    let repayments = ref<any>([]);
 
     
-    if (address != null) {
+    onMounted(async() => {
         contract = new Contract(address);
-        // @ts-ignore
-        contract.getRepaymentsByCredit(route.params.id).then(d => repayments.value = d);
-
-
-    }
-
-
+        repayments.value = await contract.getRepaymentsByCredit(route.params.id);
+    }) 
 </script>
 
 

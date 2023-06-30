@@ -1,7 +1,7 @@
 <script lang="ts" setup>
     let route = useRoute();
 
-    let menu = [
+    let menu = ref([
         {
             name: "Главное",
             route: "/unions/my", 
@@ -27,12 +27,17 @@
             name: "История",
             route: "/unions/my/history"
         }
-    ];
+    ]);
 
-    for (let i=0; i < menu.length; i++) {
-        menu[i].class = menu[i].route == route.path ? 'active' : '' 
+    const updateMenu = () => {
+        for (let i=0; i < menu.value.length; i++) {
+            menu.value[i].class = menu.value[i].route == route.path ? 'active' : '' 
+        }        
     }
 
+    updateMenu();
+
+    watch(route, updateMenu);
 
 </script>
 

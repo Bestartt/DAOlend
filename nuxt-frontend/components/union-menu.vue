@@ -3,7 +3,7 @@
 
     let address = route.params.address;
 
-    let menu = [
+    let menu = ref([
         {
             name: "Главное",
             route: `/unions/${address}`, 
@@ -25,12 +25,17 @@
             name: "Запросы на вступление",
             route: `/unions/${address}/join`
         }
-    ];
+    ]);
 
-    for (let i=0; i < menu.length; i++) {
-        menu[i].class = menu[i].route == route.path ? 'active' : '' 
+    const updateMenu = () => {
+        for (let i=0; i < menu.value.length; i++) {
+            menu.value[i].class = menu.value[i].route == route.path ? 'active' : '' 
+        }        
     }
 
+    updateMenu();
+
+    watch(route, updateMenu);
 
 </script>
 
@@ -49,3 +54,14 @@
         </li>   
     </ul>
 </template>
+
+<style>
+    .nav-pills .nav-link.active {
+        background-color: #474b4f;
+    }
+
+    .sidenav .nav-link {
+        color: black;
+    }
+</style>
+
