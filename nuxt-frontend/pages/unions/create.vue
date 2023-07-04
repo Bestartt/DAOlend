@@ -1,25 +1,33 @@
 <script setup lang="ts">
     let loading = ref(false);
     let router = useRouter();
+    let notif = useNotification();
 
     let union_name = ref("");
     let owner_name = ref("");
 
-    let member_id = ref("");
-    let member_name = ref("");
 
-    let members = ref<string[]>([]);
-    let memberNames = ref<string[]>([]);
+    let members = reactive({
+        address: "",
+        name: "",
+        addresses: [],
+        names: []
+    })
 
-    let notif = useNotification();
-    
 
     function addMember() {
-        members.value.push(member_id.value); 
-        memberNames.value.push(member_name.value);
-        member_id.value = '';
-        member_name.value = '';
+        members.addresses.push(members.name); 
+        members.names.push(members.name);
+        
+        members.name = ''; members.address = '';
+
     }
+
+    function removeMember(index) {
+        members.addresses.splice(index, 1);
+        members.names.splice(index, 1);
+    }
+
 
     async function create() {
         loading.value = true;
@@ -30,8 +38,8 @@
 
             let address = await createContract(
                 union_name.value, 
-                members.value, 
-                memberNames.value,
+                members.addresses, 
+                members.names,
                 owner_name.value,
             );
 
@@ -62,30 +70,22 @@
 
 <template>
     <div flex flex-col items-center>
-        <h3 mt-10>Создать организацию</h3>
+        
 
-        <div max-w-600px>
-            <input type="text" v-model="union_name" class="form-control" placeholder="имя вашей организации">
-            <input type="text" v-model="owner_name" class="form-control mt-3" placeholder="ваше имя">
+        <div class="card card-body form">
+            <h3>Создать организацию</h3>
+
+            <!-- basic info form -->
+            <input v-model="union_name" class="form-control" placeholder="имя вашей организации">
+            <input v-model="owner_name" class="form-control mt-3" placeholder="ваше имя">
 
             <label mt-5 for="member_id" class="form-label">Добавить участников</label>
 
-            <div flex gap-2>
-                <input 
-                    type="text" 
-                    v-model="member_id" 
-                    class="form-control" 
-                    placeholder="адрес" 
-                    id="member_id"
-                >
+            <!-- add member_addresses -->
 
-                <input 
-                    type="text" 
-                    v-model="member_name" 
-                    class="form-control" 
-                    placeholder="имя" 
-                    id="member_name"
-                >
+            <div flex gap-2>
+                <input  v-model="members.address" class="form-control" placeholder="адрес">
+                <input v-model="members.name" class="form-control" placeholder="имя">
 
                 <button @click="addMember()" class="btn btn-dark">Добавить</button>
             </div>
@@ -95,25 +95,37 @@
             </div>        
 
 
-            <ul mt-3>
-            <li v-for="(member, i) in members">
-                    {{ i + 1 }}. {{ member }} - {{ memberNames[i] }}
-                </li> 
-            </ul>
+            <!-- members list -->
+            <div class="card no-shadow" mt-3>
+                <ul class="list-group list-group-flush">
+
+                    <li v-for="(address, i) in members.addresses" class="list-group-item">
+                        <div flex justify-between>
+                            <b>{{ members.names[i] }} </b>
+                            <button @click="removeMember(i)"  class="btn btn-danger btn-sm">
+                                удалить
+                            </button>
+                        </div>
+
+                        <span class="text-gray text-sm">
+                           {{ address }}  
+                        </span>
+                    </li>                     
+                </ul>
+            </div>
+
 
             <button mt-5 @click="create()" class="btn btn-dark">
-                <template v-if="loading">
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    ожидание...
-                </template>
-                <template v-else>
-                    создать
-                </template>
+                <button-loading :loading="loading">создать</button-loading>
             </button>
 
         </div>        
     </div>
-    <!-- alert -->
- 
-
 </template>
+
+
+<style>
+    .form {
+        @apply max-w-700px mt-16 px-10 py-10;
+    }
+</style>

@@ -10,11 +10,17 @@
     async function approve(requestAddress: string) {
         loading.value = true;
         // @ts-ignore
-        let contract = new Contract(address);
-        await contract.approveJoinRequest(requestAddress);
-        loading.value = false;
-        notif.notify("Транзакция в очереди", "скоро вы будете в списке подтвердивших");
+        try {
+            let contract = new Contract(address);
+            await contract.approveJoinRequest(requestAddress);
+            notif.notify("Транзакция в очереди", "скоро вы будете в списке подтвердивших");            
+        } catch (e) {
+            alert("отменена или ошибка")
+        } finally {
+            loading.value = false;
+        }
     }
+    
     async function update() {
         let contract = new Contract(address);
         let data = await contract.getJoinRequests();

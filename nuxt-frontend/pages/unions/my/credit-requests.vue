@@ -4,36 +4,8 @@
     let address = get_my_union();
     let credit_requests = ref<any>([]);
 
-    function approve(id) {
-        // @ts-ignore
-        let contract = new Contract(address);
-        contract.approveCreditRequest(id)
-    }
-
     async function updateData() {
-        let contract = new Contract(address);
-        let _data = await contract.getCreditRequests();
-        
-        var data = _data.map(function(obj) {
-            var newObj = Object.assign({}, obj); // Create a new object
-            return newObj;
-        });
-
-        for (let i = 0; i < data.length; i++) {
-            const membersAddresses = data[i].approvedMembers;
-            let memberNames = [];
-
-            for (let x = 0; x < membersAddresses.length; x++) {
-                let member = await contract.getMember(membersAddresses[x]);
-                memberNames.push(member.name);                
-            }
-
-            // @ts-ignore
-            data[i].members = memberNames;
-            
-        }
-
-        credit_requests.value = data.reverse();
+        credit_requests.value = await getCreditRequests(address);
     }
 
     onMounted(updateData)
@@ -44,7 +16,15 @@
     <div>
         <div flex justify-between>
             <h4>Заявки на кредит</h4>
-            <button class="btn btn-dark" @click="updateData()">обновить</button>
+            <div flex gap-2>
+                <button class="btn btn-outline-dark" 
+                    data-bs-toggle="modal"
+                    data-bs-target="#request_credit">
+                    добавить
+                </button>
+                <button class="btn btn-dark" @click="updateData()">обновить</button>
+            </div>
+            
         </div>
         <br>
 
@@ -79,5 +59,5 @@
         </template>          
     </div>
       
-
+    <request-credit-modal :contract-address="address" @on-complete="updateData()"/>  
 </template>

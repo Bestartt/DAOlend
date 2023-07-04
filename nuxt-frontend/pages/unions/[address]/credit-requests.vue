@@ -1,6 +1,4 @@
 <script setup lang="ts">
-    import { Contract } from "~/utils/crypto";
-
     definePageMeta({layout: "union"})
 
 
@@ -9,37 +7,8 @@
 
     let credit_requests = ref<any>([]);
 
-
-    function approve(id) {
-        // @ts-ignore
-        let contract = new Contract(address);
-        contract.approveCreditRequest(id)
-    }
-
     async function updateData() {
-        let contract = new Contract(address);
-        let _data = await contract.getCreditRequests();
-        
-        var data = _data.map(function(obj) {
-            var newObj = Object.assign({}, obj); // Create a new object
-            return newObj;
-        });
-
-        for (let i = 0; i < data.length; i++) {
-            const membersAddresses = data[i].approvedMembers;
-            let members = [];
-
-            for (let x = 0; x < membersAddresses.length; x++) {
-                let member = await contract.getMember(membersAddresses[x] );
-                members.push(member);                
-            }
-
-            // @ts-ignore
-            data[i].members = members;
-            
-        }
-
-        credit_requests.value = data.reverse();        
+        credit_requests.value = await getCreditRequests(address);
     }
 
     onMounted(updateData)
@@ -60,7 +29,7 @@
         </div>
 
         <template v-for="credit_request in credit_requests">
-            <div class="card card-body" max-w-400px mt-3>
+            <div class="card card-body max-w-400px mt-3">
                 <p>
                     заемщик: {{ credit_request.deptor }} <br>
                     сумма: {{ credit_request.amount }} <br>

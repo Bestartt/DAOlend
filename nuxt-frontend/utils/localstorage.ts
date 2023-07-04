@@ -52,6 +52,13 @@ export function get_join_requests(): JoinRequest[] {
 }
 
 
+export function remove_join_request(index: number) {
+    let requests = get_join_requests();
+    requests = requests.splice(index, 1);
+    localStorage.setItem('join_requests', JSON.stringify(requests));
+}
+
+
 export function clear_join_requests() {
     localStorage.setItem('join_requests', '[]');
 }

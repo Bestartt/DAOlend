@@ -1,3 +1,5 @@
+
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -17,5 +19,13 @@ export default defineNuxtConfig({
       ]
     },
     pageTransition: {name: "page", "mode": "in-out"}
-  }
+  },
+  imports: {
+    dirs: ['resources']
+  },
+  components: [
+    '~/components',
+    '~/components/modals',
+    '~/components/layout'
+  ]
 })

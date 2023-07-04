@@ -25,11 +25,14 @@
 
 
 <template>
-    <nav class="navbar navbar-expand-md bg-body-tertiary" bg-gray-1>
+    <nav class="navbar navbar-expand-md border-bottom px-1 md:px-10">
         <div class="container-fluid">
-            <router-link class="navbar-brand" to="/">Главная</router-link>
+            <router-link to="/" class="navbar-brand">
+                <img src="/icon.svg" alt="icon" width="30" height="30"  class="d-inline-block align-text-top">
+            </router-link>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" 
+            type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 

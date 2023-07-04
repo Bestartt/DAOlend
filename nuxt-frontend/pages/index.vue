@@ -31,9 +31,9 @@
     
       <h3 mt-24>С чего начать?</h3>
     
-      <div flex>
+      <div>
         <div max-w-800px class="row gap-2">
-          <div class="col-5 card card-body">
+          <div class="col-12 col-md-5 card card-body">
             <p class="card-text">
               Хотите использовать собственную систему?
               создайте свою организацию за пару кликов        

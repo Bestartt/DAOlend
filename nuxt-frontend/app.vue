@@ -35,6 +35,18 @@
     font-family: 'Ubuntu', sans-serif;
   }
 
+  .card {
+    box-shadow: 0 10px 40px rgb(216, 216, 216);
+    border-radius: 10px;
+  }
+
+  .no-shadow {
+    box-shadow: none;
+  }
+
+  .center {
+    @apply flex flex-col items-center;
+  }
 
 
 </style>

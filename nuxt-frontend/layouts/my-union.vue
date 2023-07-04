@@ -17,7 +17,7 @@
     <main>
       <Navbar />
       <notification></notification>
-      <div px-24 px-md-32 block>
+      <div px-24 px-md-32 block bg-gray-1 style="min-height: 90vh;">
         
         <div v-if="address == null">
             <h3>

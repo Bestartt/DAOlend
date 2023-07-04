@@ -1,43 +1,61 @@
 <script setup lang="ts">
     let requests = get_join_requests();
     let unions = ref<any[]>([]);
+    import autoAnimate from "@formkit/auto-animate";
+
+    const union_list = ref();
 
 
     onMounted(async () => {
         unions.value = await getRequestsData(requests);
+        autoAnimate(union_list.value);
     })
 
+    function remove(index: number) {
+        unions.value.splice(index, 1);
+        remove_join_request(index);
+    }
 
 </script>
 
 <template>
 
-    <div px-16 py-6>
-        <div flex justify-between>
-            <h4>Ваши запросы на вступление</h4>
+    <div class="center px-12 py-6">
+        <div class="min-w-430px flex justify-between">
+            <h4>Ваши запросы</h4>
             <button @click="clear_join_requests(); unions = []" class="btn btn-danger">очистить</button>
         </div>
         
+        <div ref="union_list">
+            <div v-for="(union, i) in unions" class="card card-body mt-3 max-w-700px">
+                <div flex justify-between>
+                    <h3>{{ union.name }}</h3>
+                    <button class="btn-close btn-sm" @click="remove(i)"></button>
+                </div>
+                
 
-        <div v-for="union in unions" mt-3 max-w-600px class="card card-body">
-            <h3>{{ union.name }}</h3>
+                <p>основатель: {{ union.ownerName }}</p>
+                <p>адрес: {{ union.address }}</p>
 
-            <p>основатель: {{ union.ownerName }}</p>
-            <p>адрес: {{ union.address }}</p>
+                <p>статус: 
+                    <span v-if="union.joined" text-green>
+                        <span class="badge rounded-pill text-bg-success">вы вступили</span>
+                    </span>
+                    <span v-else>
+                        <span class="badge rounded-pill text-bg-warning">ожидание</span>
+                    </span>
+                </p>
 
-            <p>статус: 
-                <span v-if="union.joined" text-green>вы вступили</span>
-                <span v-else>ожидание</span>
-            </p>
-
-            <router-link 
-                :to="`/unions/${union.address}`" 
-                class="btn btn-dark" 
-                v-if="union.joined"
-            >
-                перейти
-            </router-link>
+                <router-link 
+                    :to="`/unions/${union.address}`" 
+                    class="btn btn-dark" 
+                    v-if="union.joined"
+                >
+                    перейти
+                </router-link>
+            </div>            
         </div>
+
 
     </div>
 

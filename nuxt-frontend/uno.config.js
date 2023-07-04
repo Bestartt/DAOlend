@@ -6,6 +6,8 @@ import {
     presetWebFonts,
   } from 'unocss'
   
+  import transformerDirectives from '@unocss/transformer-directives'
+
   export default defineConfig({
     presets: [
       presetUno(),
@@ -22,5 +24,8 @@ import {
         },
       }),
     ],
+    transformers: [
+      transformerDirectives(),
+    ]
   })
   

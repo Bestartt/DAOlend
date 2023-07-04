@@ -35,22 +35,25 @@
 
         <br>
 
-        <table class="table table-striped" min-w-400px max-w-800px mt-5>
-            <thead>
-                <tr>
-                    <th>Имя</th>
-                    <th>Вложение</th>
-                </tr>
-            </thead>
+        <div class="card card-body max-w-800px mt-3">
+            <table class="table table-hover min-w-400px max-w-800px">
+                <thead>
+                    <tr>
+                        <th>Имя</th>
+                        <th>Вложение</th>
+                    </tr>
+                </thead>
 
-            <tbody>
+                <tbody>
 
-                <tr v-for="member in members">
-                    <td>{{ member[2] }}</td>
-                    <td>{{ member[0] }}</td>
-                </tr>
-            </tbody>
-        </table>           
+                    <tr v-for="member in members">
+                        <td>{{ member[2] }}</td>
+                        <td>{{ member[0] }}</td>
+                    </tr>
+                </tbody>
+            </table>              
+        </div>
+         
     </div>
      
 
