@@ -4,7 +4,7 @@
     definePageMeta({layout: "my-union"})
 
 
-    let address = get_my_union();
+    let address = my_union.get();
     let contract: Contract;
     let credits = ref<any>(null);
     let currentCredit = ref(-1);

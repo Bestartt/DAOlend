@@ -7,7 +7,7 @@
     async function getOrganizationData() {
         let requested_unions = await getRequestsData(requests);
         unions.value = requested_unions.filter(request => request.joined);
-        myUnionExists.value = await contractExists(get_my_union());        
+        myUnionExists.value = await connection.contractExists(my_union.get());        
     }
 
     function update(event: MouseEvent) {

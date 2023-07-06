@@ -1,7 +1,7 @@
 <script lang="ts" setup>
     definePageMeta({layout: "my-union"})
 
-    let address = get_my_union();
+    let address = my_union.get();
     let requests = ref<any[]>([]);
     let loading = ref(false);
     let notif = useNotification();

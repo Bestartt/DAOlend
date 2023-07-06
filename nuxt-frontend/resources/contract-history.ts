@@ -1,6 +1,5 @@
-import { ethers } from "ethers"
+import { TransactionType, get_transactions_info } from "~/utils/transaction";
 
-import contract_built from "~/utils/build";
 
 
 const ETHERSCAN = {
@@ -12,47 +11,22 @@ const ETHERSCAN = {
 const ETHERSCAN_APIKEY = "T4SSWAURWMV6X2T1EED11HDIWKT28KP25W"
 
 
-type networks = "sepolia" | "goerli" | "mainnet"
+type networks = "sepolia" | "goerli" | "homestead"
 
 
-export type Transaction = {
-    blockNumber: string,
-    timestamp: string,
-    hash: string,
-    nonce: string,
-    blockHash: string,
-    from: string,
-    to: string,
-    methodId: string,
-    input: string
-}
 
-
-export async function get_transactions_list(address: string, network: networks = "sepolia"): Promise<Transaction[]> {
-    let api = ETHERSCAN[network];
-
-    let response = await fetch(`${api}?module=account&action=txlist&address=${address}&apikey=${ETHERSCAN_APIKEY}`);
+export async function fetch_transactions(contract_address: string): Promise<TransactionType[]> {
+    let response = await fetch(`${ETHERSCAN.sepolia}?module=account&action=txlist&address=${contract_address}&apikey=${ETHERSCAN_APIKEY}`);
     let data = await response.json();
     return data.result;
-
 }
 
 
-export function getMethodName(transaction: Transaction) {
-    const abi = contract_built.abi;
-    const iface = new ethers.utils.Interface(abi);
-    return iface.getFunction(transaction.methodId);
+export async function get_transactions(contract_address: string) {
+    let transactions = await fetch_transactions(contract_address);
+    let result = get_transactions_info(transactions);
+    debugger;
+    return result;
 
 }
 
-
-export function getTransactionParams(transaction: Transaction) {
-    const abi = contract_built.abi;
-    const iface = new ethers.utils.Interface(abi);
-
-    let methodName = getMethodName(transaction);
-
-    return iface.decodeFunctionData(methodName, transaction.input);
-
-
-}

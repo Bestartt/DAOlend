@@ -1,7 +1,7 @@
 <script lang="ts" setup>
     import { Contract } from "~/utils/contract";
 
-    let address = get_my_union();
+    let address = my_union.get();
     let contract: Contract;
     let data = ref<any>(null);
     
@@ -31,7 +31,7 @@
             <br>
             <span mt-5>Организация: </span>
             <h3>{{ data.name }}</h3>
-            <p text-gray>Адрес: {{ get_my_union() }}</p>
+            <p text-gray>Адрес: {{ my_union.get() }}</p>
 
             <hr>    
 

@@ -42,7 +42,7 @@
                 owner_name.value,
             );
 
-            set_my_union(address);
+            my_union.set(address);
 
             created_unions.add({
                 name: union_name.value,
@@ -69,7 +69,7 @@
     }
 
     onMounted(async () => {
-        let myUnionExists = await contractExists(get_my_union());
+        let myUnionExists = await connection.contractExists(my_union.get());
         if (myUnionExists) {
             notif.notify(
                 "У вас уже есть организация!", 

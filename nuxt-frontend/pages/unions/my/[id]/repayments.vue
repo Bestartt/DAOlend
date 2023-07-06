@@ -3,7 +3,7 @@
 
     let route = useRoute();
 
-    let address = get_my_union();
+    let address = my_union.get();
     let contract: Contract;
     let repayments = ref<any>(null);
 

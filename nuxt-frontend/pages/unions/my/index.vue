@@ -3,7 +3,7 @@
 
     definePageMeta({layout: "my-union"})
 
-    let address = get_my_union();
+    let address = my_union.get();
     let contract: Contract;
     let data = ref<any>(null);
     
@@ -44,7 +44,7 @@
                     </tr>
                     <tr>
                         <td>Адрес: </td>
-                        <td>{{ get_my_union() }} </td>
+                        <td>{{ my_union.get() }} </td>
                     </tr>
                     <tr>
                         <td>Колличество участников: </td>

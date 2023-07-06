@@ -1,6 +1,7 @@
 import { ethers, ContractFactory } from "ethers";
-import { CreditUnion } from "./typechain/types";
-import contract_built from "./build";
+import { CreditUnion } from "../artifacts/typechain/types";
+import contract_built from "../artifacts/build";
+
 
 let singleton: Contract | null = null;
 
@@ -27,7 +28,7 @@ export class Contract {
 
         this.address = address;
         singleton = this;
-        connection.requestAccount();
+        connection.requestMetamask();
     }
 
 
@@ -89,6 +90,8 @@ export class Contract {
         await this.contract.approveJoinRequest(index);
     }
 
+
+
 }
 
 
@@ -108,4 +111,42 @@ export async function createContract(
     await deployedContract.deployed();
 
     return await deployedContract.address;
+}
+
+
+/**
+ * checks if name is already in contract members
+ */
+export async function checkRequestStatus(address: string, name: string): Promise<boolean> {
+    let contract = new Contract(address);
+    let members = await contract.getMemberNames();
+    return members.includes(name);
+    
+}
+
+
+type JoinRequest = {address: string, username: string}
+
+
+export async function getRequestsData(requests: JoinRequest[]) {
+    let unions: any = [];
+
+    for (let i = 0; i < requests.length; i++) {
+        let request = requests[i];
+        let contract = new Contract(request.address);
+
+        try {
+            let data = await contract.getData();
+            let is_joined = await checkRequestStatus(request.address, request.username);
+
+            data["joined"] = is_joined;
+            data["address"] = request.address;
+
+            unions.push(data);
+            unions = unions.reverse();            
+        } catch (e) { }
+    }
+
+    return unions;
+
 }

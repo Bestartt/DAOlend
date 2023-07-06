@@ -1,10 +1,11 @@
 <script setup lang="ts" generic="T extends any, O extends any">
-  let my_union_address = get_my_union();
+  let my_union_address = my_union.get();
   let my_union_exists = ref(false);
 
   onBeforeMount(async () => {
-    my_union_exists.value = await contractExists(my_union_address);
+    my_union_exists.value = await connection.contractExists(my_union_address);
   });
+
 
 </script>
 
