@@ -25,7 +25,6 @@ export async function fetch_transactions(contract_address: string): Promise<Tran
 export async function get_transactions(contract_address: string) {
     let transactions = await fetch_transactions(contract_address);
     let result = get_transactions_info(transactions);
-    debugger;
     return result;
 
 }

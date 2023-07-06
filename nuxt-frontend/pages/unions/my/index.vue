@@ -6,11 +6,15 @@
     let address = my_union.get();
     let contract: Contract;
     let data = ref<any>(null);
+
+    let loading = ref(false);
     
     
     async function updateData() {
+        loading.value = true;
         contract = new Contract(address);
         data.value = await contract.getData();
+        loading.value = false;
     }
 
     onBeforeMount(async () => {
@@ -28,6 +32,13 @@
         </div>
 
         <div class="card card-body max-w-800px" >
+
+            <div class="w-full h-35vh flex justify-center items-center" v-if="loading">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>            
+            </div>
+
             <table class="table" max-w-lg v-if="data !== null">
                 <tbody>
                     <tr>

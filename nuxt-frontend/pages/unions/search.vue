@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { Contract, connection } from "~/utils/crypto";
+    import { Contract } from "~/utils/contract";
     import { useRouter } from "vue-router";
 
     let contract_address = ref("");

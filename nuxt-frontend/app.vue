@@ -35,9 +35,15 @@
     font-family: 'Ubuntu', sans-serif;
   }
 
-  .card {
+  .card, .navbar {
     box-shadow: 0 10px 40px rgb(216, 216, 216);
     border-radius: 10px;
+  }
+
+  .navbar {
+    box-shadow: 0 10px 40px rgb(239, 239, 239);
+    border-radius: 10px;
+    position: sticky;
   }
 
   .no-shadow {

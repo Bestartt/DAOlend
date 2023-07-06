@@ -70,7 +70,7 @@ export class LocalKV {
     }
 
     set(value: string) {
-        localStorage.setItem(this.name, JSON.stringify(value));
+        localStorage.setItem(this.name, value);
     }
 
     get(): string {

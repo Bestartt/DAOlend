@@ -3,6 +3,7 @@
 
     let requests = join_requests.get();
     let unions = ref<any[]>([]);
+    let network = ref("");
 
     async function getOrganizationData() {
         let requested_unions = await getRequestsData(requests);
@@ -16,8 +17,12 @@
         getOrganizationData();
     }
 
-    onMounted(() => {
-        getOrganizationData()
+    onMounted(async () => {
+        getOrganizationData();
+        let network_name = (await connection.getNetwork()).name;
+        network.value = network_name == 'unknown' ? 'локальная' : network_name;
+        network.value = network_name == 'homestead' ? 'ethereum' : network_name;
+
     })
 
 </script>
@@ -27,7 +32,7 @@
 <template>
     <nav class="navbar navbar-expand-md border-bottom px-1 md:px-10">
         <div class="container-fluid">
-            <router-link to="/" class="navbar-brand">
+            <router-link to="/" class="navbar-brand ms-4">
                 <img src="/icon.svg" alt="icon" width="30" height="30"  class="d-inline-block align-text-top">
             </router-link>
 
@@ -44,7 +49,9 @@
 
                         <ul class="dropdown-menu">
                             <template v-if="myUnionExists">
-                                <router-link to="/unions/my" class="dropdown-item">моя организация</router-link>
+                                <router-link to="/unions/my" class="dropdown-item">
+                                    моя организация
+                                </router-link>
                                 <li><hr class="dropdown-divider"></li>
                             </template>
 
@@ -68,9 +75,17 @@
                     </li>
 
                     <li class="nav-item">
-                        <router-link to="/local-history" class="nav-link">история</router-link>
+                        <router-link to="/my-unions" class="nav-link">мои</router-link>
                     </li>
                 </ul>
+
+
+
+            </div>
+
+            <div flex flex-col mr-10>
+                <span text-gray text-xs>сеть</span>
+                <b text-lg style="margin-top: -10px;">{{ network }}</b>                    
             </div>
         </div>
     </nav>
