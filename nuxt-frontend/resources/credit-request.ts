@@ -27,6 +27,7 @@ export async function getMemberNames(addresses: string[]) {
     let names = [];
 
     for (let i = 0; i < addresses.length; i++) {
+        let contract = new Contract(addresses[i]);
         let member = await contract.getMember(addresses[i]);
         names.push(member.name);                
     }

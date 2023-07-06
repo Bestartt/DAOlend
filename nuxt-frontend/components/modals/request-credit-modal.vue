@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-    import { Contract } from '~/utils/crypto'; 
+    import { Contract } from "~/utils/contract";
 
      let props = defineProps<{contractAddress: string}>();
     let emits = defineEmits(["onComplete"]);

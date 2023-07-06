@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { Contract } from "~/utils/crypto";
+    import { Contract } from "~/utils/contract";
 
     let route = useRoute();
 

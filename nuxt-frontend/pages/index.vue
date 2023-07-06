@@ -4,7 +4,7 @@
 
   onBeforeMount(async () => {
     my_union_exists.value = await contractExists(my_union_address);
-  })
+  });
 
 </script>
 

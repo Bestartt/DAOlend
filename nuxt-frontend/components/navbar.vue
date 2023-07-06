@@ -1,7 +1,7 @@
 <script setup lang="ts">
     let myUnionExists = ref(false);
 
-    let requests = get_join_requests();
+    let requests = join_requests.get();
     let unions = ref<any[]>([]);
 
     async function getOrganizationData() {
@@ -65,6 +65,10 @@
 
                     <li class="nav-item">
                         <router-link to="/unions/search" class="nav-link">найти</router-link>
+                    </li>
+
+                    <li class="nav-item">
+                        <router-link to="/local-history" class="nav-link">история</router-link>
                     </li>
                 </ul>
             </div>

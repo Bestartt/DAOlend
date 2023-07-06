@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 
-contract CreditUnion {
+
+contract CreditUnion is Ownable {
     uint32 public totalDeposit = 0;
-    address public owner;
     string public ownerName;
     string public name;
 
@@ -79,7 +80,6 @@ contract CreditUnion {
             totalDeposit += members[initialMembers[i]].contribution;
         }
 
-        owner = msg.sender;
         ownerName = _ownerName;
         name = _name;
 
@@ -130,9 +130,8 @@ contract CreditUnion {
 
     }
 
-    function createJoinRequest(string memory username) public {
+    function createJoinRequest(string memory username) public onlyOwner {
         require(!members[msg.sender].joined, "you are already in members list");
-        require(msg.sender != owner, "you are owner. No need to create join request");
 
         address[] memory approvedMembers;
         bool alreadyRequested = false;
@@ -151,7 +150,7 @@ contract CreditUnion {
     }
 
     function approveJoinRequest(uint32 id) public {
-        require(members[msg.sender].joined || msg.sender == owner, "you must first join to approve");
+        require(members[msg.sender].joined, "you must first join to approve");
         joinRequests[id].approvedMembers.push(msg.sender);
 
         JoinRequest memory request = joinRequests[id];
@@ -198,8 +197,7 @@ contract CreditUnion {
         return creditRequests;
     }
 
-    function createCreditRequest(uint32 amount, uint32 term, string memory deptor) public {
-        require(msg.sender == owner, "only owner can create credit request");
+    function createCreditRequest(uint32 amount, uint32 term, string memory deptor) public onlyOwner {
         require(amount <= totalDeposit, "amount must be less than total deposit");
 
         address[] memory approvedMembers;
@@ -269,9 +267,7 @@ contract CreditUnion {
         return credits;
     }
 
-    function repay(uint32 id, uint32 amount, uint32 month) public {
-        require(msg.sender == owner, "you must be owner to create repayment");
-
+    function repay(uint32 id, uint32 amount, uint32 month) public onlyOwner {
         credits[id].repaidAmount += amount;
         repayments.push(
             Repayment(month, amount, id)

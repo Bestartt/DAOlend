@@ -33,8 +33,7 @@
         loading.value = true;
 
         try {
-            connection.getProvider();
-            connection.getSigner();
+            connect_to_metamask();
 
             let address = await createContract(
                 union_name.value, 
@@ -44,15 +43,29 @@
             );
 
             set_my_union(address);
+
+            created_unions.add({
+                name: union_name.value,
+                owner_name: owner_name.value,
+                date: new Date().toISOString(),
+                network: await connection.getNetwork(),
+                address: address
+            });
+
             router.push("/unions/my");
 
         } catch(e) {
             console.error(e);
             alert("Отменена или ошибка. Удостовертесь что вы вошли в свой Metamask");
-        } finally {
-            loading.value = false; 
-        }
+        } 
 
+        loading.value = false; 
+
+    }
+
+    function connect_to_metamask() {
+        connection.getProvider();
+        connection.getSigner();
     }
 
     onMounted(async () => {

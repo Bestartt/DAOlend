@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    let requests = get_join_requests();
+    let requests = join_requests.get();
     let unions = ref<any[]>([]);
     import autoAnimate from "@formkit/auto-animate";
 
@@ -13,7 +13,7 @@
 
     function remove(index: number) {
         unions.value.splice(index, 1);
-        remove_join_request(index);
+        join_requests.remove(index);
     }
 
 </script>

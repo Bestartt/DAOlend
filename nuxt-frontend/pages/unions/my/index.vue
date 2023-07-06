@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-    import { Contract } from "~/utils/crypto";
+    import { Contract } from "~/utils/contract";
 
     definePageMeta({layout: "my-union"})
 

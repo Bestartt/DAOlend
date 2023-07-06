@@ -45,7 +45,7 @@
 
         try {
             await contract.join(username.value);
-            set_join_request(contract_address.value, username.value);
+            join_requests.add({address: contract_address.value, username: username.value})
             router.push("/requests");
 
         } catch (e) {
