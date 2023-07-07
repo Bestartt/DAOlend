@@ -6,6 +6,20 @@ export function to_mutable(list: Array<any>) {
 }
 
 
+export function truncateString(str: string) {
+    let maxLength = 18;
+    if (str.length <= maxLength) {
+        return str;
+    } else {
+        return str.substring(0, maxLength) + '...';
+    }
+}
+
+export function copy(str: string) {
+    navigator.clipboard.writeText(str);
+}
+
+
 export class LocalDB<T> {
     /**
      * localStorage wrapper to make it like ORM for multiple values

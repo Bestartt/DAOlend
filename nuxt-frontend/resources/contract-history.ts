@@ -29,3 +29,14 @@ export async function get_transactions(contract_address: string) {
 
 }
 
+
+export const actions_dict = {
+    deposit: "вложение",
+    createJoinRequest: "запрос на вступление",
+    approveJoinRequest: "подтверждение запроса на вступление",
+    createCreditRequest: "запрос на кредит",
+    approveCreditRequest: "потверждение запроса на кредит",
+    repay: "погашение",
+    null: "неизвестно"
+}
+

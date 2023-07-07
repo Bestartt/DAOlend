@@ -1,4 +1,4 @@
-export function approve(id) {
+export function approve(id, address: string) {
     // @ts-ignore
     let contract = new Contract(address);
     contract.approveCreditRequest(id)

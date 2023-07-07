@@ -2,12 +2,12 @@
 
     import { TransactionInfo } from '~/utils/transaction';
 
-    definePageMeta({layout: "my-union"})
+    definePageMeta({layout: "union"})
 
     const NETWORK_NAMES = ["homestead", "goerli", "sepolia", "mainnet"];
 
-
-    let address = my_union.get();
+    let route = useRoute();
+    let address = route.params.address;
     let transactions = ref<TransactionInfo[]>([]);
     let members = ref([]);
 

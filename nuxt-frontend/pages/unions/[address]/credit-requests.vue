@@ -44,7 +44,7 @@
                 </p>
 
 
-                <button @click="approve(credit_request[0])" class="btn btn-dark">подтвердить</button>
+                <button @click="approve(credit_request[0], address)" class="btn btn-dark">подтвердить</button>
 
             </div>
         </template>          

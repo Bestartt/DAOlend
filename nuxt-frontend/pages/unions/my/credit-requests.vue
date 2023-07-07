@@ -50,7 +50,7 @@
 
                 
                 <button
-                    @click="approve(credit_request[0])" 
+                    @click="approve(credit_request[0], address)" 
                     class="btn btn-dark">подтвердить
                 </button>
 

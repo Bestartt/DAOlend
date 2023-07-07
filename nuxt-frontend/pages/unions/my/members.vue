@@ -5,6 +5,8 @@
     let address = my_union.get();
     let contract: Contract;
     let members = ref([]);
+    let membersAddresses = ref([]);
+
     let updateLoading = ref(false);
     
     if (address != null) {
@@ -15,6 +17,7 @@
     async function update() {
         updateLoading.value = true;
         members.value = await contract.getMembers();
+        membersAddresses.value = await contract.getMemberAddresses();
         updateLoading.value = false;
     }
 
@@ -41,14 +44,16 @@
                     <tr>
                         <th>Имя</th>
                         <th>Вложение</th>
+                        <th>Адрес</th>
                     </tr>
                 </thead>
 
                 <tbody>
 
-                    <tr v-for="member in members">
+                    <tr v-for="(member, i) in members">
                         <td>{{ member[2] }}</td>
                         <td>{{ member[0] }}</td>
+                        <td>{{ membersAddresses[i] }}</td>
                     </tr>
                 </tbody>
             </table>              
