@@ -81,6 +81,9 @@ export class Contract {
     async getCreditRequests() { return await this.contract.getCreditRequests(); }
     async createCreditRequest(amount: number, term: number, debtor: string) { await this.contract.createCreditRequest(amount, term, debtor); }
     async getRepaymentsByCredit(creditId: number) { return await this.contract.getRepaymentsByCredit(creditId); }
+    async getJoinRequests() {
+        return await this.contract.getJoinRequests();
+    }
 
     async approveJoinRequest(address: string) {
         let requests: Object[] = await this.contract.getJoinRequests();

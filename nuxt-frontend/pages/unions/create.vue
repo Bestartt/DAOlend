@@ -33,7 +33,7 @@
         loading.value = true;
 
         try {
-            connect_to_metamask();
+            connection.requestMetamask();
 
             let address = await createContract(
                 union_name.value, 
@@ -61,11 +61,6 @@
 
         loading.value = false; 
 
-    }
-
-    function connect_to_metamask() {
-        connection.getProvider();
-        connection.getSigner();
     }
 
     onMounted(async () => {

@@ -22,9 +22,11 @@
     }
     
     async function update() {
+        loading.value = true;
         let contract = new Contract(address);
         let data = await contract.getJoinRequests();
         requests.value = data.filter((request) => request[0] != "0x0000000000000000000000000000000000000000");
+        loading.value = false;
     }
 
     onMounted(update);
@@ -38,7 +40,14 @@
         </div>
         <br>
 
-        <div v-if="requests && requests.length == 0">
+        <!-- loading -->
+        <div class="w-full h-10vh flex justify-center items-center" v-if="loading">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>            
+        </div>
+
+        <div v-if="requests && requests.length == 0 && !loading">
             <h2 text-gray>Пусто</h2>
         </div>
 

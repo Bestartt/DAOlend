@@ -40,7 +40,7 @@
 </script>
 
 <template>
-    <ul class="nav nav-pills flex-column sidenav max-h-42vh">
+    <ul class="nav nav-pills flex-column sidenav max-h-45vh">
 
         <li v-for="item in menu" class="nav-item">
 

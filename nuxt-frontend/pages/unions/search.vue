@@ -54,6 +54,10 @@
         
     }
 
+    onMounted(() => {
+        connection.requestMetamask();
+    })
+
 
 </script>
 

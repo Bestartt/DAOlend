@@ -28,6 +28,15 @@ export type TransactionType = {
 }
 
 
+export type TransactionInfo = {
+    methodName: string,
+    argument: any,
+    from: string,
+    to: string,
+    timeStamp: number
+};
+
+
 
 export class Transaction {
     iface: ethers.utils.Interface;
@@ -54,17 +63,21 @@ export class Transaction {
             return []
         }
 
-        return this.iface.decodeFunctionData(
+        let data =  this.iface.decodeFunctionData(
             function_name, 
             this.transaction.input
         );
+
+        debugger;
+
+        return data;
     }
 
-    info() {
+    info(): TransactionInfo {
         let t = this.transaction;
         return {
             methodName: this.get_function_name(),
-            argument: this.get_function_params()[0],          
+            argument: this.get_function_params(),          
             from: t.from,
             to: t.to,
             timeStamp: Number(t.timeStamp),
@@ -73,8 +86,6 @@ export class Transaction {
 
 }
 
-
-export type TransactionInfo = ReturnType<Transaction['info']>;
 
 
 export function get_transactions_info(transactions: TransactionType[]) {
