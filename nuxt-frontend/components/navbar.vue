@@ -32,7 +32,7 @@
 <template>
     <nav class="navbar navbar-expand-md border-bottom px-1 md:px-10">
         <div class="container-fluid">
-            <router-link to="/" class="navbar-brand ms-4">
+            <router-link to="/" class="navbar-brand ms-20 flex">
                 <img src="/icon.svg" alt="icon" width="30" height="30"  class="d-inline-block align-text-top">
             </router-link>
 
@@ -41,7 +41,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="collapse navbar-collapse" style="justify-content: space-around;" id="navbarNav">
                 <ul class="navbar-nav">
 
                     <li class="nav-item dropdown">
@@ -75,7 +75,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <router-link to="/my-unions" class="nav-link">мои</router-link>
+                        <router-link to="/my-unions" class="nav-link">созданные</router-link>
                     </li>
                 </ul>
 
@@ -83,7 +83,7 @@
 
             </div>
 
-            <div flex flex-col mr-10>
+            <div class="d-none d-md-flex" flex flex-col mr-22>
                 <span text-gray text-xs>сеть</span>
                 <b text-lg style="margin-top: -10px;">{{ network }}</b>                    
             </div>
