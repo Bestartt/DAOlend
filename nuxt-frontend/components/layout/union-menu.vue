@@ -24,6 +24,10 @@
         {
             name: "Запросы на вступление",
             route: `/unions/${address}/join`
+        },
+        {
+            name: "История",
+            route: `/unions/${address}/history`
         }
     ]);
 
@@ -40,7 +44,7 @@
 </script>
 
 <template>
-    <ul class="nav nav-pills flex-column sidenav max-h-45vh">
+    <ul class="nav nav-pills flex-column sidenav bg-white card card-body max-h-45vh">
 
         <li v-for="item in menu" class="nav-item">
 
