@@ -49,9 +49,9 @@
 
                         <ul class="dropdown-menu">
                             <template v-if="myUnionExists">
-                                <router-link to="/unions/my" class="dropdown-item">
+                                <nuxt-link prefetch to="/unions/my" class="dropdown-item">
                                     моя организация
-                                </router-link>
+                                </nuxt-link >
                                 <li><hr class="dropdown-divider"></li>
                             </template>
 
@@ -66,16 +66,16 @@
                         </ul>
                     </li>
 
-                    <li class="nav-item">
-                        <router-link to="/requests" class="nav-link">мои запросы</router-link>
+                    <li class="nav-item">   
+                        <nuxt-link prefetch to="/requests" class="nav-link">мои запросы</nuxt-link >
                     </li>
 
                     <li class="nav-item">
-                        <router-link to="/unions/search" class="nav-link">найти</router-link>
+                        <nuxt-link prefetch to="/unions/search" class="nav-link">найти</nuxt-link >
                     </li>
 
                     <li class="nav-item">
-                        <router-link to="/my-unions" class="nav-link">созданные</router-link>
+                        <nuxt-link prefetch to="/my-unions" class="nav-link">созданные</nuxt-link >
                     </li>
                 </ul>
 

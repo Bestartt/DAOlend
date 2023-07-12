@@ -1,15 +1,12 @@
 <script lang="ts" setup>
     import { Contract } from "~/utils/contract";
+    import { useAsyncData } from "nuxt/app";
 
     let address = my_union.get();
-    let contract: Contract;
-    let data = ref<any>(null);
-    
-    
-    if (address != null) {
-        contract = new Contract(address);
-        contract.getData().then(d => data.value = d);
-    }
+    let contract: Contract = new Contract(address);
+
+
+    let { data, pending } = await useAsyncData('organization_data', async() => await contract.getData());
 </script>
 
 
@@ -19,19 +16,22 @@
       <notification></notification>
       <div px-24 px-md-32 block bg-gray-1 style="min-height: 90vh;">
         
-        <div v-if="address == null">
-            <h3>
-                У вас нет организации. 
-            </h3>
 
-            <router-link to="/create-union">создать</router-link>
-        </div>
-
-        <div v-if="data != null">
+        <div>
             <br>
-            <span mt-5>Организация: </span>
-            <h3>{{ data.name }}</h3>
-            <p text-gray>Адрес: {{ my_union.get() }}</p>
+
+            <template v-if="data != null">
+                <span mt-5>Организация: </span>
+                <h3>{{ data.name }}</h3>
+                <p text-gray>Адрес: {{ my_union.get() }}</p>                
+            </template>
+
+            <div class="w-full h-10vh flex justify-center items-center" v-if="pending">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>            
+            </div>
+
 
             <hr>    
 

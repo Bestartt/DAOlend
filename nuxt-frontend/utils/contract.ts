@@ -16,7 +16,6 @@ export class Contract {
         if (singleton && singleton.address == address) {
             return singleton;
         }
-
         // if signer is not specified use default
         this.signer = typeof signer !== "undefined" ? signer : connection.getSigner();
 

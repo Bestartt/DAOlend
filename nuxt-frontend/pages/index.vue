@@ -41,7 +41,7 @@
             </p>
     
           
-            <nuxt-link to="/unions/create" class="btn btn-dark">создать</nuxt-link>
+            <nuxt-link prefetch to="/unions/create" class="btn btn-dark">создать</nuxt-link>
           </div>
     
           <div class="col-5 card card-body">
@@ -49,7 +49,7 @@
               Или можете вступить в другую организацию. Просто введите адрес организации
             </p>
     
-            <nuxt-link to="/unions/search" class="btn btn-dark">найти</nuxt-link>
+            <nuxt-link prefetch to="/unions/search" class="btn btn-dark">найти</nuxt-link>
           </div>
         </div> 
       </div>        

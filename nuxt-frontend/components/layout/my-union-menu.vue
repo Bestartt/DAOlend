@@ -42,16 +42,16 @@
 </script>
 
 <template>
-    <ul class="nav nav-pills flex-column sidenav bg-white card card-body max-h-45vh" >
+    <ul class="nav nav-pills flex-column sidenav bg-white card card-body" >
 
         <li v-for="item in menu" class="nav-item">
 
-            <router-link 
+            <nuxt-link refresh 
                 :to="item.route" 
                 :class="('nav-link ' + item.class)"
             >
             {{ item.name }}
-            </router-link>
+            </nuxt-link>
             
         </li>   
     </ul>

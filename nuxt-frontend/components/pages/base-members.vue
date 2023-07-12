@@ -1,29 +1,15 @@
 <script lang="ts" setup>
     import { Contract } from "~/utils/contract";
+    import { useAsyncData } from 'nuxt/app';
 
     
     let props = defineProps<{address: string}>();
     let address = props.address;
 
-    let contract: Contract;
-    let members = ref([]);
-    let membersAddresses = ref([]);
+    let contract: Contract = new Contract(address);
 
-    let updateLoading = ref(false);
-    
-    if (address != null) {
-        contract = new Contract(address);
-        contract.getMembers().then(d => members.value = d);
-    }
-
-    async function update() {
-        updateLoading.value = true;
-        members.value = await contract.getMembers();
-        membersAddresses.value = await contract.getMemberAddresses();
-        updateLoading.value = false;
-    }
-
-
+    let { data: members, pending, refresh: refresh1 } = useAsyncData(async () => await contract.getMembers());
+    let { data: membersAddresses, refresh: refresh2 } = useAsyncData(async () => await contract.getMemberAddresses());
 </script>
 
 <template>
@@ -31,7 +17,7 @@
         <div flex justify-between>
             <h4>Участники организации</h4>
 
-            <button class="btn btn-dark" @click="update()">
+            <button class="btn btn-dark" @click="refresh1(); refresh2()">
                 обновить
             </button>
         </div>
@@ -40,7 +26,13 @@
 
         <br>
 
-        <div class="card card-body max-w-800px mt-3">
+        <div class="w-full h-10vh flex justify-center items-center" v-if="pending">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>            
+        </div>
+
+        <div class="card card-body max-w-800px mt-3" v-else>
             <table class="table table-hover min-w-400px max-w-800px">
                 <thead>
                     <tr>

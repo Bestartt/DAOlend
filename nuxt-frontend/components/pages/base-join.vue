@@ -1,13 +1,13 @@
 <script lang="ts" setup>
     let props = defineProps<{address: string}>();
     let address = props.address;
+    let contract = new Contract(address);
     
-    let requests = ref<any[]>([]);
     let loading = ref(false);
-    let dataLoading = ref(false);
-
     let notif = useNotification();
     
+    let { data, pending, refresh } = useAsyncData(async () => await contract.getJoinRequests());
+
 
     async function approve(requestAddress: string) {
         loading.value = true;
@@ -22,38 +22,28 @@
             loading.value = false;
         }
     }
-    
-    async function update() {
-        dataLoading.value = true;
-        let contract = new Contract(address);
-        let data = await contract.getJoinRequests();
-        requests.value = data.filter((request) => request[0] != "0x0000000000000000000000000000000000000000");
-        dataLoading.value = false;
-    }
-
-    onMounted(update);
 </script>
 
 <template>
     <div>
         <div flex justify-between>
             <h4>Запросы на вступление</h4>
-            <button class="btn btn-dark" @click="update()">обновить</button>
+            <button class="btn btn-dark" @click="refresh()">обновить</button>
         </div>
         <br>
 
         <!-- loading -->
-        <div class="w-full h-10vh flex justify-center items-center" v-if="dataLoading">
+        <div class="w-full h-10vh flex justify-center items-center" v-if="pending">
             <div class="spinner-border" role="status">
                 <span class="sr-only">Loading...</span>
             </div>            
         </div>
 
-        <div v-if="requests && requests.length == 0 && !loading">
+        <div v-if="data && data.length == 0 && !pending">
             <h2 text-gray>Пусто</h2>
         </div>
 
-        <template v-for="request in requests">
+        <template v-for="request in data">
             <div max-w-500px class="card card-body">
                 <span tex-gray>Имя: </span>
                 <h4>{{ request[1] }}</h4>

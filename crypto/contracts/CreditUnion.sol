@@ -10,78 +10,85 @@ contract CreditUnion is Ownable {
     string public ownerName;
     string public name;
 
-    struct Member {
-        uint32 contribution;
-        bool joined;
-        string name;
-    }
 
-    struct Credit {
-        uint32 id;
-        string deptor;
-        uint32 amount;
-        uint32 term;
-        uint32 repaidAmount;
-    }
-
-    struct Repayment {
-        uint32 month;
-        uint32 amount;
-        uint32 creditId;
-    }
-
+    // credit requests
     struct CreditRequest {
         uint32 id;
         string deptor;
         uint32 amount;
         uint32 term;
         address[] approvedMembers;
+        address deptorAddress;
+        bool creditCreated;
+    }     
+
+    CreditRequest[] public creditRequests;
+    uint32 public creditRequestCounter;
+
+    // credit
+    struct Credit {
+        uint32 id;
+        string deptor;
+        uint32 amount;
+        uint32 term;
+        uint32 repaidAmount;
+        address deptorAddress;
     }
 
+    Credit[] public credits;
+    uint32 public creditCounter;
+
+    // repayment
+    struct Repayment {
+        uint32 month;
+        uint32 amount;
+        uint32 creditId;
+    }
+
+    Repayment[] public repayments;
+    uint32 public repaymentCounter;
+
+    // join request
     struct JoinRequest {
         address user;
         string name;
         address[] approvedMembers;
     }
 
-    Credit[] public credits;
-    uint32 public creditCounter;
-
-    Repayment[] public repayments;
-    uint32 public repaymentCounter;
-
-    CreditRequest[] public creditRequests;
-    uint32 public creditRequestCounter;
-
     uint constant MAX_JOIN_REQUESTS = 1000; // Maximum number of join requests
     JoinRequest[MAX_JOIN_REQUESTS] public joinRequests; // Fixed-size array to store join requests
-    uint numJoinRequests;
+    uint numJoinRequests;    
+
+    // member
+    struct Member {
+        uint32 contribution;
+        bool joined;
+        string name;
+    }    
+
 
     address[] public membersList;
     mapping(address => Member) public members;
 
 
-    // only for testing purposes
     constructor(
         string memory _name, 
         address[] memory initialMembers, 
         string[] memory memberNames,
         string memory _ownerName
     ) {
-        for (uint i = 0; i < initialMembers.length; i++) {
+        ownerName = _ownerName;
+        name = _name;
 
+
+        for (uint i = 0; i < initialMembers.length; i++) {
             membersList.push(initialMembers[i]);
             members[initialMembers[i]] = Member({ 
                 name: memberNames[i],
                 contribution: 0, 
                 joined: true 
             });
-
-            totalDeposit += members[initialMembers[i]].contribution;
         }
-
-        ownerName = _ownerName;
-        name = _name;
 
         membersList.push(msg.sender);
         members[msg.sender] = Member({
@@ -97,16 +104,13 @@ contract CreditUnion is Ownable {
 
 
     // ====== MEMBERS FUNCTIONS
-
-    function getMemberNames() view public returns(string[] memory membersNames) {
+    function getMemberNames() view public returns(string[] memory) {
         string[] memory memberNames = new string[](membersList.length);
 
         for (uint i = 0; i < membersList.length; i++) {
             memberNames[i] = members[membersList[i]].name;
         }
-
         return memberNames;
-
     }
 
     function getMembers() view public returns(Member[] memory) {
@@ -127,10 +131,10 @@ contract CreditUnion is Ownable {
         require(members[msg.sender].joined, "only members can deposit, join first");
         totalDeposit += number;
         members[msg.sender].contribution += number;
-
     }
 
-    function createJoinRequest(string memory username) public onlyOwner {
+    // join requests
+    function createJoinRequest(string memory username) public {
         require(!members[msg.sender].joined, "you are already in members list");
 
         address[] memory approvedMembers;
@@ -151,6 +155,19 @@ contract CreditUnion is Ownable {
 
     function approveJoinRequest(uint32 id) public {
         require(members[msg.sender].joined, "you must first join to approve");
+
+        address[] memory approvedMembers = joinRequests[id].approvedMembers;
+
+        bool alreadyVoted = false;
+        for (uint i = 0; i < approvedMembers.length; i++) {
+            if (approvedMembers[i] == msg.sender) {
+                alreadyVoted = true;
+                break;
+            }
+        }
+
+        require(!alreadyVoted, "You have already voted");
+
         joinRequests[id].approvedMembers.push(msg.sender);
 
         JoinRequest memory request = joinRequests[id];
@@ -173,7 +190,6 @@ contract CreditUnion is Ownable {
         for (uint i = 0; i < len; i++) {
             result[i] = joinRequests[i];
         }
-
         return result;
     }
 
@@ -197,7 +213,7 @@ contract CreditUnion is Ownable {
         return creditRequests;
     }
 
-    function createCreditRequest(uint32 amount, uint32 term, string memory deptor) public onlyOwner {
+    function createCreditRequest(uint32 amount, uint32 term, string memory deptor) public {
         require(amount <= totalDeposit, "amount must be less than total deposit");
 
         address[] memory approvedMembers;
@@ -206,7 +222,9 @@ contract CreditUnion is Ownable {
             deptor, 
             amount, 
             term,
-            approvedMembers
+            approvedMembers,
+            msg.sender,
+            false
         ));
 
         creditRequestCounter++;
@@ -214,7 +232,9 @@ contract CreditUnion is Ownable {
 
     function approveCreditRequest(uint32 id) public {
         require(members[msg.sender].joined, "you must first join to approve");
+
         creditRequests[id].approvedMembers.push(msg.sender);
+
 
         CreditRequest memory request = creditRequests[id];
 
@@ -225,9 +245,12 @@ contract CreditUnion is Ownable {
                     request.deptor, 
                     request.amount, 
                     request.term, 
-                    0
+                    0,
+                    msg.sender
                 )
             );
+
+            creditRequests[id].creditCreated = true;
             totalDeposit -= request.amount;
             creditCounter++;
         }
@@ -267,7 +290,7 @@ contract CreditUnion is Ownable {
         return credits;
     }
 
-    function repay(uint32 id, uint32 amount, uint32 month) public onlyOwner {
+    function repay(uint32 id, uint32 amount, uint32 month) public {
         credits[id].repaidAmount += amount;
         repayments.push(
             Repayment(month, amount, id)
@@ -295,5 +318,4 @@ contract CreditUnion is Ownable {
         
         return result;
     }
-
 }

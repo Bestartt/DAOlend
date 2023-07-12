@@ -16,7 +16,7 @@
 
 
     function addMember() {
-        members.addresses.push(members.name); 
+        members.addresses.push(members.address); 
         members.names.push(members.name);
         
         members.name = ''; members.address = '';

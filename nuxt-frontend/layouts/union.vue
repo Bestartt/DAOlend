@@ -4,16 +4,12 @@
 
     let route = useRoute();
     let address = route.params.address;
-
-    let data = ref<any>(null);
-
-
-    if (address != null) {
+    
+    let { data, pending } = await useAsyncData('organization_data', async () => {
         // @ts-ignore
-        let contract = new Contract(address);
-        contract.getData().then(d => data.value = d);
-    }
-
+        let contract: Contract = new Contract(address);
+        return contract.getData()    
+    });
 </script>
 
 
@@ -22,11 +18,21 @@
       <Navbar />
       <notification></notification>
       <div px-24 px-md-32 block>
-        <div v-if="data != null">
+        <div>
             <br>
-            <span mt-5>Организация: </span>
-            <h3>{{ data.name }}</h3>
-            <p text-gray>Адрес: {{ address }}</p>
+
+            <template v-if="data != null">
+                <span mt-5>Организация: </span>
+                <h3>{{ data.name }}</h3>
+                <p text-gray>Адрес: {{ address }}</p>                
+            </template>
+
+            <div class="w-full h-10vh flex justify-center items-center" v-if="pending">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>            
+            </div>
+
 
             <hr>    
 

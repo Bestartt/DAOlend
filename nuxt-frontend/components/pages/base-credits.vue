@@ -1,20 +1,15 @@
 <script setup lang="ts">
     import { Contract } from "~/utils/contract";
+    import { useAsyncData } from 'nuxt/app';
 
     let props = defineProps<{address: string}>();
     let address = props.address;
     
-    let contract: Contract;
-    let credits = ref<any>(null);
+    let contract: Contract = new Contract(address);
     let currentCredit = ref(-1);
     
+    let { data, pending, refresh } = useAsyncData(async () => contract.getCredits());
 
-    function update() {
-        contract = new Contract(address);
-        contract.getCredits().then(d => credits.value = d);
-    }
-
-    onMounted(update)
 
 </script>
 
@@ -24,17 +19,23 @@
 
         <div flex justify-between>
             <h4>Кредиты</h4>
-            <button @click="update()" class="btn btn-dark">обновить</button>
+            <button @click="refresh()" class="btn btn-dark">обновить</button>
         </div>
         <br>
 
-        <div v-if="credits && credits.length == 0">
+        <div v-if="data && data.length == 0">
             <h2 text-gray>Пусто</h2>
+        </div>
+
+        <div class="w-full h-10vh flex justify-center items-center" v-if="pending">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>            
         </div>
 
         <!-- credit list -->
 
-        <template v-for="credit in credits" v-if="credits">
+        <template v-for="credit in data" v-if="data">
             <div class="card card-body max-w-400px">
                 <!-- data -->
                 <p>

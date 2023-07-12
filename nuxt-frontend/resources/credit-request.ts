@@ -1,3 +1,6 @@
+import { CreditUnion } from './../artifacts/typechain/types';
+
+
 export function approve(id, address: string) {
     // @ts-ignore
     let contract = new Contract(address);
@@ -5,12 +8,15 @@ export function approve(id, address: string) {
 }
 
 
+type CreditRequest = CreditUnion.CreditRequestStruct & { members: string[] }
+
+
 export async function getCreditRequests(address: string) {
 
     let contract = new Contract(address);
     let immutable_data = await contract.getCreditRequests();
     
-    let data = to_mutable(immutable_data);
+    let data: CreditRequest[] = to_mutable(immutable_data);
 
     for (let i = 0; i < data.length; i++) {
         const addresses = data[i].approvedMembers;

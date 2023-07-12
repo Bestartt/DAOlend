@@ -6,28 +6,28 @@
     let menu = ref([
         {
             name: "Главное",
-            route: `/unions/${address}`, 
+            route: `/unions/${address}/`, 
             class: ''
         },
         {
             name: "Участники",
-            route: `/unions/${address}/members`,
+            route: `/unions/${address}/members/`,
         },
         {
             name: "Заявки на кредит",
-            route: `/unions/${address}/credit-requests`
+            route: `/unions/${address}/credit-requests/`
         },
         {
             name: "Кредиты",
-            route: `/unions/${address}/credits`,
+            route: `/unions/${address}/credits/`,
         },
         {
             name: "Запросы на вступление",
-            route: `/unions/${address}/join`
+            route: `/unions/${address}/join/`
         },
         {
             name: "История",
-            route: `/unions/${address}/history`
+            route: `/unions/${address}/history/`
         }
     ]);
 
@@ -44,16 +44,16 @@
 </script>
 
 <template>
-    <ul class="nav nav-pills flex-column sidenav bg-white card card-body max-h-45vh">
+    <ul class="nav nav-pills flex-column sidenav bg-white card card-body">
 
         <li v-for="item in menu" class="nav-item">
 
-            <router-link 
+            <nuxt-link prefetch
                 :to="item.route" 
                 :class="('nav-link ' + item.class)"
             >
             {{ item.name }}
-            </router-link>
+            </nuxt-link>
             
         </li>   
     </ul>
