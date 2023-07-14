@@ -32,6 +32,11 @@ export const connection = {
         }            
     },
 
+    getCurrentUserAddress() {
+        // @ts-ignore
+        return window.ethereum.selectedAddress;
+    },
+
     async contractExists(address: string | null) {
         if (address == null) {
             return false;
@@ -48,6 +53,3 @@ export const connection = {
         }
     }
 }
-
-
-

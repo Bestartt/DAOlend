@@ -9,6 +9,7 @@
     let currentCredit = ref(-1);
     
     let { data, pending, refresh } = useAsyncData(async () => contract.getCredits());
+    let userAddress = ref(connection.getCurrentUserAddress());
 
 
 </script>
@@ -35,7 +36,7 @@
 
         <!-- credit list -->
 
-        <template v-for="credit in data" v-if="data">
+        <template v-for="credit in data">
             <div class="card card-body max-w-400px">
                 <!-- data -->
                 <p>
@@ -46,11 +47,12 @@
                 </p>
 
                 <!-- actions -->
-                <router-link :to="`/unions/my/${credit[0]}/repayments`" class="btn btn-outline-dark">
+                <router-link :to="`/unions/${address}/${credit[0]}/repayments`" class="btn btn-outline-dark">
                     погашения
                 </router-link>
 
                 <button 
+                    v-if="credit[5].toLocaleLowerCase() == userAddress"
                     mt-2
                     data-bs-toggle="modal"
                     data-bs-target="#repay"

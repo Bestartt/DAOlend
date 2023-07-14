@@ -9,6 +9,17 @@
     let contract: Contract = new Contract(address);
 
     let { data: members, pending, refresh: refresh } = useAsyncData(async () => await contract.getMembers());
+
+    let totalDeposit = computed(() => {
+        let sum = 0;
+        members.value.map(member => sum += member[0]);
+        return sum;
+    });
+
+    function getPercent(deposit: number) {
+        return Math.floor(deposit / (totalDeposit.value / 100));
+    }
+
 </script>
 
 <template>
@@ -37,6 +48,7 @@
                     <tr>
                         <th>Имя</th>
                         <th>Вложение</th>
+                        <th>Процент вложения</th>
                         <th>Адрес</th>
                     </tr>
                 </thead>
@@ -46,6 +58,7 @@
                     <tr v-for="member in members">
                         <td>{{ member[2] }}</td>
                         <td>{{ member[0] }}</td>
+                        <td>{{ getPercent(member[0]) }}%</td>
                         <td>{{ member[3] }}</td>
                     </tr>
                 </tbody>

@@ -22,11 +22,11 @@
             let contract = new Contract(contract_address.value);
             data.value = await contract.getData();    
 
-            let members = await contract.getMemberAddresses();
+            let members = await contract.getMembers();
             let signer = connection.getSigner();
             let address = await signer.getAddress();
 
-            if (members.includes(address)) {
+            if (members.some(member => member._address == address)) {
                 has_joined.value = true;
             }
 

@@ -20,9 +20,14 @@
     onMounted(async () => {
         getOrganizationData();
         let network_name = (await connection.getNetwork()).name;
-        network.value = network_name == 'unknown' ? 'локальная' : network_name;
-        network.value = network_name == 'homestead' ? 'ethereum' : network_name;
 
+        if (network_name == "unknown") {
+            network.value = "локальная"
+        }else if (network_name == "homestead") {
+            network.value = "ethereum"
+        } else {
+            network.value = network_name
+        }
     })
 
 </script>

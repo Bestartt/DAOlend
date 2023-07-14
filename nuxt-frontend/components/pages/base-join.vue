@@ -6,7 +6,10 @@
     let loading = ref(false);
     let notif = useNotification();
     
-    let { data, pending, refresh } = useAsyncData(async () => await contract.getJoinRequests());
+    let { data, pending, refresh } = useAsyncData(async () => {
+        let requests = await contract.getJoinRequests()
+        return requests.filter(r => r[0] !== "0x0000000000000000000000000000000000000000");
+    });
 
 
     async function approve(requestAddress: string) {
@@ -43,25 +46,28 @@
             <h2 text-gray>Пусто</h2>
         </div>
 
-        <template v-for="request in data">
-            <div max-w-500px class="card card-body">
-                <span tex-gray>Имя: </span>
-                <h4>{{ request[1] }}</h4>
+        <div v-if="!pending">
+            <template v-for="request in data">
+                <div max-w-500px class="card card-body">
+                    <span tex-gray>Имя: </span>
+                    <h4>{{ request[1] }}</h4>
 
-                <i>адрес: {{ request[0] }}</i>
-                
-                <b v-if="request[2].length == 0">никто не подтвердил</b>
+                    <i>адрес: {{ request[0] }}</i>
+                    
+                    <b v-if="request[2].length == 0">никто не подтвердил</b>
 
-                <ul v-else>
-                    <li v-for="member in request[2]">{{ member }}</li>
-                </ul>    
-                
-                <br>
-                <button max-w-200px class="btn btn-dark" @click="approve(request[0])">
-                    <button-loading :loading="loading">Подтвердить</button-loading>
-                </button>
-            </div>
-        </template>         
+                    <ul v-else>
+                        <li v-for="member in request[2]">{{ member }}</li>
+                    </ul>    
+                    
+                    <br>
+                    <button max-w-200px class="btn btn-dark" @click="approve(request[0])">
+                        <button-loading :loading="loading">Подтвердить</button-loading>
+                    </button>
+                </div>
+            </template>             
+        </div>
+        
     </div>
 
 </template>

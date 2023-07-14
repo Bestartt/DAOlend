@@ -23,7 +23,7 @@
     <div class="center px-12 py-6">
         <div class="min-w-430px flex justify-between">
             <h4>Ваши запросы</h4>
-            <button @click="clear_join_requests(); unions = []" class="btn btn-danger">очистить</button>
+            <button @click="join_requests.clear(); unions = []" class="btn btn-danger">очистить</button>
         </div>
         
         <div ref="union_list">
