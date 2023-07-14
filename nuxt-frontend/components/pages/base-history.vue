@@ -25,7 +25,7 @@
         }
 
         transactions.value = await get_transactions(address);   
-        transactions.value.filter((t) => t.methodName != 'unknown');
+        transactions.value = transactions.value.filter((t) => t.methodName != null);
         transactions.value.reverse();
 
         
@@ -73,6 +73,11 @@
             <span text-gray>К сожалению просмотр транзакции в локальной сети не работает</span>            
         </div>
 
+
+        <div v-if="transactions.length == 0">
+            <h3 text-gray>Пусто</h3>
+            <b text-gray>пока никаких действий нету</b>
+        </div>
 
         <!-- transactions list -->
         <div v-for="(transaction, i) in transactions" class="card mt-3">

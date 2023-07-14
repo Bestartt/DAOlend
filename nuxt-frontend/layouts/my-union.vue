@@ -4,9 +4,9 @@
 
     let address = my_union.get();
     let contract: Contract = new Contract(address);
-
-
+    
     let { data, pending } = await useAsyncData('organization_data', async() => await contract.getData());
+    
 </script>
 
 
@@ -21,9 +21,7 @@
             <br>
 
             <template v-if="data != null">
-                <span mt-5>Организация: </span>
-                <h3>{{ data.name }}</h3>
-                <p text-gray>Адрес: {{ my_union.get() }}</p>                
+                <breadcumps :union_name="data.name" address="my"/>
             </template>
 
             <div class="w-full h-10vh flex justify-center items-center" v-if="pending">

@@ -36,34 +36,37 @@
 
         <!-- credit list -->
 
-        <template v-for="credit in data">
-            <div class="card card-body max-w-400px">
-                <!-- data -->
-                <p>
-                    заемщик: {{ credit[1] }} <br>
-                    сумма: {{ credit[2] }} <br>  
-                    срок: {{ credit[3] }} месяцев <br>
-                    погашено: {{ credit[4] }}              
-                </p>
+        <div v-if="!pending">
+            <template v-for="credit in data">
+                <div class="card card-body max-w-400px">
+                    <!-- data -->
+                    <p>
+                        заемщик: {{ credit[1] }} <br>
+                        сумма: {{ credit[2] }} <br>  
+                        срок: {{ credit[3] }} месяцев <br>
+                        погашено: {{ credit[4] }}              
+                    </p>
 
-                <!-- actions -->
-                <router-link :to="`/unions/${address}/${credit[0]}/repayments`" class="btn btn-outline-dark">
-                    погашения
-                </router-link>
+                    <!-- actions -->
+                    <router-link :to="`/unions/${address}/${credit[0]}/repayments`" class="btn btn-outline-dark">
+                        погашения
+                    </router-link>
 
-                <button 
-                    v-if="credit[5].toLocaleLowerCase() == userAddress"
-                    mt-2
-                    data-bs-toggle="modal"
-                    data-bs-target="#repay"
-                    @click="currentCredit = credit[0]" 
-                    class="btn btn-dark" 
-                >
-                    Создать погашение
-                </button>
+                    <button 
+                        v-if="credit[5].toLocaleLowerCase() == userAddress"
+                        mt-2
+                        data-bs-toggle="modal"
+                        data-bs-target="#repay"
+                        @click="currentCredit = credit[0]" 
+                        class="btn btn-dark" 
+                    >
+                        Создать погашение
+                    </button>
 
-            </div>
-        </template>        
+                </div>
+            </template> 
+        </div>
+       
 
         
         <repay-modal :address="address" :creditId="currentCredit"/>

@@ -17,7 +17,9 @@
     });
 
     function getPercent(deposit: number) {
-        return Math.floor(deposit / (totalDeposit.value / 100));
+        let result = Math.floor(deposit / (totalDeposit.value / 100));
+    
+        return Number.isNaN(result) ? 0 : result;
     }
 
 </script>
@@ -43,7 +45,7 @@
         </div>
 
         <div class="card card-body max-w-800px mt-3" v-else>
-            <table class="table table-hover min-w-400px max-w-800px">
+            <table class="table table-hover min-w-400px">
                 <thead>
                     <tr>
                         <th>Имя</th>

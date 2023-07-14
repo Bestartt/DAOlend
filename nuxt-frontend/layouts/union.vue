@@ -21,11 +21,7 @@
         <div>
             <br>
 
-            <template v-if="data != null">
-                <span mt-5>Организация: </span>
-                <h3>{{ data.name }}</h3>
-                <p text-gray>Адрес: {{ address }}</p>                
-            </template>
+            <breadcumps :address="address" :union_name="data.name" />
 
             <div class="w-full h-10vh flex justify-center items-center" v-if="pending">
                 <div class="spinner-border" role="status">
