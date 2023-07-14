@@ -34,7 +34,7 @@
                 {{ error }}
             </b>
 
-            <table class="table" max-w-lg v-if="data !== null">
+            <table class="table" max-w-lg v-if="data !== null && !pending">
                 <tbody>
                     <tr>
                         <td>Создатель:</td>
@@ -54,7 +54,7 @@
                     </tr>
                     <tr>
                         <td>Колличество участников: </td>
-                        <td>{{ data.memberNames.length }}</td>
+                        <td>{{ data.members.length }}</td>
                     </tr>
                 </tbody>
             </table>   

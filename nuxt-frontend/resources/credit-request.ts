@@ -1,4 +1,4 @@
-import { CreditUnion } from './../artifacts/typechain/types';
+import { CreditUnion } from './../artifacts/typechain/contracts/types';
 
 
 export function approve(id, address: string) {
@@ -21,21 +21,19 @@ export async function getCreditRequests(address: string) {
     for (let i = 0; i < data.length; i++) {
         const addresses = data[i].approvedMembers;
         // @ts-ignore
-        data[i].members = getMemberNames(addresses);
-        
+        data[i].members = await getMemberNames(addresses, address);
     }
 
     return data;
 }
 
 
-export async function getMemberNames(addresses: string[]) {
+export async function getMemberNames(membersAddresses: string[], contractAddress: string) {
     let names = [];
-
-    for (let i = 0; i < addresses.length; i++) {
-        let contract = new Contract(addresses[i]);
-        let member = await contract.getMember(addresses[i]);
-        names.push(member.name);                
+    for (let i = 0; i < membersAddresses.length; i++) {
+        let contract = new Contract(contractAddress);
+        let member = await contract.getMember(membersAddresses[i]);
+        names.push(member.name);
     }
 
     return names

@@ -64,6 +64,7 @@ contract CreditUnion is Ownable {
         uint32 contribution;
         bool joined;
         string name;
+        address _address;
     }    
 
 
@@ -86,7 +87,8 @@ contract CreditUnion is Ownable {
             members[initialMembers[i]] = Member({ 
                 name: memberNames[i],
                 contribution: 0, 
-                joined: true 
+                joined: true,
+                _address: initialMembers[i] 
             });
         }
 
@@ -94,7 +96,8 @@ contract CreditUnion is Ownable {
         members[msg.sender] = Member({
             name: _ownerName,
             contribution: 0,
-            joined: true
+            joined: true,
+            _address: msg.sender
         });
 
         creditRequestCounter = 0;
@@ -104,15 +107,6 @@ contract CreditUnion is Ownable {
 
 
     // ====== MEMBERS FUNCTIONS
-    function getMemberNames() view public returns(string[] memory) {
-        string[] memory memberNames = new string[](membersList.length);
-
-        for (uint i = 0; i < membersList.length; i++) {
-            memberNames[i] = members[membersList[i]].name;
-        }
-        return memberNames;
-    }
-
     function getMembers() view public returns(Member[] memory) {
         Member[] memory allMembers = new Member[](membersList.length);
 
@@ -121,10 +115,6 @@ contract CreditUnion is Ownable {
         }
 
         return allMembers;
-    }
-
-    function getMembersAddresses() view public returns(address[] memory) {
-        return membersList;
     }
 
     function deposit(uint32 number) public {
@@ -176,7 +166,7 @@ contract CreditUnion is Ownable {
 
         if (allMembersApproved || ownerOnly) {
             membersList.push(request.user);
-            members[request.user] = Member(0, true, request.name);
+            members[request.user] = Member(0, true, request.name, request.user);
 
             delete joinRequests[id];   
         }
@@ -213,13 +203,13 @@ contract CreditUnion is Ownable {
         return creditRequests;
     }
 
-    function createCreditRequest(uint32 amount, uint32 term, string memory deptor) public {
+    function createCreditRequest(uint32 amount, uint32 term) public {
         require(amount <= totalDeposit, "amount must be less than total deposit");
 
         address[] memory approvedMembers;
         creditRequests.push(CreditRequest(
             creditRequestCounter, 
-            deptor, 
+            members[msg.sender].name, 
             amount, 
             term,
             approvedMembers,
@@ -234,8 +224,6 @@ contract CreditUnion is Ownable {
         require(members[msg.sender].joined, "you must first join to approve");
 
         creditRequests[id].approvedMembers.push(msg.sender);
-
-
         CreditRequest memory request = creditRequests[id];
 
         if (isCreditRequestApproved(id)) {

@@ -4,7 +4,7 @@
     let props = defineProps<{address: string}>();
     let address = props.address;
 
-    let { data, pending, refresh } = useAsyncData(async () => await getCreditRequests(address));
+    let { data, pending, refresh } = useAsyncData("credit requests", async () => await getCreditRequests(address));
 
 </script>
 
@@ -32,7 +32,7 @@
         </div>
 
         <template v-else>
-            <div v-if="data.length == 0">
+            <div v-if="data && data.length == 0">
                 <h2 text-gray>Пусто</h2>
             </div>
 
@@ -51,11 +51,11 @@
 
                     </p>
 
-                    <button v-if="credit_request">
-
+                    <button v-if="credit_request.creditCreated" disabled class="btn btn-dark">
+                        кредит создан
                     </button>
 
-                    <button
+                    <button v-else
                         @click="approve(credit_request[0], address)" 
                         class="btn btn-dark">подтвердить
                     </button>

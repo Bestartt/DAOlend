@@ -3,8 +3,7 @@
 
     let props = defineProps<{address: string}>();
     let address = props.address;
-    let contract = new Contract(address);
-
+    
     let transactions = ref<TransactionInfo[]>([]);
     let members = ref([]);
 
@@ -14,6 +13,7 @@
 
 
     async function update() {
+        let contract = new Contract(address);
         loading.value = true;
 
         // @ts-ignore

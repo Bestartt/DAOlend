@@ -13,14 +13,18 @@ import type {
   Signer,
   utils,
 } from "ethers";
-import type { FunctionFragment, Result } from "@ethersproject/abi";
+import type {
+  FunctionFragment,
+  Result,
+  EventFragment,
+} from "@ethersproject/abi";
 import type { Listener, Provider } from "@ethersproject/providers";
 import type {
   TypedEventFilter,
   TypedEvent,
   TypedListener,
   OnEvent,
-} from "./common";
+} from "../common";
 
 export declare namespace CreditUnion {
   export type CreditRequestStruct = {
@@ -29,6 +33,8 @@ export declare namespace CreditUnion {
     amount: BigNumberish;
     term: BigNumberish;
     approvedMembers: string[];
+    deptorAddress: string;
+    creditCreated: boolean;
   };
 
   export type CreditRequestStructOutput = [
@@ -36,13 +42,17 @@ export declare namespace CreditUnion {
     string,
     number,
     number,
-    string[]
+    string[],
+    string,
+    boolean
   ] & {
     id: number;
     deptor: string;
     amount: number;
     term: number;
     approvedMembers: string[];
+    deptorAddress: string;
+    creditCreated: boolean;
   };
 
   export type CreditStruct = {
@@ -51,14 +61,23 @@ export declare namespace CreditUnion {
     amount: BigNumberish;
     term: BigNumberish;
     repaidAmount: BigNumberish;
+    deptorAddress: string;
   };
 
-  export type CreditStructOutput = [number, string, number, number, number] & {
+  export type CreditStructOutput = [
+    number,
+    string,
+    number,
+    number,
+    number,
+    string
+  ] & {
     id: number;
     deptor: string;
     amount: number;
     term: number;
     repaidAmount: number;
+    deptorAddress: string;
   };
 
   export type JoinRequestStruct = {
@@ -77,12 +96,14 @@ export declare namespace CreditUnion {
     contribution: BigNumberish;
     joined: boolean;
     name: string;
+    _address: string;
   };
 
-  export type MemberStructOutput = [number, boolean, string] & {
+  export type MemberStructOutput = [number, boolean, string, string] & {
     contribution: number;
     joined: boolean;
     name: string;
+    _address: string;
   };
 
   export type RepaymentStruct = {
@@ -102,7 +123,7 @@ export interface CreditUnionInterface extends utils.Interface {
   functions: {
     "approveCreditRequest(uint32)": FunctionFragment;
     "approveJoinRequest(uint32)": FunctionFragment;
-    "createCreditRequest(uint32,uint32,string)": FunctionFragment;
+    "createCreditRequest(uint32,uint32)": FunctionFragment;
     "createJoinRequest(string)": FunctionFragment;
     "creditCounter()": FunctionFragment;
     "creditRequestCounter()": FunctionFragment;
@@ -114,9 +135,7 @@ export interface CreditUnionInterface extends utils.Interface {
     "getCreditRequests()": FunctionFragment;
     "getCredits()": FunctionFragment;
     "getJoinRequests()": FunctionFragment;
-    "getMemberNames()": FunctionFragment;
     "getMembers()": FunctionFragment;
-    "getMembersAddresses()": FunctionFragment;
     "getPercentForMember(address)": FunctionFragment;
     "getRepaymentsByCredit(uint32)": FunctionFragment;
     "isCreditRequestApproved(uint32)": FunctionFragment;
@@ -126,10 +145,12 @@ export interface CreditUnionInterface extends utils.Interface {
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerName()": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
     "repay(uint32,uint32,uint32)": FunctionFragment;
     "repaymentCounter()": FunctionFragment;
     "repayments(uint256)": FunctionFragment;
     "totalDeposit()": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
   };
 
   getFunction(
@@ -148,9 +169,7 @@ export interface CreditUnionInterface extends utils.Interface {
       | "getCreditRequests"
       | "getCredits"
       | "getJoinRequests"
-      | "getMemberNames"
       | "getMembers"
-      | "getMembersAddresses"
       | "getPercentForMember"
       | "getRepaymentsByCredit"
       | "isCreditRequestApproved"
@@ -160,10 +179,12 @@ export interface CreditUnionInterface extends utils.Interface {
       | "name"
       | "owner"
       | "ownerName"
+      | "renounceOwnership"
       | "repay"
       | "repaymentCounter"
       | "repayments"
       | "totalDeposit"
+      | "transferOwnership"
   ): FunctionFragment;
 
   encodeFunctionData(
@@ -176,7 +197,7 @@ export interface CreditUnionInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "createCreditRequest",
-    values: [BigNumberish, BigNumberish, string]
+    values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "createJoinRequest",
@@ -223,15 +244,7 @@ export interface CreditUnionInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "getMemberNames",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "getMembers",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getMembersAddresses",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -259,6 +272,10 @@ export interface CreditUnionInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "ownerName", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "renounceOwnership",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "repay",
     values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
@@ -273,6 +290,10 @@ export interface CreditUnionInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "totalDeposit",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [string]
   ): string;
 
   decodeFunctionResult(
@@ -322,15 +343,7 @@ export interface CreditUnionInterface extends utils.Interface {
     functionFragment: "getJoinRequests",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "getMemberNames",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "getMembers", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getMembersAddresses",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "getPercentForMember",
     data: BytesLike
@@ -355,6 +368,10 @@ export interface CreditUnionInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerName", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "repay", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "repaymentCounter",
@@ -365,9 +382,29 @@ export interface CreditUnionInterface extends utils.Interface {
     functionFragment: "totalDeposit",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
 
-  events: {};
+  events: {
+    "OwnershipTransferred(address,address)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
 }
+
+export interface OwnershipTransferredEventObject {
+  previousOwner: string;
+  newOwner: string;
+}
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string],
+  OwnershipTransferredEventObject
+>;
+
+export type OwnershipTransferredEventFilter =
+  TypedEventFilter<OwnershipTransferredEvent>;
 
 export interface CreditUnion extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -409,7 +446,6 @@ export interface CreditUnion extends BaseContract {
     createCreditRequest(
       amount: BigNumberish,
       term: BigNumberish,
-      deptor: string,
       overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
@@ -426,11 +462,13 @@ export interface CreditUnion extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [number, string, number, number] & {
+      [number, string, number, number, string, boolean] & {
         id: number;
         deptor: string;
         amount: number;
         term: number;
+        deptorAddress: string;
+        creditCreated: boolean;
       }
     >;
 
@@ -438,12 +476,13 @@ export interface CreditUnion extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [number, string, number, number, number] & {
+      [number, string, number, number, number, string] & {
         id: number;
         deptor: string;
         amount: number;
         term: number;
         repaidAmount: number;
+        deptorAddress: string;
       }
     >;
 
@@ -474,15 +513,9 @@ export interface CreditUnion extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[CreditUnion.JoinRequestStructOutput[]]>;
 
-    getMemberNames(
-      overrides?: CallOverrides
-    ): Promise<[string[]] & { membersNames: string[] }>;
-
     getMembers(
       overrides?: CallOverrides
     ): Promise<[CreditUnion.MemberStructOutput[]]>;
-
-    getMembersAddresses(overrides?: CallOverrides): Promise<[string[]]>;
 
     getPercentForMember(
       member: string,
@@ -508,10 +541,11 @@ export interface CreditUnion extends BaseContract {
       arg0: string,
       overrides?: CallOverrides
     ): Promise<
-      [number, boolean, string] & {
+      [number, boolean, string, string] & {
         contribution: number;
         joined: boolean;
         name: string;
+        _address: string;
       }
     >;
 
@@ -525,6 +559,10 @@ export interface CreditUnion extends BaseContract {
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     ownerName(overrides?: CallOverrides): Promise<[string]>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: string }
+    ): Promise<ContractTransaction>;
 
     repay(
       id: BigNumberish,
@@ -547,6 +585,11 @@ export interface CreditUnion extends BaseContract {
     >;
 
     totalDeposit(overrides?: CallOverrides): Promise<[number]>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string }
+    ): Promise<ContractTransaction>;
   };
 
   approveCreditRequest(
@@ -562,7 +605,6 @@ export interface CreditUnion extends BaseContract {
   createCreditRequest(
     amount: BigNumberish,
     term: BigNumberish,
-    deptor: string,
     overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
@@ -579,11 +621,13 @@ export interface CreditUnion extends BaseContract {
     arg0: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [number, string, number, number] & {
+    [number, string, number, number, string, boolean] & {
       id: number;
       deptor: string;
       amount: number;
       term: number;
+      deptorAddress: string;
+      creditCreated: boolean;
     }
   >;
 
@@ -591,12 +635,13 @@ export interface CreditUnion extends BaseContract {
     arg0: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [number, string, number, number, number] & {
+    [number, string, number, number, number, string] & {
       id: number;
       deptor: string;
       amount: number;
       term: number;
       repaidAmount: number;
+      deptorAddress: string;
     }
   >;
 
@@ -627,13 +672,9 @@ export interface CreditUnion extends BaseContract {
     overrides?: CallOverrides
   ): Promise<CreditUnion.JoinRequestStructOutput[]>;
 
-  getMemberNames(overrides?: CallOverrides): Promise<string[]>;
-
   getMembers(
     overrides?: CallOverrides
   ): Promise<CreditUnion.MemberStructOutput[]>;
-
-  getMembersAddresses(overrides?: CallOverrides): Promise<string[]>;
 
   getPercentForMember(
     member: string,
@@ -659,10 +700,11 @@ export interface CreditUnion extends BaseContract {
     arg0: string,
     overrides?: CallOverrides
   ): Promise<
-    [number, boolean, string] & {
+    [number, boolean, string, string] & {
       contribution: number;
       joined: boolean;
       name: string;
+      _address: string;
     }
   >;
 
@@ -673,6 +715,10 @@ export interface CreditUnion extends BaseContract {
   owner(overrides?: CallOverrides): Promise<string>;
 
   ownerName(overrides?: CallOverrides): Promise<string>;
+
+  renounceOwnership(
+    overrides?: Overrides & { from?: string }
+  ): Promise<ContractTransaction>;
 
   repay(
     id: BigNumberish,
@@ -696,6 +742,11 @@ export interface CreditUnion extends BaseContract {
 
   totalDeposit(overrides?: CallOverrides): Promise<number>;
 
+  transferOwnership(
+    newOwner: string,
+    overrides?: Overrides & { from?: string }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
     approveCreditRequest(
       id: BigNumberish,
@@ -710,7 +761,6 @@ export interface CreditUnion extends BaseContract {
     createCreditRequest(
       amount: BigNumberish,
       term: BigNumberish,
-      deptor: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -727,11 +777,13 @@ export interface CreditUnion extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [number, string, number, number] & {
+      [number, string, number, number, string, boolean] & {
         id: number;
         deptor: string;
         amount: number;
         term: number;
+        deptorAddress: string;
+        creditCreated: boolean;
       }
     >;
 
@@ -739,12 +791,13 @@ export interface CreditUnion extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [number, string, number, number, number] & {
+      [number, string, number, number, number, string] & {
         id: number;
         deptor: string;
         amount: number;
         term: number;
         repaidAmount: number;
+        deptorAddress: string;
       }
     >;
 
@@ -772,13 +825,9 @@ export interface CreditUnion extends BaseContract {
       overrides?: CallOverrides
     ): Promise<CreditUnion.JoinRequestStructOutput[]>;
 
-    getMemberNames(overrides?: CallOverrides): Promise<string[]>;
-
     getMembers(
       overrides?: CallOverrides
     ): Promise<CreditUnion.MemberStructOutput[]>;
-
-    getMembersAddresses(overrides?: CallOverrides): Promise<string[]>;
 
     getPercentForMember(
       member: string,
@@ -804,10 +853,11 @@ export interface CreditUnion extends BaseContract {
       arg0: string,
       overrides?: CallOverrides
     ): Promise<
-      [number, boolean, string] & {
+      [number, boolean, string, string] & {
         contribution: number;
         joined: boolean;
         name: string;
+        _address: string;
       }
     >;
 
@@ -818,6 +868,8 @@ export interface CreditUnion extends BaseContract {
     owner(overrides?: CallOverrides): Promise<string>;
 
     ownerName(overrides?: CallOverrides): Promise<string>;
+
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
     repay(
       id: BigNumberish,
@@ -840,9 +892,23 @@ export interface CreditUnion extends BaseContract {
     >;
 
     totalDeposit(overrides?: CallOverrides): Promise<number>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
-  filters: {};
+  filters: {
+    "OwnershipTransferred(address,address)"(
+      previousOwner?: string | null,
+      newOwner?: string | null
+    ): OwnershipTransferredEventFilter;
+    OwnershipTransferred(
+      previousOwner?: string | null,
+      newOwner?: string | null
+    ): OwnershipTransferredEventFilter;
+  };
 
   estimateGas: {
     approveCreditRequest(
@@ -858,7 +924,6 @@ export interface CreditUnion extends BaseContract {
     createCreditRequest(
       amount: BigNumberish,
       term: BigNumberish,
-      deptor: string,
       overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
@@ -899,11 +964,7 @@ export interface CreditUnion extends BaseContract {
 
     getJoinRequests(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getMemberNames(overrides?: CallOverrides): Promise<BigNumber>;
-
     getMembers(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getMembersAddresses(overrides?: CallOverrides): Promise<BigNumber>;
 
     getPercentForMember(
       member: string,
@@ -938,6 +999,10 @@ export interface CreditUnion extends BaseContract {
 
     ownerName(overrides?: CallOverrides): Promise<BigNumber>;
 
+    renounceOwnership(
+      overrides?: Overrides & { from?: string }
+    ): Promise<BigNumber>;
+
     repay(
       id: BigNumberish,
       amount: BigNumberish,
@@ -953,6 +1018,11 @@ export interface CreditUnion extends BaseContract {
     ): Promise<BigNumber>;
 
     totalDeposit(overrides?: CallOverrides): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -969,7 +1039,6 @@ export interface CreditUnion extends BaseContract {
     createCreditRequest(
       amount: BigNumberish,
       term: BigNumberish,
-      deptor: string,
       overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
@@ -1015,13 +1084,7 @@ export interface CreditUnion extends BaseContract {
 
     getJoinRequests(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getMemberNames(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     getMembers(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getMembersAddresses(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
 
     getPercentForMember(
       member: string,
@@ -1059,6 +1122,10 @@ export interface CreditUnion extends BaseContract {
 
     ownerName(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    renounceOwnership(
+      overrides?: Overrides & { from?: string }
+    ): Promise<PopulatedTransaction>;
+
     repay(
       id: BigNumberish,
       amount: BigNumberish,
@@ -1074,5 +1141,10 @@ export interface CreditUnion extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     totalDeposit(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string }
+    ): Promise<PopulatedTransaction>;
   };
 }

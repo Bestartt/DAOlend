@@ -5,7 +5,6 @@
     let emits = defineEmits(["onComplete"]);
 
     let amount = ref(0);
-    let debtor = ref("");
     let term = ref(0);
     let notif = useNotification();
 
@@ -14,7 +13,7 @@
 
     async function call() {
         loading.value = true;
-        await contract.createCreditRequest(amount.value, term.value, debtor.value);
+        await contract.createCreditRequest(amount.value, term.value);
         
         emits("onComplete");
         notif.notify(
@@ -41,9 +40,6 @@
 
                 <label class="form-label" for="term">Срок</label>
                 <input v-model="term" id="term" class="form-control">
-
-                <label class="form-label" for="debtor">Имя заемщика</label>
-                <input v-model="debtor" id="debtor" class="form-control">  
             </div>
 
             <div class="modal-footer">

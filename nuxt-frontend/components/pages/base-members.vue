@@ -8,8 +8,7 @@
 
     let contract: Contract = new Contract(address);
 
-    let { data: members, pending, refresh: refresh1 } = useAsyncData(async () => await contract.getMembers());
-    let { data: membersAddresses, refresh: refresh2 } = useAsyncData(async () => await contract.getMemberAddresses());
+    let { data: members, pending, refresh: refresh } = useAsyncData(async () => await contract.getMembers());
 </script>
 
 <template>
@@ -17,7 +16,7 @@
         <div flex justify-between>
             <h4>Участники организации</h4>
 
-            <button class="btn btn-dark" @click="refresh1(); refresh2()">
+            <button class="btn btn-dark" @click="refresh()">
                 обновить
             </button>
         </div>
@@ -44,10 +43,10 @@
 
                 <tbody>
 
-                    <tr v-for="(member, i) in members">
+                    <tr v-for="member in members">
                         <td>{{ member[2] }}</td>
                         <td>{{ member[0] }}</td>
-                        <td>{{ membersAddresses[i] }}</td>
+                        <td>{{ member[3] }}</td>
                     </tr>
                 </tbody>
             </table>              

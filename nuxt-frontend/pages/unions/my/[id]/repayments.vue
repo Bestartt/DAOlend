@@ -1,45 +1,40 @@
 <script setup lang="ts">
     import { Contract } from "~/utils/contract";
+    import { useAsyncData } from "nuxt/app";
 
     let route = useRoute();
 
     let address = my_union.get();
-    let contract: Contract;
-    let repayments = ref<any>(null);
-
+    let contract: Contract = new Contract(address);;
     
-    if (address != null) {
-        contract = new Contract(address);
-        // @ts-ignore
-        contract.getRepaymentsByCredit(route.params.id).then(d => repayments.value = d);
-
-
-    }
-
+    let { data, pending } = useAsyncData(async () => await contract.getRepaymentsByCredit(route.params.id));
 
 </script>
 
 
 <template>
-    <div>
+    <div py-5>
         <h4>Погашения</h4>
 
-        <table class="table table-striped" min-w-400px max-w-800px mt-5>
-            <thead>
-                <tr>
-                    <th>Месяц</th>
-                    <th>Сумма</th>
-                </tr>
-            </thead>
+        <div class="card card-body">
+            <table class="table table-striped" min-w-400px mt-5>
+                <thead>
+                    <tr>
+                        <th>Месяц</th>
+                        <th>Сумма</th>
+                    </tr>
+                </thead>
 
-            <tbody>
+                <tbody>
 
-                <tr v-for="repayment in repayments">
-                    <td>{{ repayment[0] }}</td>
-                    <td>{{ repayment[1] }}</td>
-                </tr>
-            </tbody>
-        </table>   
+                    <tr v-for="repayment in data">
+                        <td>{{ repayment[0] }}</td>
+                        <td>{{ repayment[1] }}</td>
+                    </tr>
+                </tbody>
+            </table>              
+        </div>
+ 
 
     </div>
 </template>

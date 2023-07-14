@@ -1,5 +1,5 @@
 import { ethers, ContractFactory } from "ethers";
-import { CreditUnion } from "../artifacts/typechain/types";
+import { CreditUnion, CreditUnionInterface } from "../artifacts/typechain/contracts/types";
 import contract_built from "../artifacts/build";
 
 
@@ -35,14 +35,8 @@ export class Contract {
         let totalDeposit:   number = await this.contract.totalDeposit();
         let ownerName:      string = await this.contract.ownerName();
         let name:           string = await this.contract.name();
-        let memberNames:  string[] = await this.contract.getMemberNames();
-        return { totalDeposit, ownerName, name, memberNames }
-
-    }
-
-    async getMemberNames() {
-        let members: string[] = await this.contract.getMemberNames();
-        return members
+        let members:  CreditUnion.MemberStruct[] = await this.contract.getMembers();
+        return { totalDeposit, ownerName, name, members }
     }
 
     async getMember(address: string) {
@@ -50,13 +44,7 @@ export class Contract {
         return result;
     }
 
-    async getMemberAddresses(): Promise<string[]> {
-        return await this.contract.getMembersAddresses();
-    }
-
     async getMembers() {return await this.contract.getMembers(); }
-
-
 
 
     async deposit(quantity: number) {
@@ -77,8 +65,15 @@ export class Contract {
     async getCredits() {return await this.contract.getCredits(); }
     async repayCredit(id: number, amount: number, month: number) {return await this.contract.repay(id, amount, month);}
     async approveCreditRequest(id) { await this.contract.approveCreditRequest(id); }
-    async getCreditRequests() { return await this.contract.getCreditRequests(); }
-    async createCreditRequest(amount: number, term: number, debtor: string) { await this.contract.createCreditRequest(amount, term, debtor); }
+    
+    async getCreditRequests(){ 
+        return await this.contract.getCreditRequests(); 
+    }
+
+    async createCreditRequest(amount: number, term: number) { 
+        await this.contract.createCreditRequest(amount, term); 
+    }
+
     async getRepaymentsByCredit(creditId: number) { return await this.contract.getRepaymentsByCredit(creditId); }
     async getJoinRequests() {
         return await this.contract.getJoinRequests();
@@ -121,8 +116,8 @@ export async function createContract(
  */
 export async function checkRequestStatus(address: string, name: string): Promise<boolean> {
     let contract = new Contract(address);
-    let members = await contract.getMemberNames();
-    return members.includes(name);
+    let members = await contract.getMembers();
+    return members.some(member => member.name == name);
     
 }
 
