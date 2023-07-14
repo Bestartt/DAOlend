@@ -11,6 +11,7 @@
 
     let username = ref("");
     let loading = ref(false);
+    let joinLoading = ref(false);
 
 
     async function find() {
@@ -41,6 +42,7 @@
 
 
     async function callJoin() {
+        joinLoading.value = true;
         let contract = new Contract(contract_address.value);
 
         try {
@@ -51,6 +53,8 @@
         } catch (e) {
             alert("Произошла ошибка или отменена");
         }
+
+        joinLoading.value = false;
         
     }
 
@@ -65,7 +69,9 @@
 
     <div px-16 class="center">
 
-        <div class="card card-body mt-26 form">
+        <full-loading :loading="joinLoading" />
+
+        <div class="card card-body mt-26 form" v-auto-animate>
             <h3>Найти организацию</h3>
 
             <!-- input -->
@@ -74,10 +80,8 @@
                 <button class="btn btn-dark" @click="find()">найти</button>
             </div>   
 
-            <!-- loading -->
-            <div class="spinner-border mt-[10%] ms-[50%]" role="status" v-if="loading">
-                <span class="visually-hidden">Loading...</span>
-            </div>
+            
+
 
             <!-- results -->
             <div v-if="data !== null"  class="card card-body mt-5 min-w-500px">
@@ -99,7 +103,12 @@
 
             </div>
 
-            <h5 v-if="not_found">Не найдено</h5>            
+            <h5 v-if="not_found">Не найдено</h5>    
+
+            <!-- loading -->
+            <div class="spinner-border mt-[10%] ms-[50%]" role="status" v-if="loading">
+                <span class="visually-hidden">Loading...</span>
+            </div>
         </div>
 
 

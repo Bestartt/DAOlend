@@ -38,14 +38,17 @@
 
         <br>
 
-        <div class="w-full h-10vh flex justify-center items-center" v-if="pending">
-            <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>            
-        </div>
 
-        <div class="card card-body max-w-800px mt-3" v-else>
-            <table class="table table-hover min-w-400px">
+
+        <div class="card card-body max-w-800px mt-3"  v-auto-animate>
+
+            <div class="w-full h-10vh flex justify-center items-center" v-if="pending">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>            
+            </div>
+
+            <table class="table table-hover min-w-400px" v-else>
                 <thead>
                     <tr>
                         <th>Имя</th>

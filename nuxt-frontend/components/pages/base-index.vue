@@ -23,7 +23,7 @@
             <button @click="refresh()" class="btn btn-dark">обновить</button>
         </div>
 
-        <div class="card card-body max-w-700px" >
+        <div class="card card-body max-w-700px" v-auto-animate>
             <div class="w-full h-10vh flex justify-center items-center" v-if="pending">
                 <div class="spinner-border" role="status">
                     <span class="sr-only">Loading...</span>

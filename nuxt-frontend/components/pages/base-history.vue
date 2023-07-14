@@ -74,67 +74,70 @@
         </div>
 
 
-        <div v-if="transactions.length == 0">
+        <div v-if="transactions.length == 0 && !loading">
             <h3 text-gray>Пусто</h3>
             <b text-gray>пока никаких действий нету</b>
         </div>
 
-        <!-- transactions list -->
-        <div v-for="(transaction, i) in transactions" class="card mt-3">
+        <div v-auto-animate>
+            <div v-for="(transaction, i) in transactions" class="card mt-3">
 
-            <!-- action name and datetime -->
-            <div class="card-header flex justify-between">
-                <div class="">
-                    <span class="text-sm text-gray">действие</span> <br>
-                    <b>{{ actions_dict[transaction.methodName] }}</b>   
+                <!-- action name and datetime -->
+                <div class="card-header flex justify-between">
+                    <div class="">
+                        <span class="text-sm text-gray">действие</span> <br>
+                        <b>{{ actions_dict[transaction.methodName] }}</b>   
+                    </div>
+                    
+                    <span>{{ new Date(transaction.timeStamp * 1000).toLocaleString() }}</span>
                 </div>
                 
-                <span>{{ new Date(transaction.timeStamp * 1000).toLocaleString() }}</span>
+                <div class="card-body row items-center">
+
+                    <!-- sent data -->
+                    <div class="flex flex-col col-3">
+                        <template v-if="transaction.methodName == 'repay'">
+                            <i>месяц: {{ transaction.argument.month }}</i>
+                            <i>сумма: {{ transaction.argument.amount }}</i>
+                        </template>
+
+                        <template v-if="transaction.methodName == 'createCreditRequest'">
+                            <i>имя кредитора: {{ transaction.argument.deptor }}</i>
+                            <i>сумма: {{ transaction.argument.amount }}</i>
+                            <i>срок: {{ transaction.argument.term }}</i>
+                        </template>
+
+                        <template v-if="transaction.methodName == 'deposit'">
+                            <i>сумма: {{ transaction.argument[0] }}</i>
+                        </template>
+
+                        <template v-if="transaction.methodName == 'approveCreditRequest'">
+                            <i>номер кредита: {{ transaction.argument[0] }}</i>
+                        </template>
+
+                        <template v-if="transaction.methodName == 'createJoinRequest'">
+                            <i>заявитель: {{ transaction.argument[0] }}</i>
+                        </template>
+
+                        <!-- {{ transaction.argument }} -->
+                    </div>
+
+
+                    <!-- messager details -->
+                    <div class="col-9">
+                        <span>участник: </span>
+                        <b class="truncat">{{ members[i].name }}</b> <br>
+                        <i>адрес: {{ transaction.from }}</i>
+
+                        <button class="btn btn-light btn-sm mb-1 ms-2" @click="copy(transaction.from)">копировать</button>
+
+                    </div>
+                
+                </div>                
             </div>
-            
-            <div class="card-body row items-center">
 
-                <!-- sent data -->
-                <div class="flex flex-col col-3">
-                    <template v-if="transaction.methodName == 'repay'">
-                        <i>месяц: {{ transaction.argument.month }}</i>
-                        <i>сумма: {{ transaction.argument.amount }}</i>
-                    </template>
-
-                    <template v-if="transaction.methodName == 'createCreditRequest'">
-                        <i>имя кредитора: {{ transaction.argument.deptor }}</i>
-                        <i>сумма: {{ transaction.argument.amount }}</i>
-                        <i>срок: {{ transaction.argument.term }}</i>
-                    </template>
-
-                    <template v-if="transaction.methodName == 'deposit'">
-                        <i>сумма: {{ transaction.argument[0] }}</i>
-                    </template>
-
-                    <template v-if="transaction.methodName == 'approveCreditRequest'">
-                        <i>номер кредита: {{ transaction.argument[0] }}</i>
-                    </template>
-
-                    <template v-if="transaction.methodName == 'createJoinRequest'">
-                        <i>заявитель: {{ transaction.argument[0] }}</i>
-                    </template>
-
-                    <!-- {{ transaction.argument }} -->
-                </div>
-
-
-                <!-- messager details -->
-                <div class="col-9">
-                    <span>участник: </span>
-                    <b class="truncat">{{ members[i].name }}</b> <br>
-                    <i>адрес: {{ transaction.from }}</i>
-
-                    <button class="btn btn-light btn-sm mb-1 ms-2" @click="copy(transaction.from)">копировать</button>
-
-                </div>
-            
-            </div>                
         </div>
+        <!-- transactions list -->
 
 
     </div>
