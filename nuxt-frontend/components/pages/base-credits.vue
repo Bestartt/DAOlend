@@ -36,7 +36,7 @@
 
         <!-- credit list -->
 
-        <div v-if="!pending">
+        <div v-if="!pending" v-auto-animate>
             <template v-for="credit in data">
                 <div class="card card-body max-w-400px">
                     <!-- data -->

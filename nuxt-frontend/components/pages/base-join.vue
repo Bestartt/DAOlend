@@ -46,24 +46,33 @@
             <h2 text-gray>Пусто</h2>
         </div>
 
-        <div v-if="!pending">
+        <div v-if="!pending" v-auto-animate>
             <template v-for="request in data">
-                <div max-w-500px class="card card-body">
-                    <span tex-gray>Имя: </span>
-                    <h4>{{ request[1] }}</h4>
+                <div max-w-700px class="card">
+                    <div class="card-header flex justify-between items-center">
+                        <div>
+                            <span tex-gray text-sm>Имя: </span>
+                            <h5>{{ request[1] }}</h5>
+                        </div>
 
-                    <i>адрес: {{ request[0] }}</i>
-                    
-                    <b v-if="request[2].length == 0">никто не подтвердил</b>
+                        <i text-gray>адрес: {{ request[0] }}</i>
 
-                    <ul v-else>
-                        <li v-for="member in request[2]">{{ member }}</li>
-                    </ul>    
+                    </div>
                     
-                    <br>
-                    <button max-w-200px class="btn btn-dark" @click="approve(request[0])">
-                        <button-loading :loading="loading">Подтвердить</button-loading>
-                    </button>
+                    <div class="card-body">
+                        <b v-if="request[2].length == 0" class="text-gray">пока никто не подтвердил</b>
+                        
+                        <div v-else>
+                            <b>подтвердившие члены</b>
+                            <ul>
+                                <li v-for="member in request[2]">{{ member }}</li>
+                            </ul>    
+                        </div>
+                        <br>    
+                        <button max-w-200px class="btn btn-dark mt-3" @click="approve(request[0])">
+                            <button-loading :loading="loading">Подтвердить</button-loading>
+                        </button>
+                    </div>
                 </div>
             </template>             
         </div>

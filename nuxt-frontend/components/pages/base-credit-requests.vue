@@ -31,7 +31,7 @@
             </div>            
         </div>
 
-        <template v-else>
+        <div v-else v-auto-animate>
             <div v-if="data && data.length == 0">
                 <h2 text-gray>Пусто</h2>
             </div>
@@ -63,7 +63,7 @@
 
                 </div>
             </template>             
-        </template>
+        </div>
 
          <request-credit-modal :contract-address="address" @on-complete="updateData()"/>  
     </div>
