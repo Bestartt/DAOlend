@@ -4,6 +4,13 @@ import { ethers } from "hardhat";
 import { CreditUnion } from "../typechain-types";
 
 
+const approvable = {
+    DEPOSIT: 0,
+    CREDIT: 1,
+    REPAYMENT: 2        
+}
+
+
 describe("Credit Union", function() {
 
     describe("Credit Union membership", function () {
@@ -11,12 +18,14 @@ describe("Credit Union", function() {
         let owner;
         let member1, member2, member3;
         let memberNames = ["member1", "member2", "member3"];
+        let members = [];
 
 
         beforeEach(async () => {
             let Factory = await ethers.getContractFactory("CreditUnion");
             
             [owner, member1, member2, member3] = await ethers.getSigners();
+            members = [member1, member2, member3, owner];
             Factory = Factory.connect(owner);
 
             // @ts-ignore
@@ -31,27 +40,44 @@ describe("Credit Union", function() {
         });
 
 
-        it("creates deposit", async function () {
-            await contract.deposit(1000);
+        describe("deposit test", function () {
 
-            let deposit = await contract.deposits(0);
+            it("creates deposit", async function () {
+                await contract.createDeposit(1000);
+                  
+                let deposit = await contract.deposits(0);
+                
+                expect(deposit.member).to.eq(owner.address);
+                expect(deposit.amount).to.eq(1000);
+            });
+            
+            it("approves deposit", async function () {
+                await contract.createDeposit(1000);
+                
+                contract = contract.connect(member1);
+                contract.approve(approvable.DEPOSIT, 0);
 
-            expect(deposit.member).to.be(owner.address);
-            expect(deposit.amount).to.be("1000");
+                let approvedMembers = await contract.depositApprovedList(0);
+
+                expect(approvedMembers).to.deep.eq([member1.address]);
+            })
+            
+            it("it confirms deposit if all approved", async function () {
+                await contract.createDeposit(1000);
+                
+                for (const member of members) {
+                    await contract.connect(member).approve(approvable.DEPOSIT, 0);
+                }
+                
+                let deposit = await contract.deposits(0);
+                let totalDeposit = await contract.totalDeposit();
+                
+                expect(deposit.confirmed).to.be.true;
+                expect(totalDeposit).to.eq(1000);
+            });   
         })
 
-        it("delegates vote", async function () {
-            await contract.delegateVote(member1.address);
-
-            let member = await contract.members(member1.address);
-            contract.credits(0);
-
-            expect(member.delegatedMembers())
-
-        })
-
-
-        describe("members join approvement", function() {
+        describe("join test", function () {
             let joiningUser;
 
             // create join request
@@ -59,165 +85,105 @@ describe("Credit Union", function() {
                 // 4th signer
                 [,,,,joiningUser] = await ethers.getSigners();
                 contract = contract.connect(joiningUser);
-                await contract.createJoinRequest("Sam Raymond");                
-            });
-
-            it("should create join request", async function () {
-
-                let result = await contract.joinRequests(0);
-                expect(result[0]).to.eq(joiningUser.address);
-
-            });
-
-            it("member approve", async function() {
-                contract = await contract.connect(member1);
-
-                await contract.approveJoinRequest(0);
-
-                let result = await contract.getApprovedMembersForJoinRequest(0);
-                expect(result).to.contain(member1.address);
-
-            });         
-
-            it("automatically adds to members if everybody approved", async function() {
-                contract = await contract.connect(member1);
-                await contract.approveJoinRequest(0);          
-
-                contract = await contract.connect(member2);
-                await contract.approveJoinRequest(0);
-
-                contract = await contract.connect(member3);
-                await contract.approveJoinRequest(0);
-
-                contract = await contract.connect(owner);
-                await contract.approveJoinRequest(0);
-
-                let result = await contract.members(joiningUser.address);
-
-                expect(result.joined).to.be.true;
-            });
-
-            it("member adds deposit", async function () {
-                contract = await contract.connect(member1);
-
-                await contract.deposit(100);
-
-            });
-
-            it("not members cannot deposite", async function () {
-                let user;
-                [,,,,,user] = await ethers.getSigners();
+                await contract.createJoin("Sam Raymond"); 
                 
-                try {
-                    await contract.connect(user).deposit(100);
-                    expect(false, "did not throw an error");
-                } catch(e) {
-                    expect(e.message).to.contain("only members can deposit, join first");
+                
+            });
+            
+            it("creates join request", async function () {
+                let members = await contract.getMembers();
+                
+                expect(members.at(-1).name).to.eq("Sam Raymond");
+                
+            });
+            
+            it("confirms if everyone approved", async function () {
+                for (const member of members) {
+                    await contract.connect(member).approveJoin(joiningUser.address);    
                 }
-            });
-
-            it("owner adds member to union", async function() {
-                let new_member;
-                [,,,,,new_member] = await ethers.getSigners();
-
-
-            })
-
-
-        });
-
-
-        it("should return percent for member", async function () {
-
-            const getPercent = async(address) => (await contract.getPercentForMember(address)).toNumber();
-
-            await contract.connect(member1).deposit(100);
-            await contract.connect(member2).deposit(200);
-            await contract.connect(member3).deposit(300);
-
-            let percent = await getPercent(member1.address);
-            expect(percent).to.be.equal(16);
-
-            percent = await getPercent(member2.address);
-            expect(percent).to.be.equal(33);
-
-            percent = await getPercent(member3.address);
-            expect(percent).to.be.equal(50);
-        });
-
-
-        describe("credit approvement", function() {
-            let debtorName = "Alex";
-
-            beforeEach(async () => {
-                await contract.connect(owner).deposit(100);
-                await contract.connect(owner).createCreditRequest(50, 5, debtorName);                
-            })
-
-            it("should approve credit request", async function () {
-                contract = contract.connect(member1);
-                await contract.approveCreditRequest(0);
-
-                let members = await contract.getApprovedMembers(0);
-                expect(members[0]).to.be.equal(member1.address);
-            });
-
-            it("if 60% approved it should automatically create credit", async function () {
-                await contract.connect(member1).deposit(100);
-                await contract.connect(member2).deposit(100);
-
-                contract = contract.connect(member1);
-                await contract.approveCreditRequest(0);
-
-                contract = contract.connect(member2);
-                await contract.approveCreditRequest(0);
-
-                expect((await contract.isCreditRequestApproved(0))).to.be.true;
-                expect((await contract.credits(0)).deptor).to.eq(debtorName);
-
                 
-            })             
-        }) 
+                let approveList = await contract.memberApprovedList(joiningUser.address);
+                let joinedMember = await contract.members(joiningUser.address);
 
-
-    });
-
-
-    describe("credit", function() {
-        let contract: CreditUnion;
-        let owner;
-        let debtor;
-        let member;
-
-        let debtorName = "Alex";
-
-        beforeEach(async() => {
-            [owner, member] = await ethers.getSigners();
-            let Factory = await ethers.getContractFactory("CreditUnion", owner);
-            Factory = Factory.connect(owner);
-
-            contract = await Factory.deploy(
-                "test", 
-                [member.address], 
-                ["member"],
-                "Owner Name (credit)"
-            );
-
-            await contract.connect(member).deposit(100);
-            await contract.connect(owner).createCreditRequest(100, 5, debtorName); 
-            await contract.connect(member).approveCreditRequest(0);    
-
-            expect(await contract.owner()).to.eq(owner.address);
-            expect((await contract.credits(0)).deptor).to.eq(debtorName);
-            expect(await contract.totalDeposit()).to.eq(0);           
+                expect(joinedMember.confirmed).to.be.true;
+                expect(approveList).to.contain(member1.address);
+            })            
         });
 
-        it("creates credit repayment", async function() {
-            await contract.repay(0, 50);
+        describe("credit test", function () {
+            beforeEach(async () => {
+                // add initial deposit so we can create credits
+                await contract.createDeposit(10_000);
+                
+                for (const member of members) {
+                    await contract.connect(member).approve(approvable.DEPOSIT, 0);
+                }
 
-            expect((await contract.credits(0)).repaidAmount).to.eq(50);
-            expect(await contract.totalDeposit()).to.eq(50);
+                // create credit
+                contract = contract.connect(member1);    
+                await contract.createCredit(3000, 3);
+            });
+
+            it("creates credit", async function () {
+                let credits = await contract.getCredits();
+                expect(credits.length).to.eq(1);
+            });
+
+            it("approves credit", async function() {               
+                for (const member of members) {
+                    await contract.connect(member).approve(approvable.CREDIT, 0);
+                }
+
+                let credit = await contract.credits(0);
+                let approvedMembers = await contract.creditApprovedList(0);
+
+                expect(credit.confirmed).to.be.true;
+                expect(approvedMembers).to.deep.eq([member1.address, member2.address, member3.address, owner.address]);
+                
+            });
 
         });
+
+
+        describe("repayment test", function () {
+            beforeEach(async () => {
+                // add deposit
+                await contract.createDeposit(10_000);
+                
+                for (const member of members) {
+                    await contract.connect(member).approve(approvable.DEPOSIT, 0);
+                }
+
+                // create credit
+                contract = contract.connect(member1);    
+                await contract.createCredit(3000, 3);
+
+                // approve credit
+                for (const member of members) {
+                    await contract.connect(member).approve(approvable.CREDIT, 0);
+                }
+                
+                contract = contract.connect(member1);
+                await contract.createRepayment(0, 1000, 1);
+            })
+
+            it("creates repayment", async function() {
+                let repayments = await contract.getRepaymentsByCredit(0);
+                expect(repayments.length).to.eq(1);
+            })
+
+            it("approves repayment", async function() {
+                for (const member of members) {
+                    await contract.connect(member).approve(approvable.REPAYMENT, 0);
+                }                
+
+                let repayment = await contract.repayments(0);
+                let credit = await contract.credits(0);
+
+                expect(repayment.confirmed).to.be.true;
+                expect(credit.repaid).to.eq(1000);
+            })
+
+        })
     })
 });

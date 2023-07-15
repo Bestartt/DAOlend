@@ -47,8 +47,6 @@ contract CreditUnion {
         string name;
         address member;
         address[] approvedMembers;
-        address[] delegatedMembers; 
-        bool voteDelegated;
         bool confirmed;
         bool created;
     }    
@@ -67,12 +65,13 @@ contract CreditUnion {
     Deposit[] public deposits;
     uint32 public depositCounter;
 
-    constructor(
-        string memory _name, 
-        string memory _ownerName,
-        address[] memory memberAddresses, 
-        string[] memory memberNames
-    ) {
+    enum Approvable {
+        DEPOSIT,
+        CREDIT,
+        REPAYMENT
+    }
+
+    constructor(string memory _name, string memory _ownerName,address[] memory memberAddresses, string[] memory memberNames) {
         ownerName = _ownerName;
         name = _name;
         address[] memory temp;
@@ -87,23 +86,17 @@ contract CreditUnion {
                 contribution: 0,
                 confirmed: true,
                 created: true,
-                approvedMembers: temp,
-                delegatedMembers: temp,
-                voteDelegated: false
+                approvedMembers: temp
             });
         }
 
-        // add creator
-        membersList.push(msg.sender);
-        members[msg.sender] = Member({
+        members[msg.sender] =Member({
             name: _ownerName,
             member: msg.sender,
             contribution: 0,
             confirmed: true,
             created: true,
-            approvedMembers: temp,
-            delegatedMembers: temp,
-            voteDelegated: false
+            approvedMembers: temp
         });
 
         // set counters
@@ -112,16 +105,90 @@ contract CreditUnion {
         repaymentCounter = 0;
     }
 
+    function approve(Approvable object, uint32 id) public memberOnly {
+        address[] storage approvedMembers;
 
-    // ========== utilites
-    function includes(address member, address[] memory list) private pure returns(bool) {
-        for (uint i = 0; i < list.length; i++) {
-            if (list[i] == member) {
-                return true;
+        // set reference to approvedMembers array
+        if      (object == Approvable.DEPOSIT)   {approvedMembers = deposits[id].approvedMembers;} 
+        else if (object == Approvable.CREDIT)    {approvedMembers = credits[id].approvedMembers;} 
+        else if (object == Approvable.REPAYMENT) {approvedMembers = repayments[id].approvedMembers;} 
+        else {
+            revert("Wrong approvable struct identity");
+        }
+
+        // check if user already votes
+        for (uint i = 0; i < approvedMembers.length; i++) {
+            if (approvedMembers[i] == msg.sender) {
+                revert(unicode"вы уже подтвердили");
             }
         }
-        return false;
+
+        approvedMembers.push(msg.sender);
+        bool allMembersApproved = approvedMembers.length == membersList.length;
+
+        
+        if (object == Approvable.CREDIT) {
+            if (isCreditApproved(id) && !credits[id].confirmed) {
+                credits[id].confirmed = true;
+                totalDeposit -= credits[id].amount;
+                creditCounter++;
+            }
+        }
+        else if (object == Approvable.REPAYMENT) {
+            Repayment memory repayment = repayments[id];
+            if (allMembersApproved) {
+                repayments[id].confirmed = true;
+                credits[repayment.creditId].repaid += repayment.amount; 
+            }
+        } 
+        else if (object == Approvable.DEPOSIT) {
+            if (allMembersApproved) {
+                deposits[id].confirmed = true;
+                Deposit memory current_deposit = deposits[id];
+                totalDeposit += current_deposit.amount;
+            }
+        }
     }
+
+    // ========= JOIN ===========
+    function createJoin(string memory username) public {
+        require(!members[msg.sender].confirmed, unicode"вы уже являетесь членом организации");
+        require(!members[msg.sender].created, unicode"вы уже создали запрос на вступление");
+
+        address[] memory temp;
+
+        members[msg.sender] = Member({
+            name: username,
+            member: msg.sender,
+            approvedMembers: temp,
+            contribution: 0,
+            confirmed: false,
+            created: true
+        });
+
+        membersList.push(msg.sender);
+    }
+
+
+    function approveJoin(address member) public memberOnly {
+        require(!includes(msg.sender, members[member].approvedMembers), unicode"вы уже подтвердили");
+        require(members[msg.sender].confirmed, unicode"вы уже подтвердили");
+
+        members[member].approvedMembers.push(msg.sender);
+
+        Member memory current_member = members[member];
+        bool allMembersApproved = current_member.approvedMembers.length == membersList.length;
+
+        if (allMembersApproved) {
+            membersList.push(member);
+            members[member].confirmed = true; 
+        }
+    }    
+    
+    // ============= MEMBERS ================
+    function memberApprovedList(address member) view public returns(address[] memory) {
+        return members[member].approvedMembers;
+    } 
 
     function getMembers() view public returns(Member[] memory) {
         Member[] memory allMembers = new Member[](membersList.length);
@@ -129,37 +196,8 @@ contract CreditUnion {
         return allMembers;
     }
 
-    function memberApprovedList(address member) view public returns(address[] memory) {
-        return members[member].approvedMembers;
-    }    
-    
-    function delegatedMembers(address member) view public returns(address[] memory) {
-        return members[member].delegatedMembers;
-    }
 
-    // ======= voting delegation
-    function delegateVote(address reciever) public {
-        require(!members[msg.sender].voteDelegated, unicode"вы уже доверили свой голос другому члену");
-
-        members[reciever].delegatedMembers.push(msg.sender);
-        members[msg.sender].voteDelegated = true;        
-    }
-
-    function takeBackVote(address from) public {
-        address[] memory delegatedMembers = members[from].delegatedMembers;
-
-        uint index = findIndex(msg.sender, delegatedMembers);
-        require(index < delegatedMembers.length, unicode"вы не давали доверенность этому члену");
-
-        // Replace item in given index with last item and reduce length by 1
-        members[from].delegatedMembers[index] = delegatedMembers[delegatedMembers.length - 1];
-        members[from].delegatedMembers.pop();
-
-        members[msg.sender].voteDelegated = false;
-    }
-
-    function createDeposit(uint32 number) public {
-        require(members[msg.sender].confirmed, unicode"только члены организации могут создавать депозит");
+    function createDeposit(uint32 number) public memberOnly {
 
         address[] memory temp;
         deposits.push(Deposit({
@@ -170,83 +208,13 @@ contract CreditUnion {
         }));
     }
 
-    function approveDeposit(uint id) public {
-        require(members[msg.sender].confirmed, unicode"вы не член организации");
-        require(!includes(msg.sender, deposits[id].approvedMembers), unicode"вы уже подтвердили");
-
-        for (uint i = 0; i < members[msg.sender].delegatedMembers.length; i++) {
-            deposits[id].approvedMembers.push(members[msg.sender].delegatedMembers[i]);
-        }
-
-        Deposit memory current_deposit = deposits[id];
-        bool allMembersApproved = current_deposit.approvedMembers.length == membersList.length;
-
-        if (allMembersApproved) {
-            deposits[id].confirmed = true;
-            totalDeposit += current_deposit.amount;
-        }
-    }
+    function depositApprovedList(uint id) view public returns(address[] memory) {
+        return deposits[id].approvedMembers;
+    }  
 
 
-
-    function findIndex(address value, address[] memory from) internal pure returns (uint) {
-        for (uint i = 0; i < from.length; i++) {
-            if (from[i] == value) {
-                return i;
-            }
-        }
-        return from.length + 10;
-    }
-
-    function createJoin(string memory username) public {
-        require(!members[msg.sender].confirmed, unicode"вы уже являетесь членом организации");
-        require(!members[msg.sender].created, unicode"you already created join request");
-
-        address[] memory temp;
-
-        members[msg.sender] = Member({
-            name: username,
-            member: msg.sender,
-            approvedMembers: temp,
-            contribution: 0,
-            confirmed: false,
-            created: true,
-            delegatedMembers: temp,
-            voteDelegated: false
-        });
-    }
-
-
-    function approveJoin(address member) public {
-        require(members[msg.sender].confirmed, unicode"вы должны быть членом организации чтобы подтверждать");
-        require(!includes(msg.sender, members[member].approvedMembers), unicode"вы уже подтвердили");
-
-        members[member].approvedMembers.push(msg.sender);
-
-        for (uint i = 0; i < members[msg.sender].delegatedMembers.length; i++) {
-            members[member].approvedMembers.push(members[msg.sender].delegatedMembers[i]);
-        }
-
-        Member memory current_member = members[member];
-        bool allMembersApproved = current_member.approvedMembers.length == membersList.length;
-
-        if (allMembersApproved) {
-            membersList.push(member);
-            members[member].confirmed = true; 
-        }
-    }
-
-    function getPercentForMember(address member) public view returns(uint256) {
-        uint256 sum = 0;
-
-        for (uint i = 0; i < membersList.length; i++) {
-            sum += members[membersList[i]].contribution;
-        }
-
-        return members[member].contribution * 100 / sum;
-    }
-
-    function createCredit(uint32 amount, uint32 term) public {
+    // ================ CREDITS ================
+    function createCredit(uint32 amount, uint32 term) public memberOnly {
         require(amount <= totalDeposit, unicode"запрашиваемая сумма должна быть меньше чем казна организации");
 
         address[] memory temp;
@@ -260,23 +228,6 @@ contract CreditUnion {
             approvedMembers: temp,
             confirmed: false
         }));
-    }
-
-    function approveCredit(uint32 id) public {
-        require(members[msg.sender].confirmed, unicode"вы должны быть членом организации чтобы подтверждать");
-        require(!includes(msg.sender, credits[id].approvedMembers), unicode"вы уже подтвердили");
-
-        credits[id].approvedMembers.push(msg.sender);
-
-        for (uint i = 0; i < members[msg.sender].delegatedMembers.length; i++) {
-            credits[id].approvedMembers.push(members[msg.sender].delegatedMembers[i]);
-        }
-
-        if (isCreditApproved(id)) {
-            credits[id].confirmed = true;
-            totalDeposit -= credits[id].amount;
-            creditCounter++;
-        }
     }
 
     // return bool if minimum 60% of all members have approved
@@ -312,7 +263,9 @@ contract CreditUnion {
         return credits[id].approvedMembers;
     }    
 
-    function createRepayment(uint32 id, uint32 amount, uint32 month) public {
+
+    // ================= REPAYMENTS ====================
+    function createRepayment(uint32 id, uint32 amount, uint32 month) public memberOnly {
         address[] memory temp;
         
         repayments.push(
@@ -325,37 +278,9 @@ contract CreditUnion {
                 confirmed: false
             })
         );
-
         repaymentCounter++;
     }
 
-    function approveRepayment(uint32 id) public {
-        require(members[msg.sender].confirmed, unicode"вы должны быть членом организации чтобы подтверждать");
-        require(!includes(msg.sender, repayments[id].approvedMembers), unicode"вы уже подтвердили");
-
-        repayments[id].approvedMembers.push(msg.sender);
-
-        for (uint i = 0; i < members[msg.sender].delegatedMembers.length; i++) {
-            repayments[id].approvedMembers.push(members[msg.sender].delegatedMembers[i]);
-        }
-
-        Repayment memory repayment = repayments[id];
-
-        if (isRepaymentApproved(id)) {
-            repayments[id].confirmed = true;
-            credits[repayment.creditId].repaid += repayment.amount; 
-        }
-    }
-
-
-    function isRepaymentApproved(uint32 id) public view returns (bool) {
-        return repayments[id].approvedMembers.length == membersList.length;
-    }
-
-    function repaymentApproveList(uint32 id) public view returns (address[] memory) {
-        return repayments[id].approvedMembers;
-    }
-    
     function getRepaymentsByCredit(uint32 _creditId) public view returns (Repayment[] memory) {
         uint256 count = 0;
         for (uint256 i = 0; i < repayments.length; i++) {
@@ -375,6 +300,23 @@ contract CreditUnion {
         }
         
         return result;
+    }
+
+
+    // ========== UTILITIES ================
+
+    modifier memberOnly() {
+        require(members[msg.sender].confirmed, unicode"вы не член организации");
+        _;
+    }
+
+    function includes(address member, address[] memory list) private pure returns(bool) {
+        for (uint i = 0; i < list.length; i++) {
+            if (list[i] == member) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // TODO add credit close when all repaid
