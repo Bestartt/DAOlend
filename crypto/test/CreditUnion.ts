@@ -19,24 +19,35 @@ describe("Credit Union", function() {
             [owner, member1, member2, member3] = await ethers.getSigners();
             Factory = Factory.connect(owner);
 
+            // @ts-ignore
+            let addresses: string[] = [member1.address, member2.address, member3.address];
+
             contract = await Factory.deploy(
                 "test", 
-                [member1.address, member2.address, member3.address],
-                memberNames,
-                "Owner Name"
+                "Owner Name",
+                addresses,
+                memberNames
             );
         });
 
-        it("get member names", async function() {
-            let allMembers = memberNames;
-            allMembers.push("Owner Name");
-            expect(await contract.getMemberNames()).to.deep.eq(allMembers);
-        });
 
-        it("get members full info", async function() {
-            contract.connect(member1).deposit(100);
-            let _members = await contract.getMembers();
-            // write assert later
+        it("creates deposit", async function () {
+            await contract.deposit(1000);
+
+            let deposit = await contract.deposits(0);
+
+            expect(deposit.member).to.be(owner.address);
+            expect(deposit.amount).to.be("1000");
+        })
+
+        it("delegates vote", async function () {
+            await contract.delegateVote(member1.address);
+
+            let member = await contract.members(member1.address);
+            contract.credits(0);
+
+            expect(member.delegatedMembers())
+
         })
 
 
