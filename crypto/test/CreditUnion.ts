@@ -46,9 +46,11 @@ describe("Credit Union", function() {
                 await contract.createDeposit(1000);
                   
                 let deposit = await contract.deposits(0);
-                
+                let depositList = await contract.getDeposits();
+
                 expect(deposit.member).to.eq(owner.address);
                 expect(deposit.amount).to.eq(1000);
+                expect(depositList[0].amount).to.eq(1000);
             });
             
             it("approves deposit", async function () {
@@ -107,7 +109,14 @@ describe("Credit Union", function() {
 
                 expect(joinedMember.confirmed).to.be.true;
                 expect(approveList).to.contain(member1.address);
-            })            
+            });
+            
+            it("returns list of members by addresses", async function () {
+                let result = await contract.getMembersByAddresses([member1.address, member3.address]);
+
+                expect(result[0].name).to.eq("member1");
+                expect(result[1].name).to.eq("member3");
+            })
         });
 
         describe("credit test", function () {
@@ -179,9 +188,11 @@ describe("Credit Union", function() {
 
                 let repayment = await contract.repayments(0);
                 let credit = await contract.credits(0);
+                let approvedMembers = await contract.repaymentApprovedList(0);
 
                 expect(repayment.confirmed).to.be.true;
                 expect(credit.repaid).to.eq(1000);
+                expect(approvedMembers).to.deep.eq([member1.address, member2.address, member3.address, owner.address]);
             })
 
         })

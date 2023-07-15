@@ -12,7 +12,7 @@
 
     let totalDeposit = computed(() => {
         let sum = 0;
-        members.value.map(member => sum += member[0]);
+        members.value.map(member => sum += member.contribution);
         return sum;
     });
 
@@ -61,10 +61,10 @@
                 <tbody>
 
                     <tr v-for="member in members">
-                        <td>{{ member[2] }}</td>
-                        <td>{{ member[0] }}</td>
-                        <td>{{ getPercent(member[0]) }}%</td>
-                        <td>{{ member[3] }}</td>
+                        <td>{{ member.name }}</td>
+                        <td>{{ member.contribution }}</td>
+                        <td>{{ getPercent(member.contribution) }}%</td>
+                        <td>{{ member.member }}</td>
                     </tr>
                 </tbody>
             </table>              

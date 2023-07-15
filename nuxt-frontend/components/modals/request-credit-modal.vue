@@ -13,7 +13,7 @@
 
     async function call() {
         loading.value = true;
-        await contract.createCreditRequest(amount.value, term.value);
+        await contract.createCredit(amount.value, term.value);
         
         emits("onComplete");
         notif.notify(

@@ -41,7 +41,6 @@ contract CreditUnion {
 
     // member
 
-    // TODO add weight functionality here, so when somebody can delegate his vote right
     struct Member {
         uint32 contribution;
         string name;
@@ -57,6 +56,7 @@ contract CreditUnion {
     // deposit
     struct Deposit {
         address member;
+        string name;
         uint32 amount;
         address[] approvedMembers;
         bool confirmed;
@@ -196,12 +196,24 @@ contract CreditUnion {
         return allMembers;
     }
 
+    function getMembersByAddresses(address[] calldata addresses) view public returns(Member[] memory) {
+        Member[] memory resultMembers = new Member[](addresses.length);
+
+        for (uint i = 0; i < addresses.length; i++) {
+            resultMembers[i] = members[addresses[i]];
+        }
+
+        return resultMembers;
+        
+    }
+
 
     function createDeposit(uint32 number) public memberOnly {
 
         address[] memory temp;
         deposits.push(Deposit({
             member: msg.sender,
+            name: members[msg.sender].name,
             amount: number,
             approvedMembers: temp,
             confirmed: false
@@ -212,6 +224,9 @@ contract CreditUnion {
         return deposits[id].approvedMembers;
     }  
 
+    function getDeposits() view public returns (Deposit[] memory) {
+        return deposits;
+    }
 
     // ================ CREDITS ================
     function createCredit(uint32 amount, uint32 term) public memberOnly {
@@ -300,6 +315,10 @@ contract CreditUnion {
         }
         
         return result;
+    }
+
+    function repaymentApprovedList(uint32 id) public view returns(address[] memory) {
+        return repayments[id].approvedMembers;
     }
 
 

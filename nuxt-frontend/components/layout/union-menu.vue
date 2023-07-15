@@ -14,6 +14,10 @@
             route: `/unions/${address}/members/`,
         },
         {
+            name: "вложения",
+            route: `/unions/${address}/deposits/`,
+        },
+        {
             name: "Заявки на кредит",
             route: `/unions/${address}/credit-requests/`
         },

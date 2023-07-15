@@ -74,7 +74,7 @@
         </div>
 
 
-        <div v-if="transactions.length == 0 && !loading">
+        <div v-if="transactions.length == 0 && !loading && !networkIsLocal">
             <h3 text-gray>Пусто</h3>
             <b text-gray>пока никаких действий нету</b>
         </div>

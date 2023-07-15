@@ -13,11 +13,7 @@ import type {
   Signer,
   utils,
 } from "ethers";
-import type {
-  FunctionFragment,
-  Result,
-  EventFragment,
-} from "@ethersproject/abi";
+import type { FunctionFragment, Result } from "@ethersproject/abi";
 import type { Listener, Provider } from "@ethersproject/providers";
 import type {
   TypedEventFilter,
@@ -27,220 +23,220 @@ import type {
 } from "../common";
 
 export declare namespace CreditUnion {
-  export type CreditRequestStruct = {
-    id: BigNumberish;
-    deptor: string;
-    amount: BigNumberish;
-    term: BigNumberish;
-    approvedMembers: string[];
-    deptorAddress: string;
-    creditCreated: boolean;
-  };
-
-  export type CreditRequestStructOutput = [
-    number,
-    string,
-    number,
-    number,
-    string[],
-    string,
-    boolean
-  ] & {
-    id: number;
-    deptor: string;
-    amount: number;
-    term: number;
-    approvedMembers: string[];
-    deptorAddress: string;
-    creditCreated: boolean;
-  };
-
   export type CreditStruct = {
     id: BigNumberish;
-    deptor: string;
     amount: BigNumberish;
     term: BigNumberish;
-    repaidAmount: BigNumberish;
-    deptorAddress: string;
+    repaid: BigNumberish;
+    name: string;
+    member: string;
+    approvedMembers: string[];
+    confirmed: boolean;
   };
 
   export type CreditStructOutput = [
     number,
+    number,
+    number,
+    number,
     string,
-    number,
-    number,
-    number,
-    string
+    string,
+    string[],
+    boolean
   ] & {
     id: number;
-    deptor: string;
     amount: number;
     term: number;
-    repaidAmount: number;
-    deptorAddress: string;
+    repaid: number;
+    name: string;
+    member: string;
+    approvedMembers: string[];
+    confirmed: boolean;
   };
 
-  export type JoinRequestStruct = {
-    user: string;
+  export type DepositStruct = {
+    member: string;
     name: string;
+    amount: BigNumberish;
     approvedMembers: string[];
+    confirmed: boolean;
   };
 
-  export type JoinRequestStructOutput = [string, string, string[]] & {
-    user: string;
+  export type DepositStructOutput = [
+    string,
+    string,
+    number,
+    string[],
+    boolean
+  ] & {
+    member: string;
     name: string;
+    amount: number;
     approvedMembers: string[];
+    confirmed: boolean;
   };
 
   export type MemberStruct = {
     contribution: BigNumberish;
-    joined: boolean;
     name: string;
-    _address: string;
+    member: string;
+    approvedMembers: string[];
+    confirmed: boolean;
+    created: boolean;
   };
 
-  export type MemberStructOutput = [number, boolean, string, string] & {
+  export type MemberStructOutput = [
+    number,
+    string,
+    string,
+    string[],
+    boolean,
+    boolean
+  ] & {
     contribution: number;
-    joined: boolean;
     name: string;
-    _address: string;
+    member: string;
+    approvedMembers: string[];
+    confirmed: boolean;
+    created: boolean;
   };
 
   export type RepaymentStruct = {
+    id: BigNumberish;
     month: BigNumberish;
     amount: BigNumberish;
     creditId: BigNumberish;
+    approvedMembers: string[];
+    confirmed: boolean;
   };
 
-  export type RepaymentStructOutput = [number, number, number] & {
+  export type RepaymentStructOutput = [
+    number,
+    number,
+    number,
+    number,
+    string[],
+    boolean
+  ] & {
+    id: number;
     month: number;
     amount: number;
     creditId: number;
+    approvedMembers: string[];
+    confirmed: boolean;
   };
 }
 
 export interface CreditUnionInterface extends utils.Interface {
   functions: {
-    "approveCreditRequest(uint32)": FunctionFragment;
-    "approveJoinRequest(uint32)": FunctionFragment;
-    "createCreditRequest(uint32,uint32)": FunctionFragment;
-    "createJoinRequest(string)": FunctionFragment;
+    "approve(uint8,uint32)": FunctionFragment;
+    "approveJoin(address)": FunctionFragment;
+    "createCredit(uint32,uint32)": FunctionFragment;
+    "createDeposit(uint32)": FunctionFragment;
+    "createJoin(string)": FunctionFragment;
+    "createRepayment(uint32,uint32,uint32)": FunctionFragment;
+    "creditApprovedList(uint256)": FunctionFragment;
     "creditCounter()": FunctionFragment;
-    "creditRequestCounter()": FunctionFragment;
-    "creditRequests(uint256)": FunctionFragment;
     "credits(uint256)": FunctionFragment;
-    "deposit(uint32)": FunctionFragment;
-    "getApprovedMembers(uint32)": FunctionFragment;
-    "getApprovedMembersForJoinRequest(uint256)": FunctionFragment;
-    "getCreditRequests()": FunctionFragment;
+    "depositApprovedList(uint256)": FunctionFragment;
+    "depositCounter()": FunctionFragment;
+    "deposits(uint256)": FunctionFragment;
     "getCredits()": FunctionFragment;
-    "getJoinRequests()": FunctionFragment;
+    "getDeposits()": FunctionFragment;
     "getMembers()": FunctionFragment;
-    "getPercentForMember(address)": FunctionFragment;
+    "getMembersByAddresses(address[])": FunctionFragment;
     "getRepaymentsByCredit(uint32)": FunctionFragment;
-    "isCreditRequestApproved(uint32)": FunctionFragment;
-    "joinRequests(uint256)": FunctionFragment;
+    "isCreditApproved(uint32)": FunctionFragment;
+    "memberApprovedList(address)": FunctionFragment;
     "members(address)": FunctionFragment;
     "membersList(uint256)": FunctionFragment;
     "name()": FunctionFragment;
-    "owner()": FunctionFragment;
     "ownerName()": FunctionFragment;
-    "renounceOwnership()": FunctionFragment;
-    "repay(uint32,uint32,uint32)": FunctionFragment;
+    "repaymentApprovedList(uint32)": FunctionFragment;
     "repaymentCounter()": FunctionFragment;
     "repayments(uint256)": FunctionFragment;
     "totalDeposit()": FunctionFragment;
-    "transferOwnership(address)": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
-      | "approveCreditRequest"
-      | "approveJoinRequest"
-      | "createCreditRequest"
-      | "createJoinRequest"
+      | "approve"
+      | "approveJoin"
+      | "createCredit"
+      | "createDeposit"
+      | "createJoin"
+      | "createRepayment"
+      | "creditApprovedList"
       | "creditCounter"
-      | "creditRequestCounter"
-      | "creditRequests"
       | "credits"
-      | "deposit"
-      | "getApprovedMembers"
-      | "getApprovedMembersForJoinRequest"
-      | "getCreditRequests"
+      | "depositApprovedList"
+      | "depositCounter"
+      | "deposits"
       | "getCredits"
-      | "getJoinRequests"
+      | "getDeposits"
       | "getMembers"
-      | "getPercentForMember"
+      | "getMembersByAddresses"
       | "getRepaymentsByCredit"
-      | "isCreditRequestApproved"
-      | "joinRequests"
+      | "isCreditApproved"
+      | "memberApprovedList"
       | "members"
       | "membersList"
       | "name"
-      | "owner"
       | "ownerName"
-      | "renounceOwnership"
-      | "repay"
+      | "repaymentApprovedList"
       | "repaymentCounter"
       | "repayments"
       | "totalDeposit"
-      | "transferOwnership"
   ): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: "approveCreditRequest",
-    values: [BigNumberish]
+    functionFragment: "approve",
+    values: [BigNumberish, BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "approveJoin", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "approveJoinRequest",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "createCreditRequest",
+    functionFragment: "createCredit",
     values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "createJoinRequest",
-    values: [string]
+    functionFragment: "createDeposit",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(functionFragment: "createJoin", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "createRepayment",
+    values: [BigNumberish, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "creditApprovedList",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "creditCounter",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "creditRequestCounter",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "creditRequests",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "credits",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "deposit",
+    functionFragment: "depositApprovedList",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "getApprovedMembers",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getApprovedMembersForJoinRequest",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getCreditRequests",
+    functionFragment: "depositCounter",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "deposits",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getCredits",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "getJoinRequests",
+    functionFragment: "getDeposits",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -248,20 +244,20 @@ export interface CreditUnionInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "getPercentForMember",
-    values: [string]
+    functionFragment: "getMembersByAddresses",
+    values: [string[]]
   ): string;
   encodeFunctionData(
     functionFragment: "getRepaymentsByCredit",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "isCreditRequestApproved",
+    functionFragment: "isCreditApproved",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "joinRequests",
-    values: [BigNumberish]
+    functionFragment: "memberApprovedList",
+    values: [string]
   ): string;
   encodeFunctionData(functionFragment: "members", values: [string]): string;
   encodeFunctionData(
@@ -269,15 +265,10 @@ export interface CreditUnionInterface extends utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "ownerName", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "renounceOwnership",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "repay",
-    values: [BigNumberish, BigNumberish, BigNumberish]
+    functionFragment: "repaymentApprovedList",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "repaymentCounter",
@@ -291,61 +282,51 @@ export interface CreditUnionInterface extends utils.Interface {
     functionFragment: "totalDeposit",
     values?: undefined
   ): string;
-  encodeFunctionData(
-    functionFragment: "transferOwnership",
-    values: [string]
-  ): string;
 
+  decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "approveCreditRequest",
+    functionFragment: "approveJoin",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "approveJoinRequest",
+    functionFragment: "createCredit",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "createCreditRequest",
+    functionFragment: "createDeposit",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "createJoin", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "createRepayment",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "createJoinRequest",
+    functionFragment: "creditApprovedList",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "creditCounter",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "creditRequestCounter",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "creditRequests",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "credits", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "getApprovedMembers",
+    functionFragment: "depositApprovedList",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getApprovedMembersForJoinRequest",
+    functionFragment: "depositCounter",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "getCreditRequests",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "deposits", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getCredits", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "getJoinRequests",
+    functionFragment: "getDeposits",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getMembers", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "getPercentForMember",
+    functionFragment: "getMembersByAddresses",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -353,11 +334,11 @@ export interface CreditUnionInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "isCreditRequestApproved",
+    functionFragment: "isCreditApproved",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "joinRequests",
+    functionFragment: "memberApprovedList",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "members", data: BytesLike): Result;
@@ -366,13 +347,11 @@ export interface CreditUnionInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerName", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "renounceOwnership",
+    functionFragment: "repaymentApprovedList",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "repay", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "repaymentCounter",
     data: BytesLike
@@ -382,29 +361,9 @@ export interface CreditUnionInterface extends utils.Interface {
     functionFragment: "totalDeposit",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "transferOwnership",
-    data: BytesLike
-  ): Result;
 
-  events: {
-    "OwnershipTransferred(address,address)": EventFragment;
-  };
-
-  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  events: {};
 }
-
-export interface OwnershipTransferredEventObject {
-  previousOwner: string;
-  newOwner: string;
-}
-export type OwnershipTransferredEvent = TypedEvent<
-  [string, string],
-  OwnershipTransferredEventObject
->;
-
-export type OwnershipTransferredEventFilter =
-  TypedEventFilter<OwnershipTransferredEvent>;
 
 export interface CreditUnion extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -433,119 +392,123 @@ export interface CreditUnion extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    approveCreditRequest(
+    approve(
+      object: BigNumberish,
       id: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
-    approveJoinRequest(
-      id: BigNumberish,
+    approveJoin(
+      member: string,
       overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
-    createCreditRequest(
+    createCredit(
       amount: BigNumberish,
       term: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
-    createJoinRequest(
+    createDeposit(
+      number: BigNumberish,
+      overrides?: Overrides & { from?: string }
+    ): Promise<ContractTransaction>;
+
+    createJoin(
       username: string,
       overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
-    creditCounter(overrides?: CallOverrides): Promise<[number]>;
+    createRepayment(
+      id: BigNumberish,
+      amount: BigNumberish,
+      month: BigNumberish,
+      overrides?: Overrides & { from?: string }
+    ): Promise<ContractTransaction>;
 
-    creditRequestCounter(overrides?: CallOverrides): Promise<[number]>;
-
-    creditRequests(
-      arg0: BigNumberish,
+    creditApprovedList(
+      id: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<
-      [number, string, number, number, string, boolean] & {
-        id: number;
-        deptor: string;
-        amount: number;
-        term: number;
-        deptorAddress: string;
-        creditCreated: boolean;
-      }
-    >;
+    ): Promise<[string[]]>;
+
+    creditCounter(overrides?: CallOverrides): Promise<[number]>;
 
     credits(
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [number, string, number, number, number, string] & {
+      [number, number, number, number, string, string, boolean] & {
         id: number;
-        deptor: string;
         amount: number;
         term: number;
-        repaidAmount: number;
-        deptorAddress: string;
+        repaid: number;
+        name: string;
+        member: string;
+        confirmed: boolean;
       }
     >;
 
-    deposit(
-      number: BigNumberish,
-      overrides?: Overrides & { from?: string }
-    ): Promise<ContractTransaction>;
-
-    getApprovedMembers(
-      Id: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[string[]]>;
-
-    getApprovedMembersForJoinRequest(
+    depositApprovedList(
       id: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string[]]>;
 
-    getCreditRequests(
+    depositCounter(overrides?: CallOverrides): Promise<[number]>;
+
+    deposits(
+      arg0: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[CreditUnion.CreditRequestStructOutput[]]>;
+    ): Promise<
+      [string, string, number, boolean] & {
+        member: string;
+        name: string;
+        amount: number;
+        confirmed: boolean;
+      }
+    >;
 
     getCredits(
       overrides?: CallOverrides
     ): Promise<[CreditUnion.CreditStructOutput[]]>;
 
-    getJoinRequests(
+    getDeposits(
       overrides?: CallOverrides
-    ): Promise<[CreditUnion.JoinRequestStructOutput[]]>;
+    ): Promise<[CreditUnion.DepositStructOutput[]]>;
 
     getMembers(
       overrides?: CallOverrides
     ): Promise<[CreditUnion.MemberStructOutput[]]>;
 
-    getPercentForMember(
-      member: string,
+    getMembersByAddresses(
+      addresses: string[],
       overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    ): Promise<[CreditUnion.MemberStructOutput[]]>;
 
     getRepaymentsByCredit(
       _creditId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[CreditUnion.RepaymentStructOutput[]]>;
 
-    isCreditRequestApproved(
-      Id: BigNumberish,
+    isCreditApproved(
+      id: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    joinRequests(
-      arg0: BigNumberish,
+    memberApprovedList(
+      member: string,
       overrides?: CallOverrides
-    ): Promise<[string, string] & { user: string; name: string }>;
+    ): Promise<[string[]]>;
 
     members(
       arg0: string,
       overrides?: CallOverrides
     ): Promise<
-      [number, boolean, string, string] & {
+      [number, string, string, boolean, boolean] & {
         contribution: number;
-        joined: boolean;
         name: string;
-        _address: string;
+        member: string;
+        confirmed: boolean;
+        created: boolean;
       }
     >;
 
@@ -556,20 +519,12 @@ export interface CreditUnion extends BaseContract {
 
     name(overrides?: CallOverrides): Promise<[string]>;
 
-    owner(overrides?: CallOverrides): Promise<[string]>;
-
     ownerName(overrides?: CallOverrides): Promise<[string]>;
 
-    renounceOwnership(
-      overrides?: Overrides & { from?: string }
-    ): Promise<ContractTransaction>;
-
-    repay(
+    repaymentApprovedList(
       id: BigNumberish,
-      amount: BigNumberish,
-      month: BigNumberish,
-      overrides?: Overrides & { from?: string }
-    ): Promise<ContractTransaction>;
+      overrides?: CallOverrides
+    ): Promise<[string[]]>;
 
     repaymentCounter(overrides?: CallOverrides): Promise<[number]>;
 
@@ -577,134 +532,135 @@ export interface CreditUnion extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [number, number, number] & {
+      [number, number, number, number, boolean] & {
+        id: number;
         month: number;
         amount: number;
         creditId: number;
+        confirmed: boolean;
       }
     >;
 
     totalDeposit(overrides?: CallOverrides): Promise<[number]>;
-
-    transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string }
-    ): Promise<ContractTransaction>;
   };
 
-  approveCreditRequest(
+  approve(
+    object: BigNumberish,
     id: BigNumberish,
     overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
-  approveJoinRequest(
-    id: BigNumberish,
+  approveJoin(
+    member: string,
     overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
-  createCreditRequest(
+  createCredit(
     amount: BigNumberish,
     term: BigNumberish,
     overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
-  createJoinRequest(
+  createDeposit(
+    number: BigNumberish,
+    overrides?: Overrides & { from?: string }
+  ): Promise<ContractTransaction>;
+
+  createJoin(
     username: string,
     overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
-  creditCounter(overrides?: CallOverrides): Promise<number>;
+  createRepayment(
+    id: BigNumberish,
+    amount: BigNumberish,
+    month: BigNumberish,
+    overrides?: Overrides & { from?: string }
+  ): Promise<ContractTransaction>;
 
-  creditRequestCounter(overrides?: CallOverrides): Promise<number>;
-
-  creditRequests(
-    arg0: BigNumberish,
+  creditApprovedList(
+    id: BigNumberish,
     overrides?: CallOverrides
-  ): Promise<
-    [number, string, number, number, string, boolean] & {
-      id: number;
-      deptor: string;
-      amount: number;
-      term: number;
-      deptorAddress: string;
-      creditCreated: boolean;
-    }
-  >;
+  ): Promise<string[]>;
+
+  creditCounter(overrides?: CallOverrides): Promise<number>;
 
   credits(
     arg0: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [number, string, number, number, number, string] & {
+    [number, number, number, number, string, string, boolean] & {
       id: number;
-      deptor: string;
       amount: number;
       term: number;
-      repaidAmount: number;
-      deptorAddress: string;
+      repaid: number;
+      name: string;
+      member: string;
+      confirmed: boolean;
     }
   >;
 
-  deposit(
-    number: BigNumberish,
-    overrides?: Overrides & { from?: string }
-  ): Promise<ContractTransaction>;
-
-  getApprovedMembers(
-    Id: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<string[]>;
-
-  getApprovedMembersForJoinRequest(
+  depositApprovedList(
     id: BigNumberish,
     overrides?: CallOverrides
   ): Promise<string[]>;
 
-  getCreditRequests(
+  depositCounter(overrides?: CallOverrides): Promise<number>;
+
+  deposits(
+    arg0: BigNumberish,
     overrides?: CallOverrides
-  ): Promise<CreditUnion.CreditRequestStructOutput[]>;
+  ): Promise<
+    [string, string, number, boolean] & {
+      member: string;
+      name: string;
+      amount: number;
+      confirmed: boolean;
+    }
+  >;
 
   getCredits(
     overrides?: CallOverrides
   ): Promise<CreditUnion.CreditStructOutput[]>;
 
-  getJoinRequests(
+  getDeposits(
     overrides?: CallOverrides
-  ): Promise<CreditUnion.JoinRequestStructOutput[]>;
+  ): Promise<CreditUnion.DepositStructOutput[]>;
 
   getMembers(
     overrides?: CallOverrides
   ): Promise<CreditUnion.MemberStructOutput[]>;
 
-  getPercentForMember(
-    member: string,
+  getMembersByAddresses(
+    addresses: string[],
     overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  ): Promise<CreditUnion.MemberStructOutput[]>;
 
   getRepaymentsByCredit(
     _creditId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<CreditUnion.RepaymentStructOutput[]>;
 
-  isCreditRequestApproved(
-    Id: BigNumberish,
+  isCreditApproved(
+    id: BigNumberish,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  joinRequests(
-    arg0: BigNumberish,
+  memberApprovedList(
+    member: string,
     overrides?: CallOverrides
-  ): Promise<[string, string] & { user: string; name: string }>;
+  ): Promise<string[]>;
 
   members(
     arg0: string,
     overrides?: CallOverrides
   ): Promise<
-    [number, boolean, string, string] & {
+    [number, string, string, boolean, boolean] & {
       contribution: number;
-      joined: boolean;
       name: string;
-      _address: string;
+      member: string;
+      confirmed: boolean;
+      created: boolean;
     }
   >;
 
@@ -712,20 +668,12 @@ export interface CreditUnion extends BaseContract {
 
   name(overrides?: CallOverrides): Promise<string>;
 
-  owner(overrides?: CallOverrides): Promise<string>;
-
   ownerName(overrides?: CallOverrides): Promise<string>;
 
-  renounceOwnership(
-    overrides?: Overrides & { from?: string }
-  ): Promise<ContractTransaction>;
-
-  repay(
+  repaymentApprovedList(
     id: BigNumberish,
-    amount: BigNumberish,
-    month: BigNumberish,
-    overrides?: Overrides & { from?: string }
-  ): Promise<ContractTransaction>;
+    overrides?: CallOverrides
+  ): Promise<string[]>;
 
   repaymentCounter(overrides?: CallOverrides): Promise<number>;
 
@@ -733,131 +681,129 @@ export interface CreditUnion extends BaseContract {
     arg0: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [number, number, number] & {
+    [number, number, number, number, boolean] & {
+      id: number;
       month: number;
       amount: number;
       creditId: number;
+      confirmed: boolean;
     }
   >;
 
   totalDeposit(overrides?: CallOverrides): Promise<number>;
 
-  transferOwnership(
-    newOwner: string,
-    overrides?: Overrides & { from?: string }
-  ): Promise<ContractTransaction>;
-
   callStatic: {
-    approveCreditRequest(
+    approve(
+      object: BigNumberish,
       id: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    approveJoinRequest(
-      id: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    approveJoin(member: string, overrides?: CallOverrides): Promise<void>;
 
-    createCreditRequest(
+    createCredit(
       amount: BigNumberish,
       term: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    createJoinRequest(
-      username: string,
+    createDeposit(
+      number: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    creditCounter(overrides?: CallOverrides): Promise<number>;
+    createJoin(username: string, overrides?: CallOverrides): Promise<void>;
 
-    creditRequestCounter(overrides?: CallOverrides): Promise<number>;
-
-    creditRequests(
-      arg0: BigNumberish,
+    createRepayment(
+      id: BigNumberish,
+      amount: BigNumberish,
+      month: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<
-      [number, string, number, number, string, boolean] & {
-        id: number;
-        deptor: string;
-        amount: number;
-        term: number;
-        deptorAddress: string;
-        creditCreated: boolean;
-      }
-    >;
+    ): Promise<void>;
+
+    creditApprovedList(
+      id: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string[]>;
+
+    creditCounter(overrides?: CallOverrides): Promise<number>;
 
     credits(
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [number, string, number, number, number, string] & {
+      [number, number, number, number, string, string, boolean] & {
         id: number;
-        deptor: string;
         amount: number;
         term: number;
-        repaidAmount: number;
-        deptorAddress: string;
+        repaid: number;
+        name: string;
+        member: string;
+        confirmed: boolean;
       }
     >;
 
-    deposit(number: BigNumberish, overrides?: CallOverrides): Promise<void>;
-
-    getApprovedMembers(
-      Id: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<string[]>;
-
-    getApprovedMembersForJoinRequest(
+    depositApprovedList(
       id: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string[]>;
 
-    getCreditRequests(
+    depositCounter(overrides?: CallOverrides): Promise<number>;
+
+    deposits(
+      arg0: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<CreditUnion.CreditRequestStructOutput[]>;
+    ): Promise<
+      [string, string, number, boolean] & {
+        member: string;
+        name: string;
+        amount: number;
+        confirmed: boolean;
+      }
+    >;
 
     getCredits(
       overrides?: CallOverrides
     ): Promise<CreditUnion.CreditStructOutput[]>;
 
-    getJoinRequests(
+    getDeposits(
       overrides?: CallOverrides
-    ): Promise<CreditUnion.JoinRequestStructOutput[]>;
+    ): Promise<CreditUnion.DepositStructOutput[]>;
 
     getMembers(
       overrides?: CallOverrides
     ): Promise<CreditUnion.MemberStructOutput[]>;
 
-    getPercentForMember(
-      member: string,
+    getMembersByAddresses(
+      addresses: string[],
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    ): Promise<CreditUnion.MemberStructOutput[]>;
 
     getRepaymentsByCredit(
       _creditId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<CreditUnion.RepaymentStructOutput[]>;
 
-    isCreditRequestApproved(
-      Id: BigNumberish,
+    isCreditApproved(
+      id: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    joinRequests(
-      arg0: BigNumberish,
+    memberApprovedList(
+      member: string,
       overrides?: CallOverrides
-    ): Promise<[string, string] & { user: string; name: string }>;
+    ): Promise<string[]>;
 
     members(
       arg0: string,
       overrides?: CallOverrides
     ): Promise<
-      [number, boolean, string, string] & {
+      [number, string, string, boolean, boolean] & {
         contribution: number;
-        joined: boolean;
         name: string;
-        _address: string;
+        member: string;
+        confirmed: boolean;
+        created: boolean;
       }
     >;
 
@@ -865,18 +811,12 @@ export interface CreditUnion extends BaseContract {
 
     name(overrides?: CallOverrides): Promise<string>;
 
-    owner(overrides?: CallOverrides): Promise<string>;
-
     ownerName(overrides?: CallOverrides): Promise<string>;
 
-    renounceOwnership(overrides?: CallOverrides): Promise<void>;
-
-    repay(
+    repaymentApprovedList(
       id: BigNumberish,
-      amount: BigNumberish,
-      month: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<string[]>;
 
     repaymentCounter(overrides?: CallOverrides): Promise<number>;
 
@@ -884,90 +824,81 @@ export interface CreditUnion extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [number, number, number] & {
+      [number, number, number, number, boolean] & {
+        id: number;
         month: number;
         amount: number;
         creditId: number;
+        confirmed: boolean;
       }
     >;
 
     totalDeposit(overrides?: CallOverrides): Promise<number>;
-
-    transferOwnership(
-      newOwner: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
   };
 
-  filters: {
-    "OwnershipTransferred(address,address)"(
-      previousOwner?: string | null,
-      newOwner?: string | null
-    ): OwnershipTransferredEventFilter;
-    OwnershipTransferred(
-      previousOwner?: string | null,
-      newOwner?: string | null
-    ): OwnershipTransferredEventFilter;
-  };
+  filters: {};
 
   estimateGas: {
-    approveCreditRequest(
+    approve(
+      object: BigNumberish,
       id: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
-    approveJoinRequest(
-      id: BigNumberish,
+    approveJoin(
+      member: string,
       overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
-    createCreditRequest(
+    createCredit(
       amount: BigNumberish,
       term: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
-    createJoinRequest(
-      username: string,
-      overrides?: Overrides & { from?: string }
-    ): Promise<BigNumber>;
-
-    creditCounter(overrides?: CallOverrides): Promise<BigNumber>;
-
-    creditRequestCounter(overrides?: CallOverrides): Promise<BigNumber>;
-
-    creditRequests(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    credits(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    deposit(
+    createDeposit(
       number: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
-    getApprovedMembers(
-      Id: BigNumberish,
-      overrides?: CallOverrides
+    createJoin(
+      username: string,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
-    getApprovedMembersForJoinRequest(
+    createRepayment(
+      id: BigNumberish,
+      amount: BigNumberish,
+      month: BigNumberish,
+      overrides?: Overrides & { from?: string }
+    ): Promise<BigNumber>;
+
+    creditApprovedList(
       id: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getCreditRequests(overrides?: CallOverrides): Promise<BigNumber>;
+    creditCounter(overrides?: CallOverrides): Promise<BigNumber>;
+
+    credits(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    depositApprovedList(
+      id: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    depositCounter(overrides?: CallOverrides): Promise<BigNumber>;
+
+    deposits(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     getCredits(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getJoinRequests(overrides?: CallOverrides): Promise<BigNumber>;
+    getDeposits(overrides?: CallOverrides): Promise<BigNumber>;
 
     getMembers(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getPercentForMember(
-      member: string,
+    getMembersByAddresses(
+      addresses: string[],
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -976,13 +907,13 @@ export interface CreditUnion extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    isCreditRequestApproved(
-      Id: BigNumberish,
+    isCreditApproved(
+      id: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    joinRequests(
-      arg0: BigNumberish,
+    memberApprovedList(
+      member: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -995,19 +926,11 @@ export interface CreditUnion extends BaseContract {
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
-    owner(overrides?: CallOverrides): Promise<BigNumber>;
-
     ownerName(overrides?: CallOverrides): Promise<BigNumber>;
 
-    renounceOwnership(
-      overrides?: Overrides & { from?: string }
-    ): Promise<BigNumber>;
-
-    repay(
+    repaymentApprovedList(
       id: BigNumberish,
-      amount: BigNumberish,
-      month: BigNumberish,
-      overrides?: Overrides & { from?: string }
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     repaymentCounter(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1018,76 +941,75 @@ export interface CreditUnion extends BaseContract {
     ): Promise<BigNumber>;
 
     totalDeposit(overrides?: CallOverrides): Promise<BigNumber>;
-
-    transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string }
-    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    approveCreditRequest(
+    approve(
+      object: BigNumberish,
       id: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
-    approveJoinRequest(
-      id: BigNumberish,
+    approveJoin(
+      member: string,
       overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
-    createCreditRequest(
+    createCredit(
       amount: BigNumberish,
       term: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
-    createJoinRequest(
+    createDeposit(
+      number: BigNumberish,
+      overrides?: Overrides & { from?: string }
+    ): Promise<PopulatedTransaction>;
+
+    createJoin(
       username: string,
       overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
+    createRepayment(
+      id: BigNumberish,
+      amount: BigNumberish,
+      month: BigNumberish,
+      overrides?: Overrides & { from?: string }
+    ): Promise<PopulatedTransaction>;
+
+    creditApprovedList(
+      id: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     creditCounter(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    creditRequestCounter(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    creditRequests(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
 
     credits(
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    deposit(
-      number: BigNumberish,
-      overrides?: Overrides & { from?: string }
-    ): Promise<PopulatedTransaction>;
-
-    getApprovedMembers(
-      Id: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getApprovedMembersForJoinRequest(
+    depositApprovedList(
       id: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getCreditRequests(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    depositCounter(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    deposits(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getCredits(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getJoinRequests(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getDeposits(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getMembers(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getPercentForMember(
-      member: string,
+    getMembersByAddresses(
+      addresses: string[],
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1096,13 +1018,13 @@ export interface CreditUnion extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    isCreditRequestApproved(
-      Id: BigNumberish,
+    isCreditApproved(
+      id: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    joinRequests(
-      arg0: BigNumberish,
+    memberApprovedList(
+      member: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1118,19 +1040,11 @@ export interface CreditUnion extends BaseContract {
 
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     ownerName(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    renounceOwnership(
-      overrides?: Overrides & { from?: string }
-    ): Promise<PopulatedTransaction>;
-
-    repay(
+    repaymentApprovedList(
       id: BigNumberish,
-      amount: BigNumberish,
-      month: BigNumberish,
-      overrides?: Overrides & { from?: string }
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     repaymentCounter(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1141,10 +1055,5 @@ export interface CreditUnion extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     totalDeposit(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string }
-    ): Promise<PopulatedTransaction>;
   };
 }

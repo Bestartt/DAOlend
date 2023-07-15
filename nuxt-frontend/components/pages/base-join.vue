@@ -8,7 +8,7 @@
     
     let { data, pending, refresh } = useAsyncData(async () => {
         let requests = await contract.getJoinRequests()
-        return requests.filter(r => r[0] !== "0x0000000000000000000000000000000000000000");
+        return requests.filter(r => r[2] !== "0x0000000000000000000000000000000000000000");
     });
 
 
@@ -17,7 +17,7 @@
         // @ts-ignore
         try {
             let contract = new Contract(address);
-            await contract.approveJoinRequest(requestAddress);
+            await contract.approveJoin(requestAddress);
             notif.notify("Транзакция в очереди", "скоро вы будете в списке подтвердивших");            
         } catch (e) {
             alert("отменена или ошибка")

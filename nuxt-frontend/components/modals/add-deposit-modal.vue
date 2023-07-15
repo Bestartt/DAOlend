@@ -9,8 +9,7 @@
     let notification = useNotification();
 
     async function callAddDeposit() {
-        await contract.deposit(quantity.value);
-        
+        await contract.createDeposit(quantity.value);
         notification.notify("Транзакция в очереди", "Скоро депозит пополниться");
         emit("onComplete");
     }

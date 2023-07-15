@@ -16,7 +16,7 @@
         let contract: Contract = new Contract(props.address);
 
         try {
-            await contract.repayCredit(
+            await contract.createRepayment(
                 props.creditId, 
                 repayAmount.value, 
                 month.value

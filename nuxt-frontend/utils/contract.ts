@@ -1,10 +1,16 @@
 import { ethers, ContractFactory } from "ethers";
-import { CreditUnion, CreditUnionInterface } from "../artifacts/typechain/contracts/types";
+import { CreditUnion } from "../artifacts/typechain/contracts/types";
 import contract_built from "../artifacts/build";
 
 
 let singleton: Contract | null = null;
 
+
+const approvable = {
+    DEPOSIT: 0,
+    CREDIT: 1,
+    REPAYMENT: 2        
+}
 
 
 export class Contract {
@@ -38,56 +44,89 @@ export class Contract {
         let members:  CreditUnion.MemberStruct[] = await this.contract.getMembers();
         return { totalDeposit, ownerName, name, members }
     }
-
+    
+    // members
     async getMember(address: string) {
         let result = await this.contract.members(address);
         return result;
     }
-
-    async getMembers() {return await this.contract.getMembers(); }
-
-
-    async deposit(quantity: number) {
-
-        try {
-            await this.contract.deposit(quantity);
-        } catch(e) {
-            console.error(
-                `Couldn't add deposit on 
-                contract address: ${this.contract}, 
-                quantity: ${quantity}`
-            );
-            console.error(e);
-        }
-    }
-
-    async join(name: string) { await this.contract.createJoinRequest(name); }
-    async getCredits() {return await this.contract.getCredits(); }
-    async repayCredit(id: number, amount: number, month: number) {return await this.contract.repay(id, amount, month);}
-    async approveCreditRequest(id) { await this.contract.approveCreditRequest(id); }
     
-    async getCreditRequests(){ 
-        return await this.contract.getCreditRequests(); 
+    async getMembers() {
+        return await this.contract.getMembers(); 
+    }
+    
+    async getMemberApprovals(address: string) {
+        return await this.contract.memberApprovedList(address);
     }
 
-    async createCreditRequest(amount: number, term: number) { 
-        await this.contract.createCreditRequest(amount, term); 
+    async getMembersByAddresses(addresses: string[]) {
+        return await this.contract.getMembersByAddresses(addresses);
     }
 
-    async getRepaymentsByCredit(creditId: number) { return await this.contract.getRepaymentsByCredit(creditId); }
+    // deposit
+    async createDeposit(quantity: number) {
+        await this.contract.createDeposit(quantity);
+    }
+    
+    async approveDeposit(id: number) {
+        await this.contract.approve(approvable.DEPOSIT, id);
+    }
+    
+    async getDepositApprovals(id: number) {
+        return await this.contract.depositApprovedList(id);
+    }
+
+    async getDeposits() {
+        return await this.contract.getDeposits();
+    }
+    
+    // join
+    async createJoin(name: string) { 
+        await this.contract.createJoin(name); 
+    }
+    
+    async approveJoin(address: string) {
+        await this.contract.approveJoin(address);
+    }
+    
     async getJoinRequests() {
-        return await this.contract.getJoinRequests();
+        let members = await this.getMembers();
+        return members.filter(m => !m.confirmed);
     }
 
-    async approveJoinRequest(address: string) {
-        let requests: Object[] = await this.contract.getJoinRequests();
-
-        let index = requests.findIndex((request) => request[0] == address);
-
-        await this.contract.approveJoinRequest(index);
+    // credits
+    async createCredit(amount: number, term: number) {
+        await this.contract.createCredit(amount, term);
     }
 
+    async approveCredit(id: number) {
+        await this.contract.approve(approvable.CREDIT, id);
+    }
 
+    async getCredits() {
+        return await this.contract.getCredits(); 
+    }
+
+    async getCreditApprovals(id: number) {
+        return this.contract.creditApprovedList(id);
+    }
+
+    // repayment
+    async createRepayment(creditId: number, amount: number, month: number) {
+        await this.contract.createRepayment(creditId, amount, month);
+    }
+
+    async approveRepayment(id: number) {
+        await this.contract.approve(approvable.REPAYMENT, id);
+    }
+
+    async getRepaymentsByCredit(creditId: number) { 
+        return await this.contract.getRepaymentsByCredit(creditId); 
+    }
+
+    async getRepaymentApprovals(id: number) {
+        return await this.contract.repaymentApprovedList(id);
+    }
 
 }
 
@@ -104,7 +143,7 @@ export async function createContract(
         connection.getSigner()
     );
 
-    const deployedContract = await contractFactory.deploy(union_name, members, memberNames, ownerName);
+    const deployedContract = await contractFactory.deploy(union_name, ownerName, members, memberNames);
     await deployedContract.deployed();
 
     return await deployedContract.address;
