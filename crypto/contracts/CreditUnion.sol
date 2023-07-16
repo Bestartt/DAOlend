@@ -31,6 +31,7 @@ contract CreditUnion {
         uint32 id;
         uint32 month;
         uint32 amount;
+        address creator;
         uint32 creditId;
         address[] approvedMembers;
         bool confirmed;
@@ -80,7 +81,7 @@ contract CreditUnion {
         for (uint i = 0; i < memberAddresses.length; i++) {
             membersList.push(memberAddresses[i]);
 
-            members[memberAddresses[i]] =Member({
+            members[memberAddresses[i]] = Member({
                 name: memberNames[i],
                 member: memberAddresses[i],
                 contribution: 0,
@@ -90,7 +91,8 @@ contract CreditUnion {
             });
         }
 
-        members[msg.sender] =Member({
+        membersList.push(msg.sender);
+        members[msg.sender] = Member({
             name: _ownerName,
             member: msg.sender,
             contribution: 0,
@@ -122,10 +124,7 @@ contract CreditUnion {
                 revert(unicode"вы уже подтвердили");
             }
         }
-
         approvedMembers.push(msg.sender);
-        bool allMembersApproved = approvedMembers.length == membersList.length;
-
         
         if (object == Approvable.CREDIT) {
             if (isCreditApproved(id) && !credits[id].confirmed) {
@@ -136,16 +135,20 @@ contract CreditUnion {
         }
         else if (object == Approvable.REPAYMENT) {
             Repayment memory repayment = repayments[id];
-            if (allMembersApproved) {
+            bool allApproved = checkAllMembersApproved(repayment.approvedMembers, repayment.creator);
+
+            if (allApproved) {
                 repayments[id].confirmed = true;
                 credits[repayment.creditId].repaid += repayment.amount; 
             }
         } 
         else if (object == Approvable.DEPOSIT) {
-            if (allMembersApproved) {
+            Deposit memory current_deposit = deposits[id];
+            bool allApproved = checkAllMembersApproved(current_deposit.approvedMembers, current_deposit.member);
+            if (allApproved) {
                 deposits[id].confirmed = true;
-                Deposit memory current_deposit = deposits[id];
                 totalDeposit += current_deposit.amount;
+                members[current_deposit.member].contribution += current_deposit.amount;
             }
         }
     }
@@ -177,14 +180,24 @@ contract CreditUnion {
         members[member].approvedMembers.push(msg.sender);
 
         Member memory current_member = members[member];
-        bool allMembersApproved = current_member.approvedMembers.length == membersList.length;
-
-        if (allMembersApproved) {
-            membersList.push(member);
+        if (checkAllMembersApproved(current_member.approvedMembers, current_member.member)) {
             members[member].confirmed = true; 
         }
     }    
     
+    function checkAllMembersApproved(address[] memory _members, address except) internal view returns(bool) {
+        uint count = 0;
+
+        for (uint i = 0; i < _members.length; i++) {
+            if (_members[i] != except) {
+                count++;
+            }
+        }
+
+        return membersList.length - 1 == count;
+
+    }
+
     // ============= MEMBERS ================
     function memberApprovedList(address member) view public returns(address[] memory) {
         return members[member].approvedMembers;
@@ -209,7 +222,7 @@ contract CreditUnion {
 
 
     function createDeposit(uint32 number) public memberOnly {
-
+        // TODO add index to deposits
         address[] memory temp;
         deposits.push(Deposit({
             member: msg.sender,
@@ -286,6 +299,7 @@ contract CreditUnion {
         repayments.push(
             Repayment({
                 id: repaymentCounter,
+                creator: msg.sender,
                 creditId: id,
                 amount: amount,
                 month: month,

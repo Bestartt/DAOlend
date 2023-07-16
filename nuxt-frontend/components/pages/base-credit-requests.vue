@@ -3,9 +3,15 @@
 
     let props = defineProps<{address: string}>();
     let address = props.address;
+    let currentUser = ref("");
 
     let { data, pending, refresh } = useAsyncData("credit requests", async () => await getCreditRequests(address));
 
+
+    onMounted(() => {
+        // @ts-ignore
+        currentUser.value = window.ethereum.selectedAddress;
+    })
 </script>
 
 <template>
@@ -39,7 +45,7 @@
             <template v-for="credit_request in data">
                 <div class="card card-body" max-w-400px mt-3>
                     <p>
-                        заемщик: {{ credit_request.deptor }} <br>
+                        заемщик: {{ credit_request.name }} <br>
                         сумма: {{ credit_request.amount }} <br>
                         срок: {{ credit_request.term }} <br>
                         подтвердившие участники: 
@@ -49,13 +55,16 @@
                             </li>
                         </ol>               
 
-                    </p>
+                        <b text-gray v-if="credit_request.members.length == 0">пока нет</b>
 
-                    <button v-if="credit_request.creditCreated" disabled class="btn btn-dark">
+                    </p>
+                    
+                    
+                    <button v-if="credit_request.confirmed" disabled class="btn btn-dark">
                         кредит создан
                     </button>
 
-                    <button v-else
+                    <button v-else-if="currentUser !== credit_request.member.toLocaleLowerCase()"
                         @click="approve(credit_request[0], address)" 
                         class="btn btn-dark">подтвердить
                     </button>

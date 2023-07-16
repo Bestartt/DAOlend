@@ -25,6 +25,7 @@
             notif.notify("Транзакция в очереди", "погашение скоро будет в силе")
         }catch (e) {
             console.error("Error occured while calling repay function");
+            console.error(e);
             notif.notify("Произошла ошибка", "не удалось создать транзакцию")
         }
     }

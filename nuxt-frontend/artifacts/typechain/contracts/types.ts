@@ -105,6 +105,7 @@ export declare namespace CreditUnion {
     id: BigNumberish;
     month: BigNumberish;
     amount: BigNumberish;
+    creator: string;
     creditId: BigNumberish;
     approvedMembers: string[];
     confirmed: boolean;
@@ -114,6 +115,7 @@ export declare namespace CreditUnion {
     number,
     number,
     number,
+    string,
     number,
     string[],
     boolean
@@ -121,6 +123,7 @@ export declare namespace CreditUnion {
     id: number;
     month: number;
     amount: number;
+    creator: string;
     creditId: number;
     approvedMembers: string[];
     confirmed: boolean;
@@ -532,10 +535,11 @@ export interface CreditUnion extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [number, number, number, number, boolean] & {
+      [number, number, number, string, number, boolean] & {
         id: number;
         month: number;
         amount: number;
+        creator: string;
         creditId: number;
         confirmed: boolean;
       }
@@ -681,10 +685,11 @@ export interface CreditUnion extends BaseContract {
     arg0: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [number, number, number, number, boolean] & {
+    [number, number, number, string, number, boolean] & {
       id: number;
       month: number;
       amount: number;
+      creator: string;
       creditId: number;
       confirmed: boolean;
     }
@@ -824,10 +829,11 @@ export interface CreditUnion extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [number, number, number, number, boolean] & {
+      [number, number, number, string, number, boolean] & {
         id: number;
         month: number;
         amount: number;
+        creator: string;
         creditId: number;
         confirmed: boolean;
       }

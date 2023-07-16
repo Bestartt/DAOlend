@@ -12,7 +12,7 @@
             route: "/unions/my/members",
         },
         {
-            name: "вложения",
+            name: "Депозиты",
             route: "/unions/my/deposits",
         },
         {

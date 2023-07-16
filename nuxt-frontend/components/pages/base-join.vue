@@ -52,24 +52,24 @@
                     <div class="card-header flex justify-between items-center">
                         <div>
                             <span tex-gray text-sm>Имя: </span>
-                            <h5>{{ request[1] }}</h5>
+                            <h5>{{ request.name }}</h5>
                         </div>
 
-                        <i text-gray>адрес: {{ request[0] }}</i>
+                        <i text-gray>адрес: {{ request.member }}</i>
 
                     </div>
                     
                     <div class="card-body">
-                        <b v-if="request[2].length == 0" class="text-gray">пока никто не подтвердил</b>
+                        <b v-if="request.approvedMembers.length == 0" class="text-gray">пока никто не подтвердил</b>
                         
                         <div v-else>
                             <b>подтвердившие члены</b>
                             <ul>
-                                <li v-for="member in request[2]">{{ member }}</li>
+                                <li v-for="member in request.approvedMembers">{{ member }}</li>
                             </ul>    
                         </div>
                         <br>    
-                        <button max-w-200px class="btn btn-dark mt-3" @click="approve(request[0])">
+                        <button max-w-200px class="btn btn-dark mt-3" @click="approve(request.member)">
                             <button-loading :loading="loading">Подтвердить</button-loading>
                         </button>
                     </div>

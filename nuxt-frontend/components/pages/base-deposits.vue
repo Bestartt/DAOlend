@@ -4,14 +4,32 @@
 
     let props = defineProps<{address: string}>();
     let address = props.address;
-    
+    let approveLoading = ref(false);
+    let notif = useNotification();
     let contract: Contract = new Contract(address);
     
-    let { data, pending, refresh, error, status } = useAsyncData("deposits", async () => contract.getDeposits());
+    let { data, pending, refresh, error, status } = useAsyncData("deposits", async () => {
+        let deposits = await contract.getDeposits();
+        deposits = to_mutable(deposits);
+
+        for (let i = 0; i < deposits.length; i++) {
+            // @ts-ignore
+            deposits[i].members = await contract.getMembersByAddresses(deposits[i].approvedMembers);
+        }
+        return deposits;
+    });
+
+    async function confirm(id: number){
+        approveLoading.value = true;
+        await contract.approveDeposit(id);
+        approveLoading.value = false;
+
+        notif.notify("Транзакция скоро выполниться", "Подтверждение депозита отправлена успешно")
+    }
 
     watch(status, () => {
         if (status.value == "error") {
-            console.error(error.value);
+            console.log(error.value);
         }
     })
 
@@ -46,23 +64,28 @@
                     <p>
                         участник: {{ deposit.name }} <br>
                         сумма: {{ deposit.amount }} <br>
-                        подтвержден: {{ deposit.confirmed ? "❌" : "✅" }}  
+                        подтвержден: {{ deposit.confirmed ? "✅" : "❌" }}  
                     </p>
 
-                    <hr>
+                    <b>Подтвердившие участники</b>
+                    <ul v-auto-animate>
+                        <li v-for="member in deposit.members">
+                            {{ member.name }}
+                        </li>
+                    </ul>
 
-                    <button 
-                        class="btn btn-dark" 
-                        data-bs-toggle="modal" 
-                        :data-bs-target="`#approved_members_${index}`"> 
-                        подтвердившие участники
-                    </button>
- 
+                    <template v-if="!deposit.confirmed">
+                        <hr>
+                        <button class="btn btn-dark" @click="confirm(index)">
+                            <button-loading :loading="approveLoading">
+                                подтвердить
+                            </button-loading>
+                        </button>
 
+                    </template>
                 </div>
             </template>
 
-            <!-- <approved-members :member-addresses="deposit.approvedMembers" :index="index"></approved-members> -->
         </div>
         
     </div>

@@ -14,7 +14,7 @@
             route: `/unions/${address}/members/`,
         },
         {
-            name: "вложения",
+            name: "Депозиты",
             route: `/unions/${address}/deposits/`,
         },
         {

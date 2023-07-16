@@ -47,7 +47,7 @@
                 </p>
 
                 <router-link 
-                    :to="`/unions/${union.address}`" 
+                    :to="`/unions/${union.address}/`" 
                     class="btn btn-dark" 
                     v-if="union.joined"
                 >

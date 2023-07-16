@@ -8,11 +8,14 @@
 
     let contract: Contract = new Contract(address);
 
-    let { data: members, pending, refresh: refresh } = useAsyncData(async () => await contract.getMembers());
+    let { data, pending, refresh } = useAsyncData("members", async () => {
+        let members = await contract.getMembers();
+        return members.filter(m => m.confirmed);
+    });
 
     let totalDeposit = computed(() => {
         let sum = 0;
-        members.value.map(member => sum += member.contribution);
+        data.value.map(member => sum += member.contribution);
         return sum;
     });
 
@@ -60,7 +63,7 @@
 
                 <tbody>
 
-                    <tr v-for="member in members">
+                    <tr v-for="member in data">
                         <td>{{ member.name }}</td>
                         <td>{{ member.contribution }}</td>
                         <td>{{ getPercent(member.contribution) }}%</td>

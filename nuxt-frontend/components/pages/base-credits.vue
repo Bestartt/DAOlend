@@ -8,7 +8,7 @@
     let contract: Contract = new Contract(address);
     let currentCredit = ref(-1);
     
-    let { data, pending, refresh } = useAsyncData(async () => contract.getCredits());
+    let { data, pending, refresh } = useAsyncData(async () => (await contract.getCredits()).filter(c => c.confirmed));
     let userAddress = ref(connection.getCurrentUserAddress());
 
 
@@ -41,16 +41,21 @@
                 <div class="card card-body max-w-400px">
                     <!-- data -->
                     <p>
-                        заемщик: {{ credit[1] }} <br>
-                        сумма: {{ credit[2] }} <br>  
-                        срок: {{ credit[3] }} месяцев <br>
-                        погашено: {{ credit[4] }}              
+                        заемщик: {{ credit.name }} <br>
+                        сумма: {{ credit.amount }} <br>  
+                        срок: {{ credit.term }} месяцев <br>
+                        погашено: {{ credit.repaid }}              
                     </p>
 
                     <!-- actions -->
-                    <router-link :to="`/unions/${address}/${credit[0]}/repayments`" class="btn btn-outline-dark">
+                    <button 
+                        @click="currentCredit = credit.id"  
+                        class="btn btn-outline-dark"
+                        data-bs-toggle="modal"
+                        data-bs-target="#repayments_list"    
+                    >
                         погашения
-                    </router-link>
+                    </button>
 
                     <button 
                         v-if="credit[5].toLocaleLowerCase() == userAddress"
@@ -67,8 +72,10 @@
             </template> 
         </div>
        
+        <template v-if="currentCredit !== -1">
+            <repayments-list-modal :contract-address="address" :credit-id="currentCredit"></repayments-list-modal>        
+        </template>
 
-        
         <repay-modal :address="address" :creditId="currentCredit"/>
 
     </div>

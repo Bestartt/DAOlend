@@ -27,7 +27,7 @@
             let signer = connection.getSigner();
             let address = await signer.getAddress();
 
-            if (members.some(member => member._address == address)) {
+            if (members.some(member => member.member == address)) {
                 has_joined.value = true;
             }
 
@@ -46,7 +46,7 @@
         let contract = new Contract(contract_address.value);
 
         try {
-            await contract.join(username.value);
+            await contract.createJoin(username.value);
             join_requests.add({address: contract_address.value, username: username.value})
             router.push("/requests");
 
