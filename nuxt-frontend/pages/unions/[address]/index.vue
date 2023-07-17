@@ -6,5 +6,5 @@
 </script>
 
 <template>
-    <base-index :address="address"></base-index>
+    <base-index :address="address" :my="false"></base-index>
 </template>

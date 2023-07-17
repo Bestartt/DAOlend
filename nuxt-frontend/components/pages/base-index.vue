@@ -2,11 +2,20 @@
     import { Contract } from "~/utils/contract";
     import { useAsyncData } from 'nuxt/app';
 
-    let props = defineProps<{address: string}>();
+    let props = defineProps<{address: string, my: boolean}>();
     let address = props.address;
     let contract: Contract = new Contract(address);
+    let linkAddress = props.my ? "my" : address;
 
     let { data, pending, error, refresh, status } = useAsyncData(async () => await contract.getData());
+
+    let { data: info, pending: infoPending } = useAsyncData(async() => {
+        return {
+            credits: await contract.getCredits(),
+            deposits: await contract.getDeposits(),
+            members: await contract.getMembers()
+        }
+    });
 
     watch(status, () => {
         if (status.value == "error") {
@@ -18,46 +27,76 @@
 
 <template>
     <div>
+        <!-- header -->
         <div flex justify-between>
             <h4>Данные</h4>
             <button @click="refresh()" class="btn btn-dark">обновить</button>
         </div>
 
-        <div class="card card-body max-w-700px" v-auto-animate>
-            <div class="w-full h-10vh flex justify-center items-center" v-if="pending">
+        <!-- card -->
+        <div class="card card-body mt-3" v-auto-animate>
+
+            <!-- loading -->
+            <div class="w-full h-10vh flex justify-center items-center" v-if="pending || infoPending">
                 <div class="spinner-border" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>            
             </div>
 
+            <!-- error -->
             <b v-if="status == 'error'">
                 {{ error }}
             </b>
 
-            <table class="table table-borderless" max-w-lg v-if="data !== null && !pending">
-                <tbody>
-                    <tr>
-                        <td>Создатель:</td>
-                        <td> {{ data.ownerName }}</td>
-                    </tr>
-                    <tr>
-                        <td>имя: </td>
-                        <td>{{ data.name }}</td>
-                    </tr>
-                    <tr>
-                        <td>Общий вклад: </td>
-                        <td>{{ data.totalDeposit }}</td>
-                    </tr>
-                    <tr>
-                        <td>Адрес: </td>
-                        <td>{{ address }} </td>
-                    </tr>
-                    <tr>
-                        <td>Колличество участников: </td>
-                        <td>{{ data.members.length }}</td>
-                    </tr>
-                </tbody>
-            </table>   
+            <!-- base info -->
+            <div class="block" v-if="data !== null && !pending">
+                <span text-gray>организация</span>
+                <h2>{{ data.name }}</h2>
+                <br>
+                создатель: <b>{{ data.ownerName }}</b> <br>
+                дата создания: <b>{{ new Date(data.createdAt).toLocaleString("ru") }}</b> <br>
+                адрес: <b>{{ address }}</b>
+            </div>
+
+            <hr>
+
+            <!-- options -->
+            <div class="row g-4 py-3 px-5 row-cols-1 row-cols-lg-3" v-if="info !== null && data !== null && !infoPending">
+                <!-- credits -->
+                <div class="feature col block">
+                    <h4>Кредиты</h4>
+                    колличество: <b>{{ info.credits.length }}</b> <br>
+                    заявок: <b>{{ info.credits.filter(c => !c.confirmed).length }}</b> <br>
+                    выдано сумма: <b>{{ info.credits.filter(c => c.confirmed).reduce((a, c) => a + c.amount, 0) }}</b>
+                    
+                    <br>
+                    <nuxt-link prefetch :to="`/unions/${linkAddress}/credits/`" class="btn btn-dark mt-3">
+                        перейти
+                    </nuxt-link>
+                </div>
+
+                <!-- deposits -->
+                <div class="feature col">
+                    <h4>Депозиты</h4>
+                    общая сумма: <b>{{ data.totalDeposit }}</b> <br>
+                    колличество депозитов: {{ info.deposits.length }}
+                    <br><br>
+                    <nuxt-link prefetch :to="`/unions/${linkAddress}/deposits/`" class="btn btn-dark mt-3">
+                        перейти
+                    </nuxt-link>
+                </div>
+
+                <!-- members -->
+                <div class="feature col">
+                    <h4>Участники</h4>
+                    колличество: <b>{{ info.members.filter(m => m.confirmed).length }}</b> <br>
+                    запросы на вступление: <b>{{ info.members.filter(m => !m.confirmed).length }}</b>
+                    <br><br>
+                    <nuxt-link prefetch :to="`/unions/${linkAddress}/members/`" class="btn btn-dark mt-3">
+                        перейти
+                    </nuxt-link>
+                </div>
+            </div>  
         </div>
     </div>
 

@@ -40,9 +40,10 @@ export class Contract {
     async getData() {
         let totalDeposit:   number = await this.contract.totalDeposit();
         let ownerName:      string = await this.contract.ownerName();
+        let createdAt:      number = (await this.contract.createdAt()).toNumber();
         let name:           string = await this.contract.name();
         let members:  CreditUnion.MemberStruct[] = await this.contract.getMembers();
-        return { totalDeposit, ownerName, name, members }
+        return { totalDeposit, ownerName, name, members, createdAt }
     }
     
     // members
@@ -143,7 +144,13 @@ export async function createContract(
         connection.getSigner()
     );
 
-    const deployedContract = await contractFactory.deploy(union_name, ownerName, members, memberNames);
+    const deployedContract = await contractFactory.deploy(
+        union_name, 
+        ownerName, 
+        members, 
+        memberNames,
+        Date.now()        
+    );
     await deployedContract.deployed();
 
     return await deployedContract.address;

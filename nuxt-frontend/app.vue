@@ -55,5 +55,9 @@
     @apply flex flex-col items-center;
   }
 
+  .btn {
+    border-radius: 10px;
+  }
+
 
 </style>
