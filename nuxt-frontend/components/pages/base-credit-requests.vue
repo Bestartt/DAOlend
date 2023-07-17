@@ -74,6 +74,6 @@
             </template>             
         </div>
 
-         <request-credit-modal :contract-address="address" @on-complete="updateData()"/>  
+         <request-credit-modal :contract-address="address"/>  
     </div>
 </template>

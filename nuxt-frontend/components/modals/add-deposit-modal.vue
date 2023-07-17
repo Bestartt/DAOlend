@@ -2,7 +2,6 @@
     import { Contract } from "~/utils/contract";
 
     let props = defineProps<{contractAddress: string}>();
-    let emit = defineEmits(["onComplete"]);
 
     let quantity = ref(0);
     let contract = new Contract(props.contractAddress);
@@ -11,7 +10,6 @@
     async function callAddDeposit() {
         await contract.createDeposit(quantity.value);
         notification.notify("Транзакция в очереди", "Скоро депозит пополниться");
-        emit("onComplete");
     }
 
 </script>

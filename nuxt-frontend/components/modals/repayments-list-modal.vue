@@ -7,6 +7,7 @@
 
     let { data, pending } = useAsyncData("repayments list", async() => await contract.getRepaymentsByCredit(props.creditId));
 
+
 </script>
 
 

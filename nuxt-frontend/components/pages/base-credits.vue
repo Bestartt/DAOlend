@@ -38,35 +38,42 @@
 
         <div v-if="!pending" v-auto-animate>
             <template v-for="credit in data">
-                <div class="card card-body max-w-400px">
+                <div class="card max-w-500px">
+                    <h5 class="card-header">
+                        <b>
+                            заемщик: {{ credit.name }}
+                        </b>
+                    </h5>
+
                     <!-- data -->
-                    <p>
-                        заемщик: {{ credit.name }} <br>
+                    <div class="card-body">
                         сумма: {{ credit.amount }} <br>  
                         срок: {{ credit.term }} месяцев <br>
-                        погашено: {{ credit.repaid }}              
-                    </p>
+                        погашено: {{ credit.repaid }} <br>
 
-                    <!-- actions -->
-                    <button 
-                        @click="currentCredit = credit.id"  
-                        class="btn btn-outline-dark"
-                        data-bs-toggle="modal"
-                        data-bs-target="#repayments_list"    
-                    >
-                        погашения
-                    </button>
+                        <br>
+                        <!-- actions -->                        
+                        <button 
+                            @click="currentCredit = credit.id"  
+                            class="btn btn-outline-dark me-1"
+                            data-bs-toggle="modal"
+                            data-bs-target="#repayments_list"    
+                        >
+                            погашения
+                        </button>
 
-                    <button 
-                        v-if="credit[5].toLocaleLowerCase() == userAddress"
-                        mt-2
-                        data-bs-toggle="modal"
-                        data-bs-target="#repay"
-                        @click="currentCredit = credit[0]" 
-                        class="btn btn-dark" 
-                    >
-                        Создать погашение
-                    </button>
+                        <button 
+                            v-if="credit[5].toLocaleLowerCase() == userAddress"
+                            data-bs-toggle="modal"
+                            data-bs-target="#repay"
+                            @click="currentCredit = credit[0]" 
+                            class="btn btn-dark" 
+                        >
+                            Создать погашение
+                        </button>                                   
+                    </div>
+
+
 
                 </div>
             </template> 

@@ -1,8 +1,7 @@
 <script lang="ts" setup>
     import { Contract } from "~/utils/contract";
 
-     let props = defineProps<{contractAddress: string}>();
-    let emits = defineEmits(["onComplete"]);
+    let props = defineProps<{contractAddress: string}>();
 
     let amount = ref(0);
     let term = ref(0);
@@ -15,7 +14,6 @@
         loading.value = true;
         await contract.createCredit(amount.value, term.value);
         
-        emits("onComplete");
         notif.notify(
             "Транзакция в очереди", 
             "скоро запрос на кредит будет создан"

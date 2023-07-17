@@ -18,7 +18,7 @@ export default defineNuxtConfig({
         {src: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js", defer: true}
       ]
     },
-    pageTransition: {name: "page", "mode": "in-out"}
+    pageTransition: false
   },
   imports: {
     dirs: ['resources']

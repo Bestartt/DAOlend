@@ -34,7 +34,7 @@
                 {{ error }}
             </b>
 
-            <table class="table" max-w-lg v-if="data !== null && !pending">
+            <table class="table table-borderless" max-w-lg v-if="data !== null && !pending">
                 <tbody>
                     <tr>
                         <td>Создатель:</td>
@@ -45,7 +45,7 @@
                         <td>{{ data.name }}</td>
                     </tr>
                     <tr>
-                        <td>Общий вклад</td>
+                        <td>Общий вклад: </td>
                         <td>{{ data.totalDeposit }}</td>
                     </tr>
                     <tr>
@@ -58,29 +58,7 @@
                     </tr>
                 </tbody>
             </table>   
-
-            <div flex mt-5> 
-                <button 
-                    class="btn btn-dark" 
-                    data-bs-toggle="modal" 
-                    data-bs-target="#add_deposit"> 
-                    Добавить вложение
-                </button>
-
-                <button 
-                    ms-1 class="btn btn-dark"
-                    data-bs-toggle="modal"
-                    data-bs-target="#request_credit"
-                >
-                    Создать заявку на кредит
-                </button>                  
-            </div>            
         </div>
-
-
-
-        <add-deposit-modal :contract-address="address" @on-complete="updateData()"/>  
-        <request-credit-modal :contract-address="address" @on-complete="updateData()"/>        
     </div>
 
 
