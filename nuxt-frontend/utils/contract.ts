@@ -65,11 +65,11 @@ export class Contract {
 
     // deposit
     async createDeposit(quantity: number) {
-        await this.contract.createDeposit(quantity);
+        await this.contract.createDeposit(quantity, Date.now());
     }
     
     async approveDeposit(id: number) {
-        await this.contract.approve(approvable.DEPOSIT, id);
+        await this.contract.approve(approvable.DEPOSIT, id, Date.now());
     }
     
     async getDepositApprovals(id: number) {
@@ -86,7 +86,7 @@ export class Contract {
     }
     
     async approveJoin(address: string) {
-        await this.contract.approveJoin(address);
+        await this.contract.approveJoin(address, Date.now());
     }
     
     async getJoinRequests() {
@@ -96,11 +96,11 @@ export class Contract {
 
     // credits
     async createCredit(amount: number, term: number) {
-        await this.contract.createCredit(amount, term);
+        await this.contract.createCredit(amount, term, Date.now());
     }
 
     async approveCredit(id: number) {
-        await this.contract.approve(approvable.CREDIT, id);
+        await this.contract.approve(approvable.CREDIT, id, Date.now());
     }
 
     async getCredits() {
@@ -113,11 +113,11 @@ export class Contract {
 
     // repayment
     async createRepayment(creditId: number, amount: number, month: number) {
-        await this.contract.createRepayment(creditId, amount, month);
+        await this.contract.createRepayment(creditId, amount, month, Date.now());
     }
 
     async approveRepayment(id: number) {
-        await this.contract.approve(approvable.REPAYMENT, id);
+        await this.contract.approve(approvable.REPAYMENT, id, Date.now());
     }
 
     async getRepaymentsByCredit(creditId: number) { 

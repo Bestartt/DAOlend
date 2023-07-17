@@ -32,6 +32,8 @@ export declare namespace CreditUnion {
     member: string;
     approvedMembers: string[];
     confirmed: boolean;
+    createdAt: BigNumberish;
+    confirmedAt: BigNumberish;
   };
 
   export type CreditStructOutput = [
@@ -42,7 +44,9 @@ export declare namespace CreditUnion {
     string,
     string,
     string[],
-    boolean
+    boolean,
+    BigNumber,
+    BigNumber
   ] & {
     id: number;
     amount: number;
@@ -52,6 +56,8 @@ export declare namespace CreditUnion {
     member: string;
     approvedMembers: string[];
     confirmed: boolean;
+    createdAt: BigNumber;
+    confirmedAt: BigNumber;
   };
 
   export type DepositStruct = {
@@ -60,6 +66,8 @@ export declare namespace CreditUnion {
     amount: BigNumberish;
     approvedMembers: string[];
     confirmed: boolean;
+    createdAt: BigNumberish;
+    confirmedAt: BigNumberish;
   };
 
   export type DepositStructOutput = [
@@ -67,13 +75,17 @@ export declare namespace CreditUnion {
     string,
     number,
     string[],
-    boolean
+    boolean,
+    BigNumber,
+    BigNumber
   ] & {
     member: string;
     name: string;
     amount: number;
     approvedMembers: string[];
     confirmed: boolean;
+    createdAt: BigNumber;
+    confirmedAt: BigNumber;
   };
 
   export type MemberStruct = {
@@ -83,6 +95,7 @@ export declare namespace CreditUnion {
     approvedMembers: string[];
     confirmed: boolean;
     created: boolean;
+    joinedAt: BigNumberish;
   };
 
   export type MemberStructOutput = [
@@ -91,7 +104,8 @@ export declare namespace CreditUnion {
     string,
     string[],
     boolean,
-    boolean
+    boolean,
+    BigNumber
   ] & {
     contribution: number;
     name: string;
@@ -99,6 +113,7 @@ export declare namespace CreditUnion {
     approvedMembers: string[];
     confirmed: boolean;
     created: boolean;
+    joinedAt: BigNumber;
   };
 
   export type RepaymentStruct = {
@@ -109,6 +124,8 @@ export declare namespace CreditUnion {
     creditId: BigNumberish;
     approvedMembers: string[];
     confirmed: boolean;
+    createdAt: BigNumberish;
+    confirmedAt: BigNumberish;
   };
 
   export type RepaymentStructOutput = [
@@ -118,7 +135,9 @@ export declare namespace CreditUnion {
     string,
     number,
     string[],
-    boolean
+    boolean,
+    BigNumber,
+    BigNumber
   ] & {
     id: number;
     month: number;
@@ -127,17 +146,20 @@ export declare namespace CreditUnion {
     creditId: number;
     approvedMembers: string[];
     confirmed: boolean;
+    createdAt: BigNumber;
+    confirmedAt: BigNumber;
   };
 }
 
 export interface CreditUnionInterface extends utils.Interface {
   functions: {
-    "approve(uint8,uint32)": FunctionFragment;
-    "approveJoin(address)": FunctionFragment;
-    "createCredit(uint32,uint32)": FunctionFragment;
-    "createDeposit(uint32)": FunctionFragment;
+    "approve(uint8,uint32,uint64)": FunctionFragment;
+    "approveJoin(address,uint64)": FunctionFragment;
+    "createCredit(uint32,uint32,uint64)": FunctionFragment;
+    "createDeposit(uint32,uint64)": FunctionFragment;
     "createJoin(string)": FunctionFragment;
-    "createRepayment(uint32,uint32,uint32)": FunctionFragment;
+    "createRepayment(uint32,uint32,uint32,uint64)": FunctionFragment;
+    "createdAt()": FunctionFragment;
     "creditApprovedList(uint256)": FunctionFragment;
     "creditCounter()": FunctionFragment;
     "credits(uint256)": FunctionFragment;
@@ -169,6 +191,7 @@ export interface CreditUnionInterface extends utils.Interface {
       | "createDeposit"
       | "createJoin"
       | "createRepayment"
+      | "createdAt"
       | "creditApprovedList"
       | "creditCounter"
       | "credits"
@@ -194,22 +217,26 @@ export interface CreditUnionInterface extends utils.Interface {
 
   encodeFunctionData(
     functionFragment: "approve",
-    values: [BigNumberish, BigNumberish]
+    values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: "approveJoin", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "approveJoin",
+    values: [string, BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "createCredit",
-    values: [BigNumberish, BigNumberish]
+    values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "createDeposit",
-    values: [BigNumberish]
+    values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "createJoin", values: [string]): string;
   encodeFunctionData(
     functionFragment: "createRepayment",
-    values: [BigNumberish, BigNumberish, BigNumberish]
+    values: [BigNumberish, BigNumberish, BigNumberish, BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "createdAt", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "creditApprovedList",
     values: [BigNumberish]
@@ -304,6 +331,7 @@ export interface CreditUnionInterface extends utils.Interface {
     functionFragment: "createRepayment",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "createdAt", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "creditApprovedList",
     data: BytesLike
@@ -398,22 +426,26 @@ export interface CreditUnion extends BaseContract {
     approve(
       object: BigNumberish,
       id: BigNumberish,
+      dateTime: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     approveJoin(
       member: string,
+      dateTime: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     createCredit(
       amount: BigNumberish,
       term: BigNumberish,
+      dateTime: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     createDeposit(
       number: BigNumberish,
+      dateTime: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
@@ -426,8 +458,11 @@ export interface CreditUnion extends BaseContract {
       id: BigNumberish,
       amount: BigNumberish,
       month: BigNumberish,
+      dateTime: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
+
+    createdAt(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     creditApprovedList(
       id: BigNumberish,
@@ -440,7 +475,17 @@ export interface CreditUnion extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [number, number, number, number, string, string, boolean] & {
+      [
+        number,
+        number,
+        number,
+        number,
+        string,
+        string,
+        boolean,
+        BigNumber,
+        BigNumber
+      ] & {
         id: number;
         amount: number;
         term: number;
@@ -448,6 +493,8 @@ export interface CreditUnion extends BaseContract {
         name: string;
         member: string;
         confirmed: boolean;
+        createdAt: BigNumber;
+        confirmedAt: BigNumber;
       }
     >;
 
@@ -462,11 +509,13 @@ export interface CreditUnion extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [string, string, number, boolean] & {
+      [string, string, number, boolean, BigNumber, BigNumber] & {
         member: string;
         name: string;
         amount: number;
         confirmed: boolean;
+        createdAt: BigNumber;
+        confirmedAt: BigNumber;
       }
     >;
 
@@ -506,12 +555,13 @@ export interface CreditUnion extends BaseContract {
       arg0: string,
       overrides?: CallOverrides
     ): Promise<
-      [number, string, string, boolean, boolean] & {
+      [number, string, string, boolean, boolean, BigNumber] & {
         contribution: number;
         name: string;
         member: string;
         confirmed: boolean;
         created: boolean;
+        joinedAt: BigNumber;
       }
     >;
 
@@ -535,13 +585,24 @@ export interface CreditUnion extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [number, number, number, string, number, boolean] & {
+      [
+        number,
+        number,
+        number,
+        string,
+        number,
+        boolean,
+        BigNumber,
+        BigNumber
+      ] & {
         id: number;
         month: number;
         amount: number;
         creator: string;
         creditId: number;
         confirmed: boolean;
+        createdAt: BigNumber;
+        confirmedAt: BigNumber;
       }
     >;
 
@@ -551,22 +612,26 @@ export interface CreditUnion extends BaseContract {
   approve(
     object: BigNumberish,
     id: BigNumberish,
+    dateTime: BigNumberish,
     overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   approveJoin(
     member: string,
+    dateTime: BigNumberish,
     overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   createCredit(
     amount: BigNumberish,
     term: BigNumberish,
+    dateTime: BigNumberish,
     overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   createDeposit(
     number: BigNumberish,
+    dateTime: BigNumberish,
     overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
@@ -579,8 +644,11 @@ export interface CreditUnion extends BaseContract {
     id: BigNumberish,
     amount: BigNumberish,
     month: BigNumberish,
+    dateTime: BigNumberish,
     overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
+
+  createdAt(overrides?: CallOverrides): Promise<BigNumber>;
 
   creditApprovedList(
     id: BigNumberish,
@@ -593,7 +661,17 @@ export interface CreditUnion extends BaseContract {
     arg0: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [number, number, number, number, string, string, boolean] & {
+    [
+      number,
+      number,
+      number,
+      number,
+      string,
+      string,
+      boolean,
+      BigNumber,
+      BigNumber
+    ] & {
       id: number;
       amount: number;
       term: number;
@@ -601,6 +679,8 @@ export interface CreditUnion extends BaseContract {
       name: string;
       member: string;
       confirmed: boolean;
+      createdAt: BigNumber;
+      confirmedAt: BigNumber;
     }
   >;
 
@@ -615,11 +695,13 @@ export interface CreditUnion extends BaseContract {
     arg0: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [string, string, number, boolean] & {
+    [string, string, number, boolean, BigNumber, BigNumber] & {
       member: string;
       name: string;
       amount: number;
       confirmed: boolean;
+      createdAt: BigNumber;
+      confirmedAt: BigNumber;
     }
   >;
 
@@ -659,12 +741,13 @@ export interface CreditUnion extends BaseContract {
     arg0: string,
     overrides?: CallOverrides
   ): Promise<
-    [number, string, string, boolean, boolean] & {
+    [number, string, string, boolean, boolean, BigNumber] & {
       contribution: number;
       name: string;
       member: string;
       confirmed: boolean;
       created: boolean;
+      joinedAt: BigNumber;
     }
   >;
 
@@ -685,13 +768,15 @@ export interface CreditUnion extends BaseContract {
     arg0: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [number, number, number, string, number, boolean] & {
+    [number, number, number, string, number, boolean, BigNumber, BigNumber] & {
       id: number;
       month: number;
       amount: number;
       creator: string;
       creditId: number;
       confirmed: boolean;
+      createdAt: BigNumber;
+      confirmedAt: BigNumber;
     }
   >;
 
@@ -701,19 +786,26 @@ export interface CreditUnion extends BaseContract {
     approve(
       object: BigNumberish,
       id: BigNumberish,
+      dateTime: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    approveJoin(member: string, overrides?: CallOverrides): Promise<void>;
+    approveJoin(
+      member: string,
+      dateTime: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     createCredit(
       amount: BigNumberish,
       term: BigNumberish,
+      dateTime: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
     createDeposit(
       number: BigNumberish,
+      dateTime: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -723,8 +815,11 @@ export interface CreditUnion extends BaseContract {
       id: BigNumberish,
       amount: BigNumberish,
       month: BigNumberish,
+      dateTime: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    createdAt(overrides?: CallOverrides): Promise<BigNumber>;
 
     creditApprovedList(
       id: BigNumberish,
@@ -737,7 +832,17 @@ export interface CreditUnion extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [number, number, number, number, string, string, boolean] & {
+      [
+        number,
+        number,
+        number,
+        number,
+        string,
+        string,
+        boolean,
+        BigNumber,
+        BigNumber
+      ] & {
         id: number;
         amount: number;
         term: number;
@@ -745,6 +850,8 @@ export interface CreditUnion extends BaseContract {
         name: string;
         member: string;
         confirmed: boolean;
+        createdAt: BigNumber;
+        confirmedAt: BigNumber;
       }
     >;
 
@@ -759,11 +866,13 @@ export interface CreditUnion extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [string, string, number, boolean] & {
+      [string, string, number, boolean, BigNumber, BigNumber] & {
         member: string;
         name: string;
         amount: number;
         confirmed: boolean;
+        createdAt: BigNumber;
+        confirmedAt: BigNumber;
       }
     >;
 
@@ -803,12 +912,13 @@ export interface CreditUnion extends BaseContract {
       arg0: string,
       overrides?: CallOverrides
     ): Promise<
-      [number, string, string, boolean, boolean] & {
+      [number, string, string, boolean, boolean, BigNumber] & {
         contribution: number;
         name: string;
         member: string;
         confirmed: boolean;
         created: boolean;
+        joinedAt: BigNumber;
       }
     >;
 
@@ -829,13 +939,24 @@ export interface CreditUnion extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [number, number, number, string, number, boolean] & {
+      [
+        number,
+        number,
+        number,
+        string,
+        number,
+        boolean,
+        BigNumber,
+        BigNumber
+      ] & {
         id: number;
         month: number;
         amount: number;
         creator: string;
         creditId: number;
         confirmed: boolean;
+        createdAt: BigNumber;
+        confirmedAt: BigNumber;
       }
     >;
 
@@ -848,22 +969,26 @@ export interface CreditUnion extends BaseContract {
     approve(
       object: BigNumberish,
       id: BigNumberish,
+      dateTime: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     approveJoin(
       member: string,
+      dateTime: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     createCredit(
       amount: BigNumberish,
       term: BigNumberish,
+      dateTime: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     createDeposit(
       number: BigNumberish,
+      dateTime: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
@@ -876,8 +1001,11 @@ export interface CreditUnion extends BaseContract {
       id: BigNumberish,
       amount: BigNumberish,
       month: BigNumberish,
+      dateTime: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
+
+    createdAt(overrides?: CallOverrides): Promise<BigNumber>;
 
     creditApprovedList(
       id: BigNumberish,
@@ -953,22 +1081,26 @@ export interface CreditUnion extends BaseContract {
     approve(
       object: BigNumberish,
       id: BigNumberish,
+      dateTime: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     approveJoin(
       member: string,
+      dateTime: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     createCredit(
       amount: BigNumberish,
       term: BigNumberish,
+      dateTime: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     createDeposit(
       number: BigNumberish,
+      dateTime: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
@@ -981,8 +1113,11 @@ export interface CreditUnion extends BaseContract {
       id: BigNumberish,
       amount: BigNumberish,
       month: BigNumberish,
+      dateTime: BigNumberish,
       overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
+
+    createdAt(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     creditApprovedList(
       id: BigNumberish,
