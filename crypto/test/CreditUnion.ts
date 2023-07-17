@@ -11,6 +11,10 @@ const approvable = {
 }
 
 
+function datetime() {
+    return Date.now();
+}
+
 
 describe("Credit Union", function () {
     let contract: CreditUnion;
@@ -34,7 +38,8 @@ describe("Credit Union", function () {
             "test", 
             "Owner Name",
             addresses,
-            memberNames
+            memberNames,
+            datetime()
         );
     });
 
@@ -51,7 +56,7 @@ describe("Credit Union", function () {
     describe("deposit test", function () {
 
         it("creates deposit", async function () {
-            await contract.createDeposit(1000);
+            await contract.createDeposit(1000, datetime());
                 
             let deposit = await contract.deposits(0);
             let depositList = await contract.getDeposits();
@@ -62,10 +67,10 @@ describe("Credit Union", function () {
         });
         
         it("approves deposit", async function () {
-            await contract.createDeposit(1000);
+            await contract.createDeposit(1000, datetime());
             
             contract = contract.connect(member1);
-            contract.approve(approvable.DEPOSIT, 0);
+            contract.approve(approvable.DEPOSIT, 0, datetime());
 
             let approvedMembers = await contract.depositApprovedList(0);
 
@@ -73,10 +78,10 @@ describe("Credit Union", function () {
         })
         
         it("it confirms deposit if all approved", async function () {
-            await contract.connect(member1).createDeposit(1000);
+            await contract.connect(member1).createDeposit(1000, datetime());
             
             for (const member of [owner, member2, member3]) {
-                await contract.connect(member).approve(approvable.DEPOSIT, 0);
+                await contract.connect(member).approve(approvable.DEPOSIT, 0, datetime());
             }
             
             let deposit = await contract.deposits(0);
@@ -118,7 +123,7 @@ describe("Credit Union", function () {
         
         it("confirms if everyone approved", async function () {
             for (const member of members) {
-                await contract.connect(member).approveJoin(joiningUser.address);    
+                await contract.connect(member).approveJoin(joiningUser.address, datetime());    
             }
             
             let approveList = await contract.memberApprovedList(joiningUser.address);
@@ -139,15 +144,15 @@ describe("Credit Union", function () {
     describe("credit test", function () {
         beforeEach(async () => {
             // add initial deposit so we can create credits
-            await contract.createDeposit(10_000);
+            await contract.createDeposit(10_000, datetime());
             
             for (const member of members) {
-                await contract.connect(member).approve(approvable.DEPOSIT, 0);
+                await contract.connect(member).approve(approvable.DEPOSIT, 0, datetime());
             }
 
             // create credit
             contract = contract.connect(member1);    
-            await contract.createCredit(3000, 3);
+            await contract.createCredit(3000, 3, datetime());
         });
 
         it("creates credit", async function () {
@@ -157,7 +162,7 @@ describe("Credit Union", function () {
 
         it("approves credit", async function() {               
             for (const member of [owner, member2, member3]) {
-                await contract.connect(member).approve(approvable.CREDIT, 0);
+                await contract.connect(member).approve(approvable.CREDIT, 0, datetime());
             }
 
             let credit = await contract.credits(0);
@@ -174,23 +179,23 @@ describe("Credit Union", function () {
     describe("repayment test", function () {
         beforeEach(async () => {
             // add deposit
-            await contract.createDeposit(10_000);
+            await contract.createDeposit(10_000, datetime());
             
             for (const member of members) {
-                await contract.connect(member).approve(approvable.DEPOSIT, 0);
+                await contract.connect(member).approve(approvable.DEPOSIT, 0, datetime());
             }
 
             // create credit
             contract = contract.connect(member1);    
-            await contract.createCredit(3000, 3);
+            await contract.createCredit(3000, 3, datetime());
 
             // approve credit
             for (const member of members) {
-                await contract.connect(member).approve(approvable.CREDIT, 0);
+                await contract.connect(member).approve(approvable.CREDIT, 0, datetime());
             }
             
             contract = contract.connect(member1);
-            await contract.createRepayment(0, 1000, 1);
+            await contract.createRepayment(0, 1000, 1, datetime());
         })
 
         it("creates repayment", async function() {
@@ -200,7 +205,7 @@ describe("Credit Union", function () {
 
         it("approves repayment", async function() {
             for (const member of [owner, member2, member3]) {
-                await contract.connect(member).approve(approvable.REPAYMENT, 0);
+                await contract.connect(member).approve(approvable.REPAYMENT, 0, datetime());
             }                
 
             let repayment = await contract.repayments(0);

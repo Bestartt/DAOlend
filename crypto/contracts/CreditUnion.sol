@@ -9,6 +9,7 @@ contract CreditUnion {
     uint32 public totalDeposit = 0;
     string public ownerName;
     string public name;
+    uint64 public createdAt;
 
     // credit
     struct Credit {
@@ -20,6 +21,8 @@ contract CreditUnion {
         address member;
         address[] approvedMembers;
         bool confirmed;
+        uint64 createdAt;
+        uint64 confirmedAt;
     }
 
     Credit[] public credits;
@@ -35,6 +38,8 @@ contract CreditUnion {
         uint32 creditId;
         address[] approvedMembers;
         bool confirmed;
+        uint64 createdAt;
+        uint64 confirmedAt;
     }
 
     Repayment[] public repayments;
@@ -49,6 +54,7 @@ contract CreditUnion {
         address[] approvedMembers;
         bool confirmed;
         bool created;
+        uint64 joinedAt;
     }    
 
     address[] public membersList;
@@ -61,6 +67,8 @@ contract CreditUnion {
         uint32 amount;
         address[] approvedMembers;
         bool confirmed;
+        uint64 createdAt;
+        uint64 confirmedAt;
     }
 
     Deposit[] public deposits;
@@ -72,9 +80,17 @@ contract CreditUnion {
         REPAYMENT
     }
 
-    constructor(string memory _name, string memory _ownerName,address[] memory memberAddresses, string[] memory memberNames) {
+    constructor(
+            string memory _name, 
+            string memory _ownerName,
+            address[] memory memberAddresses, 
+            string[] memory memberNames, 
+            uint64 dateTime
+        ) {
         ownerName = _ownerName;
         name = _name;
+        createdAt = dateTime;
+
         address[] memory temp;
 
         // add initial members
@@ -87,7 +103,8 @@ contract CreditUnion {
                 contribution: 0,
                 confirmed: true,
                 created: true,
-                approvedMembers: temp
+                approvedMembers: temp,
+                joinedAt: dateTime
             });
         }
 
@@ -98,7 +115,9 @@ contract CreditUnion {
             contribution: 0,
             confirmed: true,
             created: true,
-            approvedMembers: temp
+            approvedMembers: temp,
+            joinedAt: dateTime
+
         });
 
         // set counters
@@ -107,7 +126,7 @@ contract CreditUnion {
         repaymentCounter = 0;
     }
 
-    function approve(Approvable object, uint32 id) public memberOnly {
+    function approve(Approvable object, uint32 id, uint64 dateTime) public memberOnly {
         address[] storage approvedMembers;
 
         // set reference to approvedMembers array
@@ -129,6 +148,7 @@ contract CreditUnion {
         if (object == Approvable.CREDIT) {
             if (isCreditApproved(id) && !credits[id].confirmed) {
                 credits[id].confirmed = true;
+                credits[id].confirmedAt = dateTime;
                 totalDeposit -= credits[id].amount;
                 creditCounter++;
             }
@@ -139,6 +159,7 @@ contract CreditUnion {
 
             if (allApproved) {
                 repayments[id].confirmed = true;
+                repayments[id].confirmedAt = dateTime;
                 credits[repayment.creditId].repaid += repayment.amount; 
             }
         } 
@@ -147,6 +168,7 @@ contract CreditUnion {
             bool allApproved = checkAllMembersApproved(current_deposit.approvedMembers, current_deposit.member);
             if (allApproved) {
                 deposits[id].confirmed = true;
+                deposits[id].confirmedAt = dateTime;
                 totalDeposit += current_deposit.amount;
                 members[current_deposit.member].contribution += current_deposit.amount;
             }
@@ -166,14 +188,15 @@ contract CreditUnion {
             approvedMembers: temp,
             contribution: 0,
             confirmed: false,
-            created: true
+            created: true,
+            joinedAt: 0
         });
 
         membersList.push(msg.sender);
     }
 
 
-    function approveJoin(address member) public memberOnly {
+    function approveJoin(address member, uint64 dateTime) public memberOnly {
         require(!includes(msg.sender, members[member].approvedMembers), unicode"вы уже подтвердили");
         require(members[msg.sender].confirmed, unicode"вы уже подтвердили");
 
@@ -182,6 +205,7 @@ contract CreditUnion {
         Member memory current_member = members[member];
         if (checkAllMembersApproved(current_member.approvedMembers, current_member.member)) {
             members[member].confirmed = true; 
+            members[member].joinedAt = dateTime;
         }
     }    
     
@@ -221,7 +245,7 @@ contract CreditUnion {
     }
 
 
-    function createDeposit(uint32 number) public memberOnly {
+    function createDeposit(uint32 number, uint64 dateTime) public memberOnly {
         // TODO add index to deposits
         address[] memory temp;
         deposits.push(Deposit({
@@ -229,7 +253,9 @@ contract CreditUnion {
             name: members[msg.sender].name,
             amount: number,
             approvedMembers: temp,
-            confirmed: false
+            confirmed: false,
+            createdAt: dateTime,
+            confirmedAt: 0
         }));
     }
 
@@ -242,7 +268,7 @@ contract CreditUnion {
     }
 
     // ================ CREDITS ================
-    function createCredit(uint32 amount, uint32 term) public memberOnly {
+    function createCredit(uint32 amount, uint32 term, uint64 dateTime) public memberOnly {
         require(amount <= totalDeposit, unicode"запрашиваемая сумма должна быть меньше чем казна организации");
 
         address[] memory temp;
@@ -254,7 +280,9 @@ contract CreditUnion {
             name: members[msg.sender].name,
             member: msg.sender,
             approvedMembers: temp,
-            confirmed: false
+            confirmed: false,
+            createdAt: dateTime,
+            confirmedAt: 0
         }));
     }
 
@@ -293,7 +321,7 @@ contract CreditUnion {
 
 
     // ================= REPAYMENTS ====================
-    function createRepayment(uint32 id, uint32 amount, uint32 month) public memberOnly {
+    function createRepayment(uint32 id, uint32 amount, uint32 month, uint64 dateTime) public memberOnly {
         address[] memory temp;
         
         repayments.push(
@@ -304,7 +332,9 @@ contract CreditUnion {
                 amount: amount,
                 month: month,
                 approvedMembers: temp,
-                confirmed: false
+                confirmed: false,
+                createdAt: dateTime,
+                confirmedAt: 0
             })
         );
         repaymentCounter++;
