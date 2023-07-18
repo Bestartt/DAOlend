@@ -7,21 +7,26 @@
     let approveLoading = ref(false);
     let notif = useNotification();
     let contract: Contract = new Contract(address);
-    
+    let currentUser = ref("");
+
     let { data, pending, refresh, error, status } = useAsyncData("deposits", async () => await contract.getDeposits());
 
     async function confirm(id: number){
         approveLoading.value = true;
-        await contract.approveDeposit(id);
-        approveLoading.value = false;
 
-        notif.notify("Транзакция скоро выполниться", "Подтверждение депозита отправлена успешно")
+        try {
+            await contract.approveDeposit(id);
+            notif.notify("Транзакция скоро выполниться", "Подтверждение депозита отправлена успешно")
+        } catch(e) {
+            console.error(e);
+            notif.notify("Ошибка или операция отменена");
+        }
+        approveLoading.value = false;
     }
 
-    watch(status, () => {
-        if (status.value == "error") {
-            console.log(error.value);
-        }
+    onMounted(() => {
+        // @ts-ignore
+        currentUser.value = window.ethereum.selectedAddress;
     })
 
 </script>
@@ -29,7 +34,6 @@
 <template>
     <div>
         <!-- head -->
-
         <div flex justify-between>
             <h4>Депозиты</h4>
 
@@ -45,10 +49,12 @@
         </div>
         <br>
 
+        <!-- empty -->
         <div v-if="data && data.length == 0">
             <h2 text-gray>Пусто</h2>
         </div>
 
+        <!-- loading -->
         <div class="w-full h-10vh flex justify-center items-center" v-if="pending">
             <div class="spinner-border" role="status">
                 <span class="sr-only">Loading...</span>
@@ -57,32 +63,52 @@
 
         <!-- deposit list -->
 
-        <div v-if="!pending" v-auto-animate>
+        <div v-if="!pending && data !== null" v-auto-animate>
             <template v-for="(deposit, index) in data">
-                <div class="card max-w-500px">
-                    <div class="card-header">
-                        <b>
-                            участник: {{ deposit.name }}
-                        </b>
-                    </div>
+                <div class="card max-w-500px mt-2">
+                    <!-- card header -->
+                    <div class="card-header"><b>участник: {{ deposit.name }}</b></div>
 
+                    <!-- info -->
                     <div class="card-body py-2 pb-0">
                         сумма: {{ deposit.amount }} <br>
                         подтвержден: {{ deposit.confirmed ? "✅" : "❌" }}  
                     </div>
                     <hr>
+
                     <div class="card-body py-0 pb-3">
+                        <!-- approved members -->
                         <b>Подтвердившие участники</b>
-                        <members-list :approved-members="deposit.approvedMembers" :contract-address="address"></members-list>
+                        <members-list 
+                            :members="deposit.approvedMembers" 
+                            :contract="address" 
+                            :fetch-key="`deposit-approved-members-${index}`"
+                        />
     
-                        <template v-if="!deposit.confirmed">
-                            <button class="btn btn-dark" @click="confirm(index)">
+                        <!-- actions -->
+
+                        <template v-if="!deposit.confirmed && deposit.member.toLowerCase() !== currentUser">
+
+                            <button class="btn btn-dark" 
+                                v-if="!deposit
+                                    .approvedMembers
+                                    .map(m => m.toLowerCase())
+                                    .includes(currentUser)
+                                " 
+
+                                @click="confirm(index)"
+                            >
                                 <button-loading :loading="approveLoading">
                                     подтвердить
                                 </button-loading>
                             </button>
-    
+
+                            <button class="btn btn-dark" disabled v-else>
+                                вы подтвердили
+                            </button>
                         </template>
+
+    
                     </div>
 
                 </div>

@@ -5,7 +5,7 @@
     let route = useRoute();
     let address = route.params.address;
     
-    let { data, pending } = await useAsyncData('organization_data', async () => {
+    let { data, pending, status } = await useAsyncData('organization_data', async () => {
         // @ts-ignore
         let contract: Contract = new Contract(address);
         return contract.getData()    
@@ -21,14 +21,13 @@
         <div>
             <br>
 
-            <breadcumps :address="address" :union_name="data.name" />
+            <breadcumps v-if="status == 'success'"  :address="address" :union_name="data.name" />
 
             <div class="w-full h-10vh flex justify-center items-center" v-if="pending">
                 <div class="spinner-border" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>            
             </div>
-
 
             <hr>    
 

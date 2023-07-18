@@ -1,15 +1,20 @@
 <script setup lang="ts">
     import { Contract } from '~/utils/contract';
-    import { useAsyncData } from 'nuxt/app';
+    import { useAsyncData, useRoute } from 'nuxt/app';
 
     let props = defineProps<{
-        approvedMembers: string[],
-        contractAddress: string
+        members: string[],
+        contract: string,
+        fetchKey: string
     }>();
 
-    let contract = new Contract(props.contractAddress);
+    let route = useRoute();
+    let isMy = route.path.includes("/unions/my");
+    let linkAddress = isMy ? "my" : props.contract;
 
-    let { data, pending } = useAsyncData(async() => await contract.getMembersByAddresses(props.approvedMembers));
+    let contract = new Contract(props.contract);
+
+    let { data, pending, status } = useAsyncData(props.fetchKey, async() => await contract.getMembersByAddresses(props.members));
 
     let currentMember = ref(null);
 
@@ -26,18 +31,23 @@
 
         <ul v-auto-animate>
             <li v-for="(member, index) in data" position-relative>
-                <button class="btn btn-light"
+                <nuxt-link :to="`/unions/${linkAddress}/${member.member}/member-detail/`"  class="dark-link">
+                    {{ member.name }}
+                </nuxt-link>
 
-                    @click="currentMember = member" data-bs-toggle="modal" :data-bs-target="`#member-modal`"
+                <!-- <button class="btn btn-light"
+                    @click="currentMember = member" data-bs-toggle="modal" :data-bs-target="`#member-modal-${fetchKey}`"
                 >
                     {{ member.name }}
-                </button>
+                </button> -->
 
             </li>
         </ul>
 
 
-        <div class="modal fade" id="member-modal">
+        <!-- May be later usage but for now we will use just links to member detail -->
+
+        <!-- <div class="modal fade" :id="`member-modal-${fetchKey}`">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <template v-if="currentMember !== null">
@@ -53,9 +63,23 @@
                     </template>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 
 </template>
 
+
+<style>
+    .dark-link {
+        text-underline-offset: 0.25em!important;
+        color: #3a3a3a;
+        text-decoration-color: #959595;
+        transition: all 0.3s;
+    }
+
+    .dark-link:hover {
+        color: black;
+        text-decoration-color: black;
+    }
+</style>
 

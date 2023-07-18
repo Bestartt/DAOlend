@@ -1,39 +1,49 @@
 <script lang="ts" setup>
+    import { useRoute } from 'nuxt/app';
     let route = useRoute();
 
-    let address = route.params.address;
+    let address = ref("");
 
-    let menu = ref([
-        {
-            name: "Главное",
-            route: `/unions/${address}/`, 
-            class: ''
-        },
-        {
-            name: "Участники",
-            route: `/unions/${address}/members/`,
-        },
-        {
-            name: "Депозиты",
-            route: `/unions/${address}/deposits/`,
-        },
-        {
-            name: "Заявки на кредит",
-            route: `/unions/${address}/credit-requests/`
-        },
-        {
-            name: "Кредиты",
-            route: `/unions/${address}/credits/`,
-        },
-        {
-            name: "Запросы на вступление",
-            route: `/unions/${address}/join/`
-        },
-        {
-            name: "История",
-            route: `/unions/${address}/history/`
-        }
-    ]);
+    watch(route, () => {
+        // @ts-ignore
+        address.value = route.params.address;
+    })
+
+    let menu = ref([]);
+
+    watch(address, () => {
+        menu.value = [
+            {
+                name: "Главное",
+                route: `/unions/${address.value}/`, 
+                class: ''
+            },
+            {
+                name: "Участники",
+                route: `/unions/${address.value}/members/`,
+            },
+            {
+                name: "Депозиты",
+                route: `/unions/${address.value}/deposits/`,
+            },
+            {
+                name: "Заявки на кредит",
+                route: `/unions/${address.value}/credit-requests/`
+            },
+            {
+                name: "Кредиты",
+                route: `/unions/${address.value}/credits/`,
+            },
+            {
+                name: "Запросы на вступление",
+                route: `/unions/${address.value}/join/`
+            },
+            {
+                name: "История",
+                route: `/unions/${address.value}/history/`
+            }
+        ];
+    })
 
     const updateMenu = () => {
         for (let i=0; i < menu.value.length; i++) {

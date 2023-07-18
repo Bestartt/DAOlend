@@ -64,9 +64,8 @@
                         
                         <div v-else>
                             <b>подтвердившие члены</b>
-                            <ul>
-                                <li v-for="member in request.approvedMembers">{{ member }}</li>
-                            </ul>    
+
+                            <members-list :approved-members="request.approvedMembers" :contract-address="address"></members-list>
                         </div>
                         <br>    
                         <button max-w-200px class="btn btn-dark mt-3" @click="approve(request.member)">
