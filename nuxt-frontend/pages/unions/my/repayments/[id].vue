@@ -5,7 +5,7 @@
     let route = useRoute();
 
     let address = my_union.get();
-    let contract: Contract = new Contract(address);;
+    let contract: Contract = new Contract(address);
     
     let { data, pending } = useAsyncData(async () => await contract.getRepaymentsByCredit(route.params.id));
 

@@ -86,7 +86,4 @@
         <repay-modal :address="address" :creditId="currentCredit"/>
 
     </div>
-
-
-
 </template>

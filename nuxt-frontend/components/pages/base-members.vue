@@ -43,7 +43,8 @@
 
 
 
-        <div class="card card-body max-w-800px mt-3"  v-auto-animate>
+        <div class="card card-body mt-3" v-auto-animate>
+            <h4>Таблица участников</h4>
 
             <div class="w-full h-10vh flex justify-center items-center" v-if="pending">
                 <div class="spinner-border" role="status">
@@ -51,23 +52,25 @@
                 </div>            
             </div>
 
-            <table class="table table-hover min-w-400px" v-else>
+            <table class="table table-hover table-bordered" v-else>
                 <thead>
                     <tr>
                         <th>Имя</th>
                         <th>Вложение</th>
                         <th>Процент вложения</th>
-                        <th>Адрес</th>
+                        <th>Дата вступления</th>
                     </tr>
                 </thead>
 
                 <tbody>
 
                     <tr v-for="member in data">
-                        <td>{{ member.name }}</td>
+                        <td>
+                            <nuxt-link :to="`/unions/${address}/${member.member}/member-detail`">{{ member.name }}</nuxt-link>
+                        </td>
                         <td>{{ member.contribution }}</td>
                         <td>{{ getPercent(member.contribution) }}%</td>
-                        <td>{{ member.member }}</td>
+                        <td>{{ new Date(member.joinedAt.toNumber()).toLocaleString("ru") }}</td>
                     </tr>
                 </tbody>
             </table>              

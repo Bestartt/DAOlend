@@ -71,12 +71,11 @@
                         подтвержден: {{ deposit.confirmed ? "✅" : "❌" }}  
                     </div>
                     <hr>
-                    <div class="card-body py-0">
+                    <div class="card-body py-0 pb-3">
                         <b>Подтвердившие участники</b>
                         <members-list :approved-members="deposit.approvedMembers" :contract-address="address"></members-list>
     
                         <template v-if="!deposit.confirmed">
-                            <hr>
                             <button class="btn btn-dark" @click="confirm(index)">
                                 <button-loading :loading="approveLoading">
                                     подтвердить
