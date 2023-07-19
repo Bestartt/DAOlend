@@ -7,7 +7,7 @@
     let contract: Contract = new Contract(address);
     let linkAddress = props.my ? "my" : address;
 
-    let { data, pending, error, refresh, status } = useAsyncData(async () => await contract.getData());
+    let { data, pending, error, refresh, status } = useAsyncData("my union data", async () => await contract.getData());
 
     let { data: info, pending: infoPending } = useAsyncData(async() => {
         return {
@@ -34,7 +34,7 @@
         </div>
 
         <!-- card -->
-        <div class="card card-body mt-3" v-auto-animate>
+        <div class="card card-body mt-3 px-4 py-4" v-auto-animate>
 
             <!-- loading -->
             <div class="w-full h-10vh flex justify-center items-center" v-if="pending || infoPending">
@@ -53,15 +53,24 @@
                 <span text-gray>организация</span>
                 <h2>{{ data.name }}</h2>
                 <br>
-                создатель: <b>{{ data.ownerName }}</b> <br>
-                дата создания: <b>{{ new Date(data.createdAt).toLocaleString("ru") }}</b> <br>
-                адрес: <b>{{ address }}</b>
+
+                <dl class="row">
+                    <dt class="col-sm-2">создатель:</dt>
+                    <dd class="col-sm-10">{{ data.ownerName }}</dd>
+
+                    <dt class="col-sm-2">дата создания: </dt>
+                    <dd class="col-sm-10">{{ new Date(data.createdAt).toLocaleString("ru") }}</dd>
+
+                    <dt class="col-sm-2">адрес:</dt>
+                    <dd class="col-sm-10">{{ address }}</dd>
+
+                </dl>
             </div>
 
             <hr>
 
             <!-- options -->
-            <div class="row g-4 py-3 px-5 row-cols-1 row-cols-lg-3" v-if="info !== null && data !== null && !infoPending">
+            <div class="row g-4 px-3 row-cols-1 row-cols-lg-3 text-center" v-if="info !== null && data !== null && !infoPending">
                 <!-- credits -->
                 <div class="feature col block">
                     <h4>Кредиты</h4>

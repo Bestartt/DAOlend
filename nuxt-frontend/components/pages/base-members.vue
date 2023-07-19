@@ -66,7 +66,11 @@
 
                     <tr v-for="member in data">
                         <td>
-                            <nuxt-link :to="`/unions/${address}/${member.member}/member-detail`">{{ member.name }}</nuxt-link>
+                            <nuxt-link 
+                                class="dark-link"
+                                :to="`/unions/${address}/${member.member}/member-detail`">
+                                {{ member.name }}
+                            </nuxt-link>
                         </td>
                         <td>{{ member.contribution }}</td>
                         <td>{{ getPercent(member.contribution) }}%</td>

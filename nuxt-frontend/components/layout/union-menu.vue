@@ -2,48 +2,37 @@
     import { useRoute } from 'nuxt/app';
     let route = useRoute();
 
-    let address = ref("");
-
-    watch(route, () => {
-        // @ts-ignore
-        address.value = route.params.address;
-    })
-
-    let menu = ref([]);
-
-    watch(address, () => {
-        menu.value = [
+    let menu = computed(() => [
             {
                 name: "Главное",
-                route: `/unions/${address.value}/`, 
+                route: `/unions/${route.params.address}/`, 
                 class: ''
             },
             {
                 name: "Участники",
-                route: `/unions/${address.value}/members/`,
+                route: `/unions/${route.params.address}/members/`,
             },
             {
                 name: "Депозиты",
-                route: `/unions/${address.value}/deposits/`,
+                route: `/unions/${route.params.address}/deposits/`,
             },
             {
                 name: "Заявки на кредит",
-                route: `/unions/${address.value}/credit-requests/`
+                route: `/unions/${route.params.address}/credit-requests/`
             },
             {
                 name: "Кредиты",
-                route: `/unions/${address.value}/credits/`,
+                route: `/unions/${route.params.address}/credits/`,
             },
             {
                 name: "Запросы на вступление",
-                route: `/unions/${address.value}/join/`
+                route: `/unions/${route.params.address}/join/`
             },
             {
                 name: "История",
-                route: `/unions/${address.value}/history/`
+                route: `/unions/${route.params.address}/history/`
             }
-        ];
-    })
+    ]);
 
     const updateMenu = () => {
         for (let i=0; i < menu.value.length; i++) {
@@ -58,7 +47,7 @@
 </script>
 
 <template>
-    <ul class="nav nav-pills flex-column sidenav bg-white card card-body">
+    <ul class="nav nav-pills flex-column sidenav bg-white card card-body" style="height: fit-content;">
 
         <li v-for="item in menu" class="nav-item">
 

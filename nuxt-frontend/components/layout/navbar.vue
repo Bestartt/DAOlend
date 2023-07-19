@@ -52,7 +52,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">организации</a>
 
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu" style="z-index: 10;" v-auto-animate>
                             <template v-if="myUnionExists">
                                 <nuxt-link prefetch to="/unions/my" class="dropdown-item">
                                     моя организация
@@ -66,7 +66,7 @@
                             
                             <li v-if="unions.length > 0"><hr class="dropdown-divider"></li>
 
-                            <button class="dropdown-item btn btn-dark" @click.stop="update">обновить</button>
+                            <button class="dropdown-item btn btn-warning" @click.stop="update">обновить</button>
 
                         </ul>
                     </li>

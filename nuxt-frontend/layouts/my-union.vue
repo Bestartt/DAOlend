@@ -20,9 +20,11 @@
         <div>
             <br>
 
-            <template v-if="data != null">
+            <!-- <template v-if="data != null">
                 <breadcumps :union_name="data.name" address="my"/>
-            </template>
+                <hr>  
+            </template> -->
+
 
             <div class="w-full h-10vh flex justify-center items-center" v-if="pending">
                 <div class="spinner-border" role="status">
@@ -31,7 +33,7 @@
             </div>
 
 
-            <hr>    
+              
 
             <div flex gap-12>
                 <my-union-menu></my-union-menu>

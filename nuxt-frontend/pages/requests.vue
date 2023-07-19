@@ -1,10 +1,14 @@
 <script setup lang="ts">
+    import autoAnimate from "@formkit/auto-animate";
+    import { useAsyncData } from "nuxt/app";    
+    
     let requests = join_requests.get();
     let unions = ref<any[]>([]);
-    import autoAnimate from "@formkit/auto-animate";
 
     const union_list = ref();
 
+
+    let { data, pending, status } = useAsyncData("requests", async() => await getRequestsData(requests));
 
     onMounted(async () => {
         unions.value = await getRequestsData(requests);
@@ -23,11 +27,18 @@
     <div class="center px-12 py-6">
         <div class="min-w-430px flex justify-between">
             <h4>Ваши запросы</h4>
-            <button @click="join_requests.clear(); unions = []" class="btn btn-danger">очистить</button>
+            <button @click="join_requests.clear(); data = []" class="btn btn-danger">очистить</button>
+        </div>
+
+        <!-- loading -->
+        <div class="w-full h-10vh flex justify-center items-center" v-if="pending">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>            
         </div>
         
-        <div ref="union_list">
-            <div v-for="(union, i) in unions" class="card card-body mt-3 max-w-700px">
+        <div v-auto-animate v-if="status == 'success'">
+            <div v-for="(union, i) in data" class="card card-body mt-3 max-w-700px">
                 <div flex justify-between>
                     <h3>{{ union.name }}</h3>
                     <button class="btn-close btn-sm" @click="remove(i)"></button>

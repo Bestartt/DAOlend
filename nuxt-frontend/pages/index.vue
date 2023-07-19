@@ -6,6 +6,9 @@
     my_union_exists.value = await connection.contractExists(my_union_address);
   });
 
+  onMounted(async () => {
+
+  })
 
 </script>
 

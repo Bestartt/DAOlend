@@ -39,6 +39,11 @@
   .card, .navbar {
     box-shadow: 0 10px 40px rgb(216, 216, 216);
     border-radius: 10px;
+    transition: 0.4s;
+  }
+
+  .card:hover {
+    box-shadow: 0 10px 40px rgba(216, 216, 216, 0.584);
   }
 
   .navbar {
@@ -59,5 +64,23 @@
     border-radius: 10px;
   }
 
+  .btn-dark {
+    box-shadow: 0 10px 20px rgb(180, 180, 180);
+    transition: 0.3;
+  }
+
+  .btn-dark:hover {
+    box-shadow: 0 10px 20px rgb(217, 217, 217);
+  }
+
+  .btn-danger {
+    box-shadow: 0 10px 20px rgb(255, 188, 188);
+    transition: 0.3;
+  }
+
+  .btn-danger:hover {
+    box-shadow: 0 10px 20px rgb(255, 215, 215);
+    background-color: #dc3f4e 
+  }
 
 </style>
