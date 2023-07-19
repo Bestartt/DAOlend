@@ -37,13 +37,13 @@
   }
 
   .card, .navbar {
-    box-shadow: 0 10px 40px rgb(216, 216, 216);
+    box-shadow: 0 5px 15px rgb(241, 241, 241);
     border-radius: 10px;
     transition: 0.4s;
   }
 
   .card:hover {
-    box-shadow: 0 10px 40px rgba(216, 216, 216, 0.584);
+    box-shadow: 0 5px 15px rgb(226, 226, 226);
   }
 
   .navbar {

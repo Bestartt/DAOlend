@@ -6,5 +6,5 @@
 
 
 <template>
-    <base-credits :address="address"></base-credits>
+    <base-credits :address="address" :my="true"></base-credits>
 </template>

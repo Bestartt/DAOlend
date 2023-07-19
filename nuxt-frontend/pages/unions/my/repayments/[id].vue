@@ -1,40 +1,15 @@
 <script setup lang="ts">
-    import { Contract } from "~/utils/contract";
-    import { useAsyncData } from "nuxt/app";
+    definePageMeta({layout: "my-union"})
 
-    let route = useRoute();
-
-    let address = my_union.get();
-    let contract: Contract = new Contract(address);
     
-    let { data, pending } = useAsyncData(async () => await contract.getRepaymentsByCredit(route.params.id));
+    let route = useRoute();
+    let creditId = route.params.id;
+    let address = my_union.get();
+    
 
 </script>
 
 
 <template>
-    <div py-5>
-        <h4>Погашения</h4>
-
-        <div class="card card-body">
-            <table class="table table-striped" min-w-400px mt-5>
-                <thead>
-                    <tr>
-                        <th>Месяц</th>
-                        <th>Сумма</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    <tr v-for="repayment in data">
-                        <td>{{ repayment[0] }}</td>
-                        <td>{{ repayment[1] }}</td>
-                    </tr>
-                </tbody>
-            </table>              
-        </div>
- 
-
-    </div>
+    <base-repayments :address="address" :credit-id="creditId"></base-repayments>
 </template>

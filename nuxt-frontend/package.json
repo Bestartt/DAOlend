@@ -18,6 +18,7 @@
     "@formkit/auto-animate": "^0.7.0",
     "@pinia/nuxt": "^0.4.11",
     "@unocss/nuxt": "^0.53.4",
+    "@vueuse/core": "^10.2.1",
     "bootstrap": "^5.3.0",
     "ethers": "5.7"
   }

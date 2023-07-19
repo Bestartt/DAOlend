@@ -9,7 +9,7 @@
     let contract: Contract = new Contract(address);
     let currentUser = ref("");
 
-    let { data, pending, refresh, error, status } = useAsyncData("deposits", async () => await contract.getDeposits());
+    let { data, pending, refresh } = useAsyncData("deposits", async () => await contract.getDeposits());
 
     async function confirm(id: number){
         approveLoading.value = true;
