@@ -20,7 +20,7 @@
             <div flex justify-end>
                 <button @click="$emit('onClose')"  class="btn btn-close"></button>
             </div>
-            <div px-3 py-1 pb-10>
+            <div px-10 py-1 pb-10>
                 <slot><h3 text-gray>empty</h3></slot>                
             </div>
 
@@ -73,7 +73,7 @@
 
     .my-dialog-active {
         height: auto;
-        width: 400px;
+        width: 500px;
     }
 
     .btn-close {

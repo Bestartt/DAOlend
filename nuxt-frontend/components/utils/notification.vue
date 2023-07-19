@@ -5,11 +5,16 @@
 
 
 <template>
-    <div class="card notification-card" :style="{ top: notif.isOpen ? `10px` : `-550px` }">
+    <div class="card notification-card no-shadow" :style="{ top: notif.isOpen ? `10px` : `-550px` }">
+        <div class="card-header flex justify-between">
+            <b>Уведомление</b>
+            <button class="btn btn-sm btn-close" @click="notif.close()"></button>
+        </div>
+
         <div class="card-body">
             <div flex justify-between>
                 <b>{{ notif.title }}</b>
-                <button class="btn btn-sm btn-close" @click="notif.close()"></button>
+                
             </div>
             
 
@@ -32,7 +37,7 @@
         position: absolute !important;
         top: 10px;
         right: 10px;
-
+        z-index: 100;
         transition: 0.3s;
     }
 

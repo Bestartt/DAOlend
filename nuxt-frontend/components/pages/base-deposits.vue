@@ -3,17 +3,19 @@
     import { useAsyncData } from 'nuxt/app';
 
     let props = defineProps<{address: string}>();
-    let address = props.address;
-    let approveLoading = ref(false);
     let notif = useNotification();
+
+    let address = props.address;
     let contract: Contract = new Contract(address);
+    
+    let approveLoading = ref(false);
     let currentUser = ref("");
+    let modalOpen = ref(false);
 
     let { data, pending, refresh } = useAsyncData("deposits", async () => await contract.getDeposits());
 
     async function confirm(id: number){
         approveLoading.value = true;
-
         try {
             await contract.approveDeposit(id);
             notif.notify("Транзакция скоро выполниться", "Подтверждение депозита отправлена успешно")
@@ -38,12 +40,7 @@
             <h4>Депозиты</h4>
 
             <div>
-                <button 
-                    class="btn btn-outline-dark me-1" 
-                    data-bs-toggle="modal" 
-                    data-bs-target="#add_deposit"> 
-                    Добавить
-                </button>
+                <button @click="modalOpen = true"  class="btn btn-outline-dark me-1" > Добавить</button>
                 <button @click="refresh()" class="btn btn-dark">обновить</button>
             </div>
         </div>
@@ -90,12 +87,7 @@
                         <template v-if="!deposit.confirmed && deposit.member.toLowerCase() !== currentUser">
 
                             <button class="btn btn-dark" 
-                                v-if="!deposit
-                                    .approvedMembers
-                                    .map(m => m.toLowerCase())
-                                    .includes(currentUser)
-                                " 
-
+                                v-if="!deposit.approvedMembers.some(m => m.toLowerCase() == currentUser)" 
                                 @click="confirm(index)"
                             >
                                 <button-loading :loading="approveLoading">
@@ -116,7 +108,11 @@
 
         </div>
         
-        <add-deposit-modal :contract-address="address"/>  
+        <add-deposit-modal 
+            :contract-address="address" 
+            :is-open="modalOpen" 
+            @on-close="modalOpen = false"
+        />  
     </div>
 </template>
 
