@@ -67,25 +67,26 @@
             </div>            
         </div>
 
+        <h3>История пока недопступно, нужно немного времени</h3>
+
 
         <!-- history not available -->
-        <div v-if="networkIsLocal">
+        <!-- <div v-if="networkIsLocal">
             <h4 text-gray>
                 Нельзя видить историю локально
             </h4>
             <span text-gray>К сожалению просмотр транзакции в локальной сети не работает</span>            
-        </div>
+        </div> -->
 
 
-        <div v-if="transactions.length == 0 && !loading && !networkIsLocal">
+        <!-- <div v-if="transactions.length == 0 && !loading && !networkIsLocal">
             <h3 text-gray>Пусто</h3>
             <b text-gray>пока никаких действий нету</b>
-        </div>
+        </div> -->
 
-        <div v-auto-animate>
+        <!-- <div v-auto-animate>
             <div v-for="(transaction, i) in transactions" class="card mt-3">
 
-                <!-- action name and datetime -->
                 <div class="card-header flex justify-between">
                     <div class="">
                         <span class="text-sm text-gray">действие</span> <br>
@@ -97,7 +98,6 @@
                 
                 <div class="card-body row items-center">
 
-                    <!-- sent data -->
                     <div class="flex flex-col col-3">
                         <template v-if="transaction.methodName == 'repay'">
                             <i>месяц: {{ transaction.argument.month }}</i>
@@ -122,11 +122,9 @@
                             <i>заявитель: {{ transaction.argument[0] }}</i>
                         </template>
 
-                        <!-- {{ transaction.argument }} -->
                     </div>
 
 
-                    <!-- messager details -->
                     <div class="col-9">
                         <span>участник: </span>
                         <b class="truncat">{{ members[i].name }}</b> <br>
@@ -139,7 +137,7 @@
                 </div>                
             </div>
 
-        </div>
+        </div> -->
         <!-- transactions list -->
 
 
