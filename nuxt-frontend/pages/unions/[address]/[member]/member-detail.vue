@@ -1,90 +1,63 @@
 <script lang="ts" setup>
     import { Contract } from "~/utils/contract";
-    import { useAsyncData } from 'nuxt/app';
+    import { useAsyncData } from "nuxt/app";
 
     definePageMeta({layout: "union"})
 
     let route = useRoute();
-    let address = route.params.address;
-    let member = route.params.member;
-
     // @ts-ignore
-    let contract: Contract = new Contract(address);
+    let address: string = route.params.address; 
+    let member: string = route.params.member;
 
-    let { data, pending, refresh } = useAsyncData("members", async () => {
-        let members = await contract.getMembers();
-        return members.filter(m => m.confirmed);
-    });
+    let contract = new Contract(address);
 
-    let totalDeposit = computed(() => {
-        let sum = 0;
-        data.value.map(member => sum += member.contribution);
-        return sum;
-    });
 
-    function getPercent(deposit: number) {
-        let result = Math.floor(deposit / (totalDeposit.value / 100));
-    
-        return Number.isNaN(result) ? 0 : result;
-    }
+    let { data, status, pending } = useAsyncData(async() => await contract.getMember(member));
+ 
 
 </script>
 
+
+
 <template>
     <div>
+        <!-- header -->
         <div flex justify-between>
-            <h4>Участники организации</h4>
-
-            <button class="btn btn-dark" @click="refresh()">
-                обновить
-            </button>
+            <h4>Данные</h4>
+            <button @click="refresh()" class="btn btn-dark">обновить</button>
         </div>
-        
-        <span text-gray>и их вложения</span>
 
-        <br>
-
-
-
+        <!-- card -->
         <div class="card card-body mt-3" v-auto-animate>
-            <h4>Таблица участников</h4>
 
+            <!-- loading -->
             <div class="w-full h-10vh flex justify-center items-center" v-if="pending">
                 <div class="spinner-border" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>            
             </div>
 
-            <table class="table table-hover table-bordered" v-else>
-                <thead>
-                    <tr>
-                        <th>Имя</th>
-                        <th>Вложение</th>
-                        <th>Процент вложения</th>
-                        <th>Дата вступления</th>
-                    </tr>
-                </thead>
+            <!-- error -->
+            <b v-if="status == 'error'">
+                {{ error }}
+            </b>
+            
+            <div class="card-body" v-if="status == 'success'">
+                <h2>{{ data.name }}</h2>
 
-                <tbody>
+                <dl class="row">
+                    <dt class="col-sm-3">адрес: </dt>
+                    <dd class="col-sm-9">{{ data.member }}</dd>
 
-                    <tr v-for="member in data">
-                        <td>
-                            <nuxt-link 
-                                class="dark-link"
-                                :to="`/unions/${address}/${member.member}/member-detail`">
-                                {{ member.name }}
-                            </nuxt-link>
-                        </td>
-                        <td>{{ member.contribution }}</td>
-                        <td>{{ getPercent(member.contribution) }}%</td>
-                        <td>{{ new Date(member.joinedAt.toNumber()).toLocaleString("ru") }}</td>
-                    </tr>
-                </tbody>
-            </table>              
+                    <dt class="col-sm-3">дата вступление: </dt>
+                    <dd class="col-sm-9">{{ new Date(data.joinedAt.toNumber()).toLocaleString("ru") }}</dd>
+
+                    <dt class="col-sm-3">сумма депозита: </dt>
+                    <dd class="col-sm-9">{{ data.contribution }}</dd>
+
+                    
+                </dl>
+            </div>
         </div>
-         
     </div>
-     
-
-
 </template>
