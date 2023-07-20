@@ -36,6 +36,10 @@
                 <span class="sr-only">Loading...</span>
             </div>            
         </div>
+
+        <b v-if="status == 'error'">
+            <error-alert></error-alert>     
+        </b> 
         
         <div v-auto-animate v-if="status == 'success'">
             <div v-for="(union, i) in data" class="card card-body mt-3 max-w-700px">

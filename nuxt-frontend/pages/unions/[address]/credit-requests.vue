@@ -36,6 +36,11 @@
             </div>   
         </div>
 
+                <!-- error -->
+        <b v-if="status == 'error'">
+            <error-alert></error-alert>     
+        </b>   
+
         <!-- loading -->
         <spinner :pending="pending"/>
 

@@ -37,6 +37,11 @@
             <button @click="refresh()" class="btn btn-dark">обновить</button>
         </div>
 
+        <!-- error -->
+        <b v-if="status == 'error'">
+            <error-alert></error-alert>     
+        </b>   
+
         <!-- card -->
         <div class="card card-body mt-3 px-4 py-4" v-auto-animate>
 
@@ -46,11 +51,6 @@
                     <span class="sr-only">Loading...</span>
                 </div>            
             </div>
-
-            <!-- error -->
-            <b v-if="status == 'error'">
-                {{ error }}
-            </b>
 
             <!-- base info -->
             <div class="block" v-if="data !== null && !pending">

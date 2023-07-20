@@ -18,6 +18,12 @@ export const connection = {
         await provider?.send("eth_requestAccounts", []);
     },
 
+    async isConnected() {
+        let provider = this.getProvider();
+        const accounts = await provider.listAccounts();
+        return accounts.length > 0;
+    },
+
     getSigner() {
         let provider = this.getProvider();
         return provider?.getSigner();

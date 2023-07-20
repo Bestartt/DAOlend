@@ -9,7 +9,7 @@
     let loading = ref(false);
     let notif = useNotification();
     
-    let { data, pending, refresh } = useAsyncData(async () => {
+    let { data, pending, refresh, status } = useAsyncData(async () => {
         let requests = await contract.getJoinRequests()
         return requests.filter(r => r[2] !== "0x0000000000000000000000000000000000000000");
     });
@@ -37,6 +37,10 @@
             <button class="btn btn-dark" @click="refresh()">обновить</button>
         </div>
         <br>
+
+        <b v-if="status == 'error'">
+            <error-alert></error-alert>     
+        </b> 
 
         <!-- loading -->
         <div class="w-full h-10vh flex justify-center items-center" v-if="pending">

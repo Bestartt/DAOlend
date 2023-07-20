@@ -1,14 +1,30 @@
 <script setup lang="ts" generic="T extends any, O extends any">
   let my_union_address = my_union.get();
   let my_union_exists = ref(false);
+  let metamask_connected = ref(false);
+  let notif = useNotification();
+  let loading = ref(false);
 
   onBeforeMount(async () => {
     my_union_exists.value = await connection.contractExists(my_union_address);
   });
 
   onMounted(async () => {
-
+    metamask_connected.value = await connection.isConnected();
   })
+
+  async function connectMetamask() {
+    loading.value = true;
+
+    try {
+      await connection.requestMetamask();
+      metamask_connected.value = true;
+    } catch(e) {
+      notif.notify("Не удалось подключить Metamask", "похоже вы отменили");
+    }
+
+    loading.value = false;
+  }
 
 </script>
 
@@ -21,10 +37,22 @@
         <span>Введите свои отчеты прозрачно через блокчейн</span>
     
         <br>
+
+        <template v-if="!metamask_connected">
+          <hr>
+          <b>Войдите в свой Metamask прежде чем начать</b>
+          <br>
+          <button class="btn btn-dark mt-2" @click="connectMetamask()">
+            <button-loading :loading="loading">
+              подключить метамаск
+            </button-loading>
+          </button>
+        </template>
+
         <nuxt-link 
           mt-3
           :to="`/unions/${my_union_address}/`" 
-          v-if="my_union_exists" 
+          v-if="my_union_exists && metamask_connected" 
           class="btn btn-outline-dark">перейти к моей организации
         </nuxt-link>
    

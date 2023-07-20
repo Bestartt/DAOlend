@@ -14,7 +14,7 @@
     let userAddress = ref(connection.getCurrentUserAddress());
     let modalOpen = ref(false);
 
-    let { data, pending, refresh } = useAsyncData(
+    let { data, pending, refresh, status } = useAsyncData(
         "credits",
         async () => (await contract.getCredits()).filter(c => c.confirmed)
     );
@@ -33,6 +33,10 @@
 
         <!-- loading -->
         <spinner :pending="pending"/>
+
+        <b v-if="status == 'error'">
+            <error-alert></error-alert>     
+        </b> 
 
         <!-- empty -->
         <div v-if="data && data.length == 0">

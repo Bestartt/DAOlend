@@ -16,7 +16,7 @@
     let currentUser = ref("");
     let modal = useModal();
 
-    let { data, pending, refresh } = useAsyncData("deposits", async () => await contract.getDeposits());
+    let { data, pending, refresh, status } = useAsyncData("deposits", async () => await contract.getDeposits());
 
     async function confirm(id: number){
         approveLoading.value = true;
@@ -49,6 +49,10 @@
             </div>
         </div>
         <br>
+
+        <b v-if="status == 'error'">
+            <error-alert></error-alert>     
+        </b> 
 
         <!-- empty -->
         <div v-if="data && data.length == 0">

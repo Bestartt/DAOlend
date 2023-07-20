@@ -40,10 +40,11 @@
         </div>
         
         <span text-gray>и их вложения</span>
-
         <br>
 
-
+        <b v-if="status == 'error'">
+            <error-alert></error-alert>     
+        </b> 
 
         <div class="card card-body mt-3" v-auto-animate>
             <h4>Таблица участников</h4>
