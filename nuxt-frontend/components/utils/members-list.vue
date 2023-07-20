@@ -4,8 +4,7 @@
 
     let props = defineProps<{
         members: string[],
-        contract: string,
-        fetchKey: string
+        contract: string
     }>();
 
     let route = useRoute();
@@ -15,7 +14,7 @@
     let contract = new Contract(props.contract);
 
     let { data, pending, status, refresh } = useAsyncData(
-        props.fetchKey, 
+        uuid(), 
         async() => await contract.getMembersByAddresses(props.members)
     );
 </script>

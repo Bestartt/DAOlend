@@ -1,8 +1,7 @@
 <script lang="ts" setup>
     import { Contract } from "~/utils/contract";
 
-    let props = defineProps<{contractAddress: string, isOpen: boolean}>();
-    let emits = defineEmits(["onClose"]);
+    let props = defineProps<{contractAddress: string}>();
 
     let quantity = ref(0);
     let contract = new Contract(props.contractAddress);
@@ -19,14 +18,13 @@
         }
 
         loading.value = false;
-        emits("onClose");
     }
 
 </script>
 
 
 <template>
-    <modal :is-open="props.isOpen" @on-close="$emit('onClose')">
+    <modal>
         <h1 class="modal-title fs-5">Создать депозит</h1>
         <hr>
 

@@ -4,9 +4,7 @@
     let props = defineProps<{
         address: string,
         creditId: number,
-        isOpen: boolean
     }>();
-    let emits = defineEmits(["onClose"]);
 
     let repayAmount = ref(0);
     let month = ref(0);
@@ -32,7 +30,6 @@
             notif.notify("Произошла ошибка", "не удалось создать транзакцию")
         }
 
-        emits("onClose");
         loading.value = false;
     }
 
@@ -40,7 +37,7 @@
 
 
 <template>
-    <modal :is-open="props.isOpen" @on-close="$emit('onClose')">
+    <modal>
         <h1 class="modal-title fs-5">Создать погашение</h1>
         <hr>
 

@@ -79,7 +79,6 @@
                         <members-list 
                             :members="deposit.approvedMembers" 
                             :contract="address" 
-                            :fetch-key="`deposit-approved-members-${index}`"
                         />
     
                         <!-- actions -->

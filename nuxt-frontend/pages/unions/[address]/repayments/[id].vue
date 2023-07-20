@@ -5,11 +5,9 @@
 
     let route = useRoute();
     // @ts-ignore
-    let address: string = route.params.address;
-    // @ts-ignore
-    let creditId: string = route.params.id;
+    let address: string = route.params.address; let creditId: string = route.params.id;
 
-    let modalOpen = ref(false);
+    let modal = useModal();
     let user = ref("");
     let contract = new Contract(address);
     let currentRepayment = ref(-1);
@@ -82,7 +80,7 @@
                         
                         <!-- members list -->
                         <td>
-                            <a href="#" class="dark-link" @click="currentRepayment = index; modalOpen = true;">список</a>
+                            <a href="#" class="dark-link" @click="currentRepayment = index; modal.open();">список</a>
                         </td>
 
                         <!-- actions -->
@@ -103,20 +101,14 @@
             </table>              
         </div>
 
+
         <template v-if="currentRepayment !== -1">
-            <modal :is-open="modalOpen"  @on-close="modalOpen = false">
-                <h5>Список подтвердивших участников</h5>
-
-                <b v-if="data[currentRepayment].approvedMembers.length == 0" text-gray>
-                    пока никто не подтвердил
-                </b>
-
-                <members-list
-                    :fetch-key="`repayment approved members ${address} ${creditId} ${currentRepayment}`"
-                    :contract="address"  
-                    :members="data[currentRepayment].approvedMembers">
-                </members-list>
-            </modal>
+            <members-list-modal :members="data[currentRepayment].approvedMembers" :contract="address">
+                <h5>Список подтвердивших членов</h5>
+                <hr>
+            </members-list-modal>    
         </template>
+
+
     </div>
 </template>

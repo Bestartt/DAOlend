@@ -71,7 +71,6 @@
                             <members-list 
                                 :approved-members="request.approvedMembers" 
                                 :contract-address="address"
-                                fetch-key="sdfsf"
                             >
                             </members-list>
                         </div>

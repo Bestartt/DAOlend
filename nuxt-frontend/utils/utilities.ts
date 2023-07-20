@@ -15,8 +15,21 @@ export function truncateString(str: string) {
     }
 }
 
+
 export function copy(str: string) {
     navigator.clipboard.writeText(str);
+}
+
+
+export function uuid() {
+    return Array
+     .from(Array(16))
+     .map(e => Math.floor(Math.random() * 255)
+     .toString(16)
+     .padStart(2,"0"))
+     .join('')
+     .match(/.{1,4}/g)
+     .join('-')
 }
 
 

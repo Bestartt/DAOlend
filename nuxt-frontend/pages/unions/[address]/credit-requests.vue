@@ -4,7 +4,8 @@
     definePageMeta({layout: "union"})
 
     let route = useRoute();
-    
+    let modal = useModal();
+
     // @ts-ignore
     let address: string = route.params.address;
     
@@ -28,9 +29,7 @@
         <div flex justify-between>
             <h4>Заявки на кредит</h4>
             <div flex gap-2>
-                <button class="btn btn-outline-dark" 
-                    data-bs-toggle="modal"
-                    data-bs-target="#request_credit">
+                <button class="btn btn-outline-dark" @click="modal.open()">
                     добавить
                 </button>
                 <button class="btn btn-dark" @click="refresh()">обновить</button>
@@ -61,7 +60,6 @@
 
                         подтвердившие участники: 
                         <members-list
-                            :fetch-key="`credit request members ${address} ${credit_request.id}`"
                             :contract="address"  
                             :members="credit_request.approvedMembers">
                         </members-list>

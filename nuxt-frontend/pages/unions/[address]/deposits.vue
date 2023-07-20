@@ -14,7 +14,7 @@
     
     let approveLoading = ref(false);
     let currentUser = ref("");
-    let modalOpen = ref(false);
+    let modal = useModal();
 
     let { data, pending, refresh } = useAsyncData("deposits", async () => await contract.getDeposits());
 
@@ -44,7 +44,7 @@
             <h4>Депозиты</h4>
 
             <div>
-                <button @click="modalOpen = true"  class="btn btn-outline-dark me-1" > Добавить</button>
+                <button @click="modal.open()"  class="btn btn-outline-dark me-1" > Добавить</button>
                 <button @click="refresh()" class="btn btn-dark">обновить</button>
             </div>
         </div>
@@ -83,7 +83,6 @@
                         <members-list 
                             :members="deposit.approvedMembers" 
                             :contract="address" 
-                            :fetch-key="`deposit-approved-members-${index}`"
                         />
     
                         <!-- actions -->
@@ -114,8 +113,6 @@
         
         <add-deposit-modal 
             :contract-address="address" 
-            :is-open="modalOpen" 
-            @on-close="modalOpen = false"
         />  
     </div>
 </template>

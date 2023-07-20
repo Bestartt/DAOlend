@@ -109,7 +109,6 @@
                 </b>
 
                 <members-list
-                    :fetch-key="`repayment approved members ${address} ${props.creditId} ${currentRepayment}`"
                     :contract="address"  
                     :members="data[currentRepayment].approvedMembers">
                 </members-list>

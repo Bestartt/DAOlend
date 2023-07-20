@@ -56,7 +56,6 @@
 
                         подтвердившие участники: 
                         <members-list
-                            :fetch-key="`credit request members ${address} ${credit_request.id}`"
                             :contract="address"  
                             :members="credit_request.approvedMembers">
                         </members-list>

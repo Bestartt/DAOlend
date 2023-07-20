@@ -24,27 +24,26 @@
 
 
 <template>
-    <div class="modal fade" id="request_credit">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5">Создать запрос на кредит</h1>
-                <button class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
+    <modal>
+        <h1 class="modal-title fs-5">Создать заявку на кредит</h1>
+        <hr>
 
-            <div class="modal-body">
-                <label class="form-label" for="amount">Сумма</label>
-                <input v-model="amount" id="amount" class="form-control">
+        <p text-gray>
+            Кредит будет одобрен если участники имеющие в общем счете больше 60% депозита
+            подтвердять эту заявку
+        </p>
 
-                <label class="form-label" for="term">Срок</label>
-                <input v-model="term" id="term" class="form-control">
-            </div>
 
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                <button class="btn btn-dark" data-bs-dismiss="modal" @click="call()">Отправить</button>
-            </div>
-            </div>
-        </div>
-    </div>
+        <label class="form-label" for="amount">Сумма</label>
+        <input v-model="amount" id="amount" class="form-control">
+
+        <label class="form-label" for="term">Срок</label>
+        <input v-model="term" id="term" class="form-control">
+
+
+        <button class="btn btn-dark mt-3"  @click="call()">
+            <button-loading :loading="loading">создать</button-loading>
+        </button>
+      
+    </modal>
 </template>
