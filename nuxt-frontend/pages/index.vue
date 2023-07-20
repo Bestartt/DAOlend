@@ -23,7 +23,7 @@
         <br>
         <nuxt-link 
           mt-3
-          to="unions/my" 
+          :to="`/unions/${my_union_address}/`" 
           v-if="my_union_exists" 
           class="btn btn-outline-dark">перейти к моей организации
         </nuxt-link>

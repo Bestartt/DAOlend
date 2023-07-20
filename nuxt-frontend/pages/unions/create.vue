@@ -52,7 +52,7 @@
                 address: address
             });
 
-            router.push("/unions/my");
+            router.push(`/unions/${address}/`);
 
         } catch(e) {
             console.error(e);

@@ -24,3 +24,11 @@ export const useNotification = defineStore('notifications', () => {
 
 })
 
+
+export const useModal = defineStore('modal', () => {
+    let isOpen = ref(false);
+
+    return { isOpen }
+
+})
+

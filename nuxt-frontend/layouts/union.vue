@@ -3,7 +3,8 @@
 
 
     let route = useRoute();
-    let address = route.params.address;
+    // @ts-ignore
+    let address: string = route.params.address;
     
     let { data, pending, status } = await useAsyncData('organization_data', async () => {
         // @ts-ignore

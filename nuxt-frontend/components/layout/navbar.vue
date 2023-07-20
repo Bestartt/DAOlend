@@ -54,7 +54,7 @@
 
                         <ul class="dropdown-menu" style="z-index: 10;" v-auto-animate>
                             <template v-if="myUnionExists">
-                                <nuxt-link prefetch to="/unions/my" class="dropdown-item">
+                                <nuxt-link prefetch :to="`/unions/${my_union.get()}/`" class="dropdown-item">
                                     моя организация
                                 </nuxt-link >
                                 <li><hr class="dropdown-divider"></li>
