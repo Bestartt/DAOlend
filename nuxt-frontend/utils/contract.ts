@@ -171,7 +171,7 @@ export async function checkRequestStatus(address: string, name: string): Promise
 type JoinRequest = {address: string, username: string}
 
 
-export async function getRequestsData(requests: JoinRequest[]) {
+export async function getJoinRequests(requests: JoinRequest[]) {
     let unions: any = [];
 
     for (let i = 0; i < requests.length; i++) {

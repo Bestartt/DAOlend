@@ -55,7 +55,7 @@
         </b> 
 
         <!-- empty -->
-        <div v-if="data && data.length == 0">
+        <div v-if="data && data.length == 0 && !pending">
             <h2 text-gray>Пусто</h2>
         </div>
 

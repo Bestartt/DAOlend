@@ -33,10 +33,10 @@ export function uuid() {
 }
 
 
+/**
+ * localStorage wrapper to make it like ORM for multiple values
+ */
 export class LocalDB<T> {
-    /**
-     * localStorage wrapper to make it like ORM for multiple values
-     */
 
     name: string;
     exists: boolean;
@@ -82,12 +82,10 @@ export class LocalDB<T> {
 
 }
 
-
-export class LocalKV {
     /**
      * localStorage wrapper for single string
      */
-
+export class LocalKV {
     name: string;
     exists: boolean;
 

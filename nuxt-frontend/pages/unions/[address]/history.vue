@@ -67,24 +67,22 @@
             </div>            
         </div>
 
-        <h3>История пока недопступно, нужно немного времени</h3>
-
 
         <!-- history not available -->
-        <!-- <div v-if="networkIsLocal">
+        <div v-if="networkIsLocal">
             <h4 text-gray>
                 Нельзя видить историю локально
             </h4>
             <span text-gray>К сожалению просмотр транзакции в локальной сети не работает</span>            
-        </div> -->
+        </div>
 
 
-        <!-- <div v-if="transactions.length == 0 && !loading && !networkIsLocal">
+        <div v-if="transactions.length == 0 && !loading && !networkIsLocal">
             <h3 text-gray>Пусто</h3>
             <b text-gray>пока никаких действий нету</b>
-        </div> -->
+        </div>
 
-        <!-- <div v-auto-animate>
+        <div v-auto-animate>
             <div v-for="(transaction, i) in transactions" class="card mt-3">
 
                 <div class="card-header flex justify-between">
@@ -99,26 +97,26 @@
                 <div class="card-body row items-center">
 
                     <div class="flex flex-col col-3">
-                        <template v-if="transaction.methodName == 'repay'">
+                        <template v-if="transaction.methodName == 'createRepayment'">
                             <i>месяц: {{ transaction.argument.month }}</i>
                             <i>сумма: {{ transaction.argument.amount }}</i>
                         </template>
 
-                        <template v-if="transaction.methodName == 'createCreditRequest'">
+                        <template v-if="transaction.methodName == 'createCredit'">
                             <i>имя кредитора: {{ transaction.argument.deptor }}</i>
                             <i>сумма: {{ transaction.argument.amount }}</i>
                             <i>срок: {{ transaction.argument.term }}</i>
                         </template>
 
-                        <template v-if="transaction.methodName == 'deposit'">
+                        <template v-if="transaction.methodName == 'createDeposit'">
                             <i>сумма: {{ transaction.argument[0] }}</i>
                         </template>
 
-                        <template v-if="transaction.methodName == 'approveCreditRequest'">
+                        <template v-if="transaction.methodName == 'approveCredit'">
                             <i>номер кредита: {{ transaction.argument[0] }}</i>
                         </template>
 
-                        <template v-if="transaction.methodName == 'createJoinRequest'">
+                        <template v-if="transaction.methodName == 'createJoin'">
                             <i>заявитель: {{ transaction.argument[0] }}</i>
                         </template>
 
@@ -127,7 +125,12 @@
 
                     <div class="col-9">
                         <span>участник: </span>
-                        <b class="truncat">{{ members[i].name }}</b> <br>
+                        <nuxt-link :to="`/unions/${address}/${members[i].member}/member-detail/`" class="dark-link">
+
+                            {{ members[i].name }}
+                        </nuxt-link>
+                        <b class="truncat">
+                        </b> <br>
                         <i>адрес: {{ transaction.from }}</i>
 
                         <button class="btn btn-light btn-sm mb-1 ms-2" @click="copy(transaction.from)">копировать</button>
@@ -137,7 +140,7 @@
                 </div>                
             </div>
 
-        </div> -->
+        </div>
         <!-- transactions list -->
 
 

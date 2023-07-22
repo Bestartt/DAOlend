@@ -41,7 +41,7 @@
 
         background-color: transparent;
         z-index: 10;  
-        transition: 0.2s;
+        transition: 0.3s;
     }
 
     .my-modal-active {
@@ -57,7 +57,7 @@
         overflow: hidden;
         position: fixed;
         border-radius: 10px;
-        transition: 0.2s;
+        transition: 0.4s;
         z-index: 11;
         
         display: flex;

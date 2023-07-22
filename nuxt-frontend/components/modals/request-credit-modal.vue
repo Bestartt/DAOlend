@@ -12,12 +12,21 @@
 
     async function call() {
         loading.value = true;
-        await contract.createCredit(amount.value, term.value);
-        
-        notif.notify(
-            "Транзакция в очереди", 
-            "скоро запрос на кредит будет создан"
-        )
+
+        try {
+            await contract.createCredit(amount.value, term.value);
+            
+            notif.notify(
+                "Транзакция в очереди", 
+                "скоро запрос на кредит будет создан"
+            )            
+        } catch (e) {
+            console.error(e);
+
+            alert("Произошла ошибка или транзакция отменена");
+        }
+
+        loading.value = false;
     }
 
 </script>

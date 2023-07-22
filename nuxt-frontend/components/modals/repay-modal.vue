@@ -23,11 +23,11 @@
                 month.value
             );
 
-            notif.notify("Транзакция в очереди", "погашение скоро будет в силе")
+            notif.notify("Транзакция в очереди", "погашение скоро будет в создано")
         }catch (e) {
             console.error("Error occured while calling repay function");
             console.error(e);
-            notif.notify("Произошла ошибка", "не удалось создать транзакцию")
+            notif.notify("Произошла ошибка", "не удалось создать транзакцию или отменена")
         }
 
         loading.value = false;
@@ -51,8 +51,8 @@
         <label class="form-label" for="month">Месяц</label>
         <input v-model="month" id="month" class="form-control">
 
-        <button class="btn btn-dark" data-bs-dismiss="modal" @click="repay()">
-            <button-loading :loading="loading">loading</button-loading>
+        <button class="btn btn-dark mt-3" data-bs-dismiss="modal" @click="repay()">
+            <button-loading :loading="loading">создать</button-loading>
         </button>
 
     </modal>           

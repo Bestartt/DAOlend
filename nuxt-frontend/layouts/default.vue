@@ -3,7 +3,7 @@
     <main>
       <Navbar />
       <notification></notification>
-      <div px-5 md:px-24 block bg-gray-1 style="min-height: 90vh;">
+      <div class="px-5 md:px-24 bg-gray-1 content">
         <slot/>
       </div>
       
@@ -11,3 +11,12 @@
     </main>
 
 </template>
+
+
+
+<style scoped>
+  .content {
+    display: block;
+    min-height: 90vh;
+  }
+</style>

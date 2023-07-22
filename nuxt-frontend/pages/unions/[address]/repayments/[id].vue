@@ -38,9 +38,15 @@
         <div flex justify-between>
             <h4>Погашения на кредит</h4>
 
-            <button class="btn btn-dark" @click="refresh()">
-                обновить
-            </button>
+            <div>
+                <button class="btn btn-outline-dark me-2" @click="currentRepayment = -1; modal.open()">
+                    создать
+                </button>
+    
+                <button class="btn btn-dark" @click="refresh()">
+                    обновить
+                </button>
+            </div>
         </div>
         
 
@@ -109,6 +115,9 @@
             </members-list-modal>    
         </template>
 
+        <template v-if="currentRepayment === -1">
+            <repay-modal :address="address" :credit-id="creditId"></repay-modal>
+        </template>
 
     </div>
 </template>

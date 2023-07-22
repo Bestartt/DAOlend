@@ -1,4 +1,4 @@
-import { LocalDB } from "./utilities";
+import { LocalDB, LocalKV } from "./utilities";
 
 
 type UnionCreate = {

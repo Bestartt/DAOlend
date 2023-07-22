@@ -11,7 +11,6 @@
     let contract: Contract = new Contract(address);
 
     let currentCredit = ref(-1);
-    let userAddress = ref(connection.getCurrentUserAddress());
     let modalOpen = ref(false);
 
     let { data, pending, refresh, status } = useAsyncData(
@@ -57,11 +56,14 @@
                         сумма: {{ credit.amount }} <br>  
                         срок: {{ credit.term }} месяцев <br>
                         погашено: {{ credit.repaid }} <br>
+
+                        <b v-if="credit.amount <= credit.repaid" my-2>Кредит полностью погашен ✅</b>
+
                         <br>
 
                         <!-- actions -->                        
                         <nuxt-link prefetch :to="`/unions/${address}/repayments/${credit.id}/`" 
-                            class="btn btn-outline-dark me-1"
+                            class="btn btn-outline-dark me-1 mt-3"
                         >
                             погашения
                         </nuxt-link>

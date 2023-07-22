@@ -14,19 +14,24 @@ export const useNotification = defineStore('notifications', () => {
         description.value = _description;
         link.value = _link;
 
+        setTimeout(() => {
+            isOpen.value = false;
+        }, 10_000);
+
     }
 
     function close() {
         isOpen.value = false;
     }
 
-    return { isOpen, title, link, notify, close, description }
+    return { isOpen, title, link, description, notify, close }
 
 })
 
 
 export const useModal = defineStore('modal', () => {
     let isOpen = ref(false);
+    let name = ref("");
 
     function open() {
         isOpen.value = true;

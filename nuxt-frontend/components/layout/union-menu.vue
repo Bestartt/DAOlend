@@ -47,7 +47,7 @@
 </script>
 
 <template>
-    <ul class="nav nav-pills flex-column sidenav bg-white card card-body" style="height: fit-content;">
+    <ul class="nav nav-pills sidenav card card-body mt-17" style="height: fit-content;">
 
         <li v-for="item in menu" class="nav-item">
 
@@ -69,6 +69,8 @@
 
     .sidenav .nav-link {
         color: black;
+        background-color: white;
+        flex-direction: column;
     }
 </style>
 

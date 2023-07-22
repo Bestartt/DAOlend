@@ -56,33 +56,36 @@
             
             <!-- card list -->
             <template v-for="credit_request in data">
-                <div class="card card-body max-w-400px mt-3">
-                    <p>
-                        заемщик: {{ credit_request.name }} <br>
-                        сумма: {{ credit_request.amount }} <br>
-                        срок: {{ credit_request.term }} <br>
+                <div class="card max-w-400px mt-3">
+                    <div class="card-header">
+                        <b>заемщик: {{ credit_request.name }}</b>
+                    </div>
+
+                    <div class="card-body">
+                        <p>
+                            сумма: {{ credit_request.amount }} <br>
+                            срок: {{ credit_request.term }} <br>
 
 
-                        подтвердившие участники: 
-                        <members-list
-                            :contract="address"  
-                            :members="credit_request.approvedMembers">
-                        </members-list>
+                            подтвердившие участники: 
+                            <members-list
+                                :contract="address"  
+                                :members="credit_request.approvedMembers">
+                            </members-list>
 
-                        <b text-gray v-if="credit_request.approvedMembers.length == 0">
-                            пока нет
-                        </b>
-                    </p>
-                    
-                    <!-- buttons -->
-                    <button v-if="credit_request.confirmed" disabled class="btn btn-dark">
-                        кредит создан
-                    </button>
+                        </p>
+                        
+                        <!-- buttons -->
+                        <button v-if="credit_request.confirmed" disabled class="btn btn-dark">
+                            кредит создан
+                        </button>
 
-                    <button v-else-if="currentUser !== credit_request.member.toLocaleLowerCase()"
-                        @click="approve(credit_request[0], address)" 
-                        class="btn btn-dark">подтвердить
-                    </button>
+                        <button v-else-if="currentUser !== credit_request.member.toLocaleLowerCase()"
+                            @click="approve(credit_request[0], address)" 
+                            class="btn btn-dark">подтвердить
+                        </button>                        
+                    </div>
+
 
 
                 </div>
@@ -90,5 +93,6 @@
         </div>
 
          <request-credit-modal :contract-address="address"/>  
+         
     </div>
 </template>

@@ -37,7 +37,7 @@
             </li>
         </ul>
 
-        <button @click="refresh()" class="btn btn-light btn-sm">обновить</button>
+        <b v-if="status == 'success' && data.length == 0" text-gray>Подтвердивших пока нет</b>
 
     </div>
 

@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { expect, assert } from "chai";
 import { ethers } from "hardhat";
 
 import { CreditUnion } from "../typechain-types";
@@ -61,6 +61,7 @@ describe("Credit Union", function () {
             let deposit = await contract.deposits(0);
             let depositList = await contract.getDeposits();
 
+            expect(deposit.member).to.eq(owner.address);
             expect(deposit.member).to.eq(owner.address);
             expect(deposit.amount).to.eq(1000);
             expect(depositList[0].amount).to.eq(1000);
@@ -173,6 +174,16 @@ describe("Credit Union", function () {
             
         });
 
+        it("test credit counter", async function () {
+            await contract.createCredit(500, 3, datetime());
+            await contract.createCredit(6000, 3, datetime());
+            await contract.createCredit(7000, 3, datetime());
+        
+            let credits = await contract.getCredits();
+
+            expect(await credits.map(c => c.id)).to.deep.eq([0, 1, 2, 3]);
+        })
+
     });
 
 
@@ -217,7 +228,6 @@ describe("Credit Union", function () {
             expect(repayment.confirmed).to.be.true;
             expect(credit.repaid).to.eq(1000);
             expect(approvedMembers).to.deep.eq(expected);
-        })
-
+        });
     })
 })

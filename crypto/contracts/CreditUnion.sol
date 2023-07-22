@@ -257,6 +257,8 @@ contract CreditUnion {
             createdAt: dateTime,
             confirmedAt: 0
         }));
+
+        depositCounter++;
     }
 
     function depositApprovedList(uint id) view public returns(address[] memory) {
@@ -284,6 +286,8 @@ contract CreditUnion {
             createdAt: dateTime,
             confirmedAt: 0
         }));
+
+        creditCounter++;
     }
 
     // return bool if minimum 60% of all members have approved

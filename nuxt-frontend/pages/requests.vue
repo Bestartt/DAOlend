@@ -1,23 +1,17 @@
-<script setup lang="ts">
-    import autoAnimate from "@formkit/auto-animate";
-    import { useAsyncData } from "nuxt/app";    
-    
-    let requests = join_requests.get();
-    let unions = ref<any[]>([]);
-
-    const union_list = ref();
-
-
-    let { data, pending, status } = useAsyncData("requests", async() => await getRequestsData(requests));
-
-    onMounted(async () => {
-        unions.value = await getRequestsData(requests);
-        autoAnimate(union_list.value);
-    })
+<script setup lang="ts">    
+    let { data, pending, status } = useAsyncData(
+        "my requests", 
+        async() => await getJoinRequests(join_requests.get())
+    );
 
     function remove(index: number) {
-        unions.value.splice(index, 1);
+        data.value.splice(index, 1);
         join_requests.remove(index);
+    }
+
+    function clear() {
+        join_requests.clear();
+        data.value = [];
     }
 
 </script>
@@ -25,42 +19,50 @@
 <template>
 
     <div class="center px-12 py-6">
+        <!-- header -->
         <div class="min-w-430px flex justify-between">
             <h4>Ваши запросы</h4>
-            <button @click="join_requests.clear(); data = []" class="btn btn-danger">очистить</button>
+            <button @click="clear()" class="btn btn-danger">
+                очистить
+            </button>
         </div>
 
         <!-- loading -->
-        <div class="w-full h-10vh flex justify-center items-center" v-if="pending">
-            <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>            
-        </div>
+        <spinner :pending="pending"></spinner>
 
+        <!-- error -->
         <b v-if="status == 'error'">
             <error-alert></error-alert>     
         </b> 
         
         <div v-auto-animate v-if="status == 'success'">
             <div v-for="(union, i) in data" class="card card-body mt-3 max-w-700px">
+                
+                <!-- card header -->
                 <div flex justify-between>
                     <h3>{{ union.name }}</h3>
                     <button class="btn-close btn-sm" @click="remove(i)"></button>
                 </div>
                 
-
+                <!-- data -->
                 <p>основатель: {{ union.ownerName }}</p>
                 <p>адрес: {{ union.address }}</p>
 
+                <!-- status -->
                 <p>статус: 
                     <span v-if="union.joined" text-green>
-                        <span class="badge rounded-pill text-bg-success">вы вступили</span>
+                        <span class="badge rounded-pill text-bg-success">
+                            вы вступили
+                        </span>
                     </span>
                     <span v-else>
-                        <span class="badge rounded-pill text-bg-warning">ожидание</span>
+                        <span class="badge rounded-pill text-bg-warning">
+                            ожидание
+                        </span>
                     </span>
                 </p>
 
+                <!-- link -->
                 <router-link 
                     :to="`/unions/${union.address}/`" 
                     class="btn btn-dark" 

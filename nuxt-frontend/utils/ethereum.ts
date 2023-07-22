@@ -18,6 +18,7 @@ export const connection = {
         await provider?.send("eth_requestAccounts", []);
     },
 
+    // check if website connected to metamask
     async isConnected() {
         let provider = this.getProvider();
         const accounts = await provider.listAccounts();

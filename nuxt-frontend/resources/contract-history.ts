@@ -15,13 +15,14 @@ type networks = "sepolia" | "goerli" | "homestead"
 
 
 export const actions_dict = {
-    deposit: "вложение",
-    createJoinRequest: "запрос на вступление",
-    approveJoinRequest: "подтверждение запроса на вступление",
-    createCreditRequest: "запрос на кредит",
-    approveCreditRequest: "потверждение запроса на кредит",
-    repay: "погашение",
-    null: "неизвестно"
+    createDeposit: "создан депозит",
+    createJoin: "создан запрос на вступление",
+    approveJoin: "подтверждение запроса на вступление",
+    createCredit: "создан запрос на кредит",
+    approveCredit: "потверждение запроса на кредит",
+    createRepayment: "создан погашение",
+    approve: "подтверждение",
+    null: "создание контракта"
 }
 
 

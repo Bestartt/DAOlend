@@ -134,6 +134,8 @@
 
 <style>
     .form {
-        @apply max-w-700px mt-16 px-10 py-10;
+        max-width: 700px;
+        margin-top: 4rem;
+        padding: 2.5rem;
     }
 </style>

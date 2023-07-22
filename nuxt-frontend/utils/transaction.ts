@@ -68,7 +68,6 @@ export class Transaction {
             this.transaction.input
         );
 
-        debugger;
 
         return data;
     }
