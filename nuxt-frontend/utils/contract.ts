@@ -108,6 +108,10 @@ export class Contract {
         return await this.contract.getCredits(); 
     }
 
+    async getCredit(id: number) {
+        return await this.contract.credits(id);
+    }
+
     async getCreditApprovals(id: number) {
         return this.contract.creditApprovedList(id);
     }
