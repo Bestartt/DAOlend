@@ -42,20 +42,3 @@
     </div>
 
 </template>
-
-
-<style>
-    .dark-link {
-        text-underline-offset: 0.25em!important;
-        color: #3a3a3a;
-        text-decoration-color: #959595;
-        transition: all 0.5s;
-    }
-
-    .dark-link:hover {
-        color: black;
-        font-weight: 115%;
-        text-decoration-color: black;
-    }
-</style>
-

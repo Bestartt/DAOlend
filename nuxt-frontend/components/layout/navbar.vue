@@ -1,26 +1,10 @@
 <script setup lang="ts">
-    let myUnionExists = ref(false);
-
-    let requests = join_requests.get();
-    let unions = ref<any[]>([]);
     let network = ref("");
+    let isOpen = ref(false);
 
-    async function getOrganizationData() {
-        let joinRequests = await getJoinRequests(requests);
-        unions.value = joinRequests.filter(request => request.joined);
-        myUnionExists.value = await connection.contractExists(my_union.get());        
-    }
-
-    function update(event: MouseEvent) {
-        event.stopPropagation();
-
-        getOrganizationData();
-    }
 
     onMounted(async () => {
-        getOrganizationData();
         let network_name = (await connection.getNetwork()).name;
-
         if (network_name == "unknown") {
             network.value = "локальная"
         }else if (network_name == "homestead") {
@@ -57,34 +41,8 @@
                 <ul class="navbar-nav">
 
                     <!-- dropdown -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">организации</a>
-
-                        <ul class="dropdown-menu" v-auto-animate>
-
-                            <!-- my union -->
-                            <template v-if="myUnionExists">
-                                <nuxt-link prefetch :to="`/unions/${my_union.get()}/`" class="dropdown-item">
-                                    моя организация
-                                </nuxt-link >
-                                <li><hr class="dropdown-divider"></li>
-                            </template>
-
-                            <!-- unions list -->
-                            <template v-for="union in unions">
-                                <nuxt-link 
-                                    :to="`/unions/${union.address}/`" 
-                                    class="dropdown-item"
-                                >
-                                    {{ union.name }}
-                                </nuxt-link>
-                            </template>
-                            
-                            <!-- end dropdown -->
-                            <li v-if="unions.length > 0"><hr class="dropdown-divider"></li>
-                            <button class="dropdown-item btn btn-warning" @click.stop="update">обновить</button>
-
-                        </ul>
+                    <li class="nav-item">
+                        <button class="nav-link" @click="isOpen = true;">организации</button>
                     </li>
 
                     <li class="nav-item">   
@@ -96,12 +54,13 @@
                     </li>
 
                     <li class="nav-item">
+                        <nuxt-link prefetch to="/unions/create" class="nav-link">создать</nuxt-link>
+                    </li>
+
+                    <li class="nav-item">
                         <nuxt-link prefetch to="/created-unions" class="nav-link">созданные</nuxt-link>
                     </li>
                 </ul>
-
-
-
             </div>
 
             <div class="d-none d-md-flex" flex flex-col mr-22>
@@ -109,6 +68,9 @@
                 <b text-lg style="margin-top: -10px;">{{ network }}</b>                    
             </div>
         </div>
+
+        <unions-modal :is-open="isOpen" @on-close="isOpen = false"></unions-modal>
+
     </nav>
 </template>
 
@@ -118,3 +80,5 @@
         z-index: 100;
     }
 </style>
+
+

@@ -83,4 +83,65 @@
     background-color: #dc3f4e 
   }
 
+  .my-modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 0;   
+        height: 0;
+        transform: translate(-50%, -50%);
+        z-index: inherit;
+        transition: 0.3s;
+    }
+
+    .my-modal-active {
+        width: 100vw;
+        height: 100vh;
+        display: block;
+        background-color:rgba(0, 0, 0, 0.426);
+        backdrop-filter: blur(3px);
+    }
+
+    .my-modal-dialog {
+        width: 0;
+        height: 0;
+        overflow: hidden;
+        position: fixed;
+        border-radius: 10px;
+        transition: 0.4s;
+        z-index: 11;
+        
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 5px 30px 0 rgba(0,0,0, 0.05);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+    }
+
+    .my-dialog-active {
+        height: auto;
+        z-index: 9999;
+        width: 500px;
+    }
+
+    .btn-close {
+        padding: 10px 10px;
+        box-shadow: 0px 0px 10px gray;
+    }
+
+    .dark-link {
+        text-underline-offset: 0.25em!important;
+        color: #3a3a3a;
+        text-decoration-color: #959595;
+        transition: all 0.5s;
+    }
+
+    .dark-link:hover {
+        color: black;
+        font-weight: 115%;
+        text-decoration-color: black;
+    }
+
 </style>

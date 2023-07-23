@@ -12,6 +12,7 @@
     let username = ref("");
     let loading = ref(false);
     let joinLoading = ref(false);
+    let unions = ref(joined_unions.get());
 
 
     async function find() {
@@ -58,6 +59,11 @@
         
     }
 
+    async function add_to_joined_unions() {
+        joined_unions.add(contract_address.value);
+        unions.value = joined_unions.get();
+    }
+
     onMounted(() => {
         connection.requestMetamask();
     })
@@ -92,9 +98,16 @@
                 <template v-if="has_joined">
                     <b>Вы уже член организации</b>
 
-                    <router-link :to="`/unions/${contract_address}/`" class="btn btn-dark">
-                        перейти
-                    </router-link>
+
+                    <div mt-3>
+                        <router-link :to="`/unions/${contract_address}/`" class="btn btn-dark">
+                            перейти
+                        </router-link>
+
+                        <button class="btn btn-dark ms-2" v-if="!unions.includes(contract_address)" @click="add_to_joined_unions()">
+                            добавить в организации
+                        </button>
+                    </div>
                 </template>
 
                 <button v-else  class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#join">

@@ -27,7 +27,6 @@ export default defineNuxtConfig({
     '~/components',
     '~/components/modals',
     '~/components/layout',
-    '~/components/pages',
     '~/components/utils',
   ]
 })
