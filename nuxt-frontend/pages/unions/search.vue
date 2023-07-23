@@ -61,6 +61,7 @@
 
     async function add_to_joined_unions() {
         joined_unions.add(contract_address.value);
+        join_requests.add(contract_address.value);
         unions.value = joined_unions.get();
     }
 
