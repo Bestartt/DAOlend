@@ -14,7 +14,7 @@ type UnionCreate = {
 
 }
 
-type JoinRequest = {address: string, username: string}
+type JoinRequest = {address: string, userAddress: string}
 
 
 

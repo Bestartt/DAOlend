@@ -164,15 +164,20 @@ export async function createContract(
 /**
  * checks if name is already in contract members
  */
-export async function checkRequestStatus(address: string, name: string): Promise<boolean> {
+export async function checkRequestStatus(address: string, userAddress: string): Promise<boolean> {
     let contract = new Contract(address);
-    let members = await contract.getMembers();
-    return members.some(member => member.name == name);
-    
+    debugger;
+
+    try {
+        let member = await contract.getMember(userAddress);
+        return member.confirmed;
+    } catch(e) {
+        return false;
+    }    
 }
 
 
-type JoinRequest = {address: string, username: string}
+type JoinRequest = {address: string, userAddress: string}
 
 
 export async function getJoinRequests(requests: JoinRequest[]) {
@@ -184,7 +189,7 @@ export async function getJoinRequests(requests: JoinRequest[]) {
 
         try {
             let data = await contract.getData();
-            let is_joined = await checkRequestStatus(request.address, request.username);
+            let is_joined = await checkRequestStatus(request.address, request.userAddress);
 
             data["joined"] = is_joined;
             data["address"] = request.address;

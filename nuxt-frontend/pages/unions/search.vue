@@ -47,8 +47,9 @@
         let contract = new Contract(contract_address.value);
 
         try {
+            let user_address = connection.getCurrentUserAddress();
             await contract.createJoin(username.value);
-            join_requests.add({address: contract_address.value, username: username.value})
+            join_requests.add({address: contract_address.value, userAddress: user_address})
             router.push("/requests");
 
         } catch (e) {
@@ -60,8 +61,9 @@
     }
 
     async function add_to_joined_unions() {
+        let user_address = connection.getCurrentUserAddress();
         joined_unions.add(contract_address.value);
-        join_requests.add(contract_address.value);
+        join_requests.add({"address": contract_address.value, "userAddress": user_address});
         unions.value = joined_unions.get();
     }
 

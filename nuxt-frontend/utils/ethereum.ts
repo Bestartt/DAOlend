@@ -39,7 +39,7 @@ export const connection = {
         }            
     },
 
-    getCurrentUserAddress() {
+    getCurrentUserAddress(): string {
         // @ts-ignore
         return window.ethereum.selectedAddress;
     },
