@@ -122,7 +122,7 @@
         </template>
 
         <template v-if="currentRepayment === -1">
-            <repay-modal :address="address" :credit-id="creditId"></repay-modal>
+            <repay-modal :address="address" :credit-id="Number(creditId)"></repay-modal>
         </template>
 
     </div>
