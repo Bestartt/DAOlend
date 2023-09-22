@@ -40,9 +40,7 @@
         }        
     }
 
-    updateMenu();
-
-    watch(route, updateMenu);
+    watchEffect(updateMenu);
 
 </script>
 
