@@ -93,7 +93,7 @@
 
                     <h4 v-if="unions.length == 0 && !myUnionExists"><b text-gray>Пусто</b></h4>
 
-                    <button class="btn btn-dark" @click="update()">обновить</button>              
+                    <button class="btn btn-dark" @click="update()">refresh</button>              
                 </div>
 
             </div>

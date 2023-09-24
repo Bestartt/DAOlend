@@ -81,7 +81,7 @@
         
 
         <div class="card card-body form">
-            <h3>Создать организацию</h3>
+            <h3>create организацию</h3>
 
             <!-- basic info form -->
             <input v-model="union_name" class="form-control" placeholder="имя вашей организации">
@@ -124,7 +124,7 @@
 
 
             <button mt-5 @click="create()" class="btn btn-dark">
-                <button-loading :loading="loading">создать</button-loading>
+                <button-loading :loading="loading">create</button-loading>
             </button>
 
         </div>        

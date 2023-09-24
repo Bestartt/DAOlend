@@ -56,8 +56,8 @@
 
         <!-- head -->
         <div flex justify-between>
-            <h4>История</h4>
-            <button  class="btn btn-dark" @click="update()">обновить</button>
+            <h4>History</h4>
+            <button  class="btn btn-dark" @click="update()">refresh</button>
         </div>
 
         <!-- loading -->
@@ -98,42 +98,42 @@
 
                     <div class="flex flex-col col-3">
                         <template v-if="transaction.methodName == 'createRepayment'">
-                            <i>месяц: {{ transaction.argument.month }}</i>
-                            <i>сумма: {{ transaction.argument.amount }}</i>
+                            <i>month: {{ transaction.argument.month }}</i>
+                            <i>amount: {{ transaction.argument.amount }}</i>
                         </template>
 
                         <template v-if="transaction.methodName == 'createCredit'">
-                            <i>имя кредитора: {{ transaction.argument.deptor }}</i>
-                            <i>сумма: {{ transaction.argument.amount }}</i>
+                            <i>creditor's name: {{ transaction.argument.deptor }}</i>
+                            <i>amount: {{ transaction.argument.amount }}</i>
                             <i>срок: {{ transaction.argument.term }}</i>
                         </template>
 
                         <template v-if="transaction.methodName == 'createDeposit'">
-                            <i>сумма: {{ transaction.argument[0] }}</i>
+                            <i>amount: {{ transaction.argument[0] }}</i>
                         </template>
 
                         <template v-if="transaction.methodName == 'approveCredit'">
-                            <i>номер кредита: {{ transaction.argument[0] }}</i>
+                            <i>credit number: {{ transaction.argument[0] }}</i>
                         </template>
 
                         <template v-if="transaction.methodName == 'createJoin'">
-                            <i>заявитель: {{ transaction.argument[0] }}</i>
+                            <i>applicant: {{ transaction.argument[0] }}</i>
                         </template>
 
                     </div>
 
 
                     <div class="col-9">
-                        <span>участник: </span>
+                        <span>member: </span>
                         <nuxt-link :to="`/unions/${address}/${members[i].member}/member-detail/`" class="dark-link">
 
                             {{ members[i].name }}
                         </nuxt-link>
                         <b class="truncat">
                         </b> <br>
-                        <i>адрес: {{ transaction.from }}</i>
+                        <i>address: {{ transaction.from }}</i>
 
-                        <button class="btn btn-light btn-sm mb-1 ms-2" @click="copy(transaction.from)">копировать</button>
+                        <button class="btn btn-light btn-sm mb-1 ms-2" @click="copy(transaction.from)">copy</button>
 
                     </div>
                 

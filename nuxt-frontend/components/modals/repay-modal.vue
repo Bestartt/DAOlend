@@ -38,21 +38,21 @@
 
 <template>
     <modal>
-        <h1 class="modal-title fs-5">Создать погашение</h1>
+        <h1 class="modal-title fs-5">Create repayment</h1>
         <hr>
 
         <p text-gray>
-            После создания другие участники организации должны подтвердить это погашение
+            After creation other members should approve this repayment
         </p>
 
-        <label class="form-label" for="quantity">Сумма</label>
+        <label class="form-label" for="quantity">Amount</label>
         <input v-model="repayAmount" id="quantity" class="form-control">
 
-        <label class="form-label" for="month">Месяц</label>
+        <label class="form-label" for="month">Month</label>
         <input v-model="month" id="month" class="form-control">
 
         <button class="btn btn-dark mt-3" data-bs-dismiss="modal" @click="repay()">
-            <button-loading :loading="loading">создать</button-loading>
+            <button-loading :loading="loading">create</button-loading>
         </button>
 
     </modal>           

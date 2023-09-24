@@ -7,7 +7,7 @@
 <template>
     <template v-if="props.loading">
         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-        ожидание...
+        waiting...
     </template>
     <template v-else>
         <slot></slot>

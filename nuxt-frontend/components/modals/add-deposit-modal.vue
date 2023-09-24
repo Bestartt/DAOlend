@@ -24,19 +24,19 @@
 <template>
     <modal>
         <h1 class="modal-title fs-5">
-            Создать депозит
+            Create deposit
         </h1>
         <hr>
 
         <p text-gray>
-            После создания другие участники организации должны подтвердить этот депозит
+            After creation other members should approve this deposit
         </p>
 
-        <label class="form-label" for="quantity">Введите сумму депозита</label>
+        <label class="form-label" for="quantity">Enter amount of the deposit</label>
         <input v-model="quantity" id="quantity" class="form-control">
 
         <button class="btn btn-dark mt-3"  @click="call()">
-            <button-loading :loading="loading">создать</button-loading>
+            <button-loading :loading="loading">create</button-loading>
         </button>
       
     </modal>

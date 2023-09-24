@@ -24,7 +24,7 @@
 
             <!-- logo -->
             <router-link to="/" class="navbar-brand ms-20 flex">
-                <img src="/icon.svg" alt="icon" width="30" height="30"  class="d-inline-block align-text-top">
+                Daolend
             </router-link>
 
             <!-- navbar toggle button (mobile only) -->
@@ -42,23 +42,23 @@
 
                     <!-- dropdown -->
                     <li class="nav-item">
-                        <button class="nav-link" @click="isOpen = true;">организации</button>
+                        <button class="nav-link" @click="isOpen = true;">organizations</button>
                     </li>
 
                     <li class="nav-item">   
-                        <nuxt-link prefetch to="/requests" class="nav-link">мои запросы</nuxt-link>
+                        <nuxt-link prefetch to="/requests" class="nav-link">my requests</nuxt-link>
                     </li>
 
                     <li class="nav-item">
-                        <nuxt-link prefetch to="/unions/search" class="nav-link">найти</nuxt-link>
+                        <nuxt-link prefetch to="/unions/search" class="nav-link">find</nuxt-link>
                     </li>
 
                     <li class="nav-item">
-                        <nuxt-link prefetch to="/unions/create" class="nav-link">создать</nuxt-link>
+                        <nuxt-link prefetch to="/unions/create" class="nav-link">create</nuxt-link>
                     </li>
 
                     <li class="nav-item">
-                        <nuxt-link prefetch to="/created-unions" class="nav-link">созданные</nuxt-link>
+                        <nuxt-link prefetch to="/created-unions" class="nav-link">addresses</nuxt-link>
                     </li>
                 </ul>
             </div>

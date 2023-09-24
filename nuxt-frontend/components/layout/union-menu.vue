@@ -4,32 +4,32 @@
 
     let menu = computed(() => [
             {
-                name: "Главное",
+                name: "Main",
                 route: `/unions/${route.params.address}/`, 
                 class: ''
             },
             {
-                name: "Участники",
+                name: "Members",
                 route: `/unions/${route.params.address}/members/`,
             },
             {
-                name: "Депозиты",
+                name: "Deposits",
                 route: `/unions/${route.params.address}/deposits/`,
             },
             {
-                name: "Заявки на кредит",
+                name: "Loan applications",
                 route: `/unions/${route.params.address}/credit-requests/`
             },
             {
-                name: "Кредиты",
+                name: "Credits",
                 route: `/unions/${route.params.address}/credits/`,
             },
             {
-                name: "Запросы на вступление",
+                name: "Join requests",
                 route: `/unions/${route.params.address}/join/`
             },
             {
-                name: "История",
+                name: "History",
                 route: `/unions/${route.params.address}/history/`
             }
     ]);

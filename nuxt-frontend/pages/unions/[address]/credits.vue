@@ -26,7 +26,7 @@
         <!-- head -->
         <div flex justify-between>
             <h4>Кредиты</h4>
-            <button @click="refresh()" class="btn btn-dark">обновить</button>
+            <button @click="refresh()" class="btn btn-dark">refresh</button>
         </div>
         <br>
 

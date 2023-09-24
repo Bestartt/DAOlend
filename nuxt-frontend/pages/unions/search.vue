@@ -133,7 +133,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5">Создать запрос на вступление</h1>
+                    <h1 class="modal-title fs-5">create запрос на вступление</h1>
                     <button class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">

@@ -34,7 +34,7 @@
 
 <template>
     <modal>
-        <h1 class="modal-title fs-5">Создать заявку на кредит</h1>
+        <h1 class="modal-title fs-5">Create loan application</h1>
         <hr>
 
         <p text-gray>
@@ -51,7 +51,7 @@
 
 
         <button class="btn btn-dark mt-3"  @click="call()">
-            <button-loading :loading="loading">создать</button-loading>
+            <button-loading :loading="loading">create</button-loading>
         </button>
       
     </modal>

@@ -33,8 +33,8 @@
 <template>
     <div>
         <div flex justify-between>
-            <h4>Запросы на вступление</h4>
-            <button class="btn btn-dark" @click="refresh()">обновить</button>
+            <h4>Join requests</h4>
+            <button class="btn btn-dark" @click="refresh()">refresh</button>
         </div>
         <br>
 

@@ -45,7 +45,7 @@
 
             <div>
                 <button @click="modal.open()"  class="btn btn-outline-dark me-1" > Добавить</button>
-                <button @click="refresh()" class="btn btn-dark">обновить</button>
+                <button @click="refresh()" class="btn btn-dark">refresh</button>
             </div>
         </div>
         <br>

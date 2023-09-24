@@ -39,9 +39,8 @@
       <div>
 
         <!-- title -->
-        <h1 mt-24>Takesep DeFi</h1>
-        <h3>Платформа для кредитных организации</h3>
-        <span>Введите свои отчеты прозрачно через блокчейн</span>
+        <h1 mt-24>Daolend</h1>
+        <h3>Connecting Wallets to Profits - <br> Your Bridge to the Future of Finance</h3>
     
         <br>
 
@@ -83,7 +82,7 @@
             </p>
   
           
-            <nuxt-link prefetch to="/unions/create" class="btn btn-dark">создать</nuxt-link>
+            <nuxt-link prefetch to="/unions/create" class="btn btn-dark">create</nuxt-link>
           </div>
     
           <!-- find -->

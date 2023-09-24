@@ -45,12 +45,12 @@
             <div>
                 <template v-if="creditStatus == 'success' && credit.member.toLowerCase() == user">
                     <button class="btn btn-outline-dark me-2" @click="currentRepayment = -1; modal.open()">
-                        создать
+                        create
                     </button>
                 </template>
 
                 <button class="btn btn-dark" @click="refresh()">
-                    обновить
+                    refresh
                 </button>
             </div>
         </div>

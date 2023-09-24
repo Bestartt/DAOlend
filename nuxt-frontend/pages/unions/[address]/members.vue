@@ -35,7 +35,7 @@
             <h4>Участники организации</h4>
 
             <button class="btn btn-dark" @click="refresh()">
-                обновить
+                refresh
             </button>
         </div>
         

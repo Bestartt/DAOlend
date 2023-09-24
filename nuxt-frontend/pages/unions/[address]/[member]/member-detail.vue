@@ -24,7 +24,7 @@
         <!-- header -->
         <div flex justify-between>
             <h4>Данные</h4>
-            <button @click="refresh()" class="btn btn-dark">обновить</button>
+            <button @click="refresh()" class="btn btn-dark">refresh</button>
         </div>
 
         <!-- card -->
