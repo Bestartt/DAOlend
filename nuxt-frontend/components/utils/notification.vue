@@ -9,7 +9,7 @@
 <template>
     <div class="card notification-card no-shadow" :style="{ top: notif.isOpen ? `10px` : `-550px` }">
         <div class="card-header flex justify-between">
-            <b>Уведомление</b>
+            <b>Notification</b>
             <button class="btn btn-sm btn-close" @click="notif.close()"></button>
         </div>
 

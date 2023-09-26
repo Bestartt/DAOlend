@@ -40,7 +40,7 @@
 <template>
     <div>
         <div flex justify-between>
-            <h4>Погашения на кредит</h4>
+            <h4>Credit repayments</h4>
 
             <div>
                 <template v-if="creditStatus == 'success' && credit.member.toLowerCase() == user">
@@ -66,12 +66,12 @@
             <table class="table table-hover table-bordered" v-if="status == 'success' && membersStatus == 'success'">
                 <thead>
                     <tr>
-                        <th>номер</th>
-                        <th>месяц</th>
-                        <th>сумма</th>
-                        <th>подтвержден</th>
-                        <th>дата создания</th>
-                        <th>подтвердившие</th>
+                        <th>#</th>
+                        <th>month</th>
+                        <th>amount</th>
+                        <th>approved</th>
+                        <th>created at</th>
+                        <th>approved members</th>
                     </tr>
                 </thead>
 
@@ -102,9 +102,9 @@
                                     v-if="repayment.approvedMembers.some(m => m.toLowerCase() == user)" 
                                     disabled
                                 >
-                                    вы подтвердили
+                                    you have approved
                                 </button>
-                                <button class="btn btn-dark btn-sm" v-else @click="approve(repayment.id)"> подтвердить</button>
+                                <button class="btn btn-dark btn-sm" v-else @click="approve(repayment.id)"> approve</button>
                             </td>
                         </template>
                             
@@ -116,7 +116,7 @@
 
         <template v-if="currentRepayment !== -1">
             <members-list-modal :members="data[currentRepayment].approvedMembers" :contract="address">
-                <h5>Список подтвердивших членов</h5>
+                <h5>The list of the approved members</h5>
                 <hr>
             </members-list-modal>    
         </template>

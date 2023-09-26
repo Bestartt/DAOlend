@@ -37,7 +37,7 @@
             </li>
         </ul>
 
-        <b v-if="status == 'success' && data.length == 0" text-gray>Подтвердивших пока нет</b>
+        <b v-if="status == 'success' && data.length == 0" text-gray>No approved members yet</b>
 
     </div>
 

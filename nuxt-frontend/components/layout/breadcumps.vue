@@ -8,27 +8,27 @@
 
     let routes = [
         {
-            name: "Главное",
+            name: "Organization",
             route: `/unions/${props.address}`, 
         },
         {
-            name: "Участники",
+            name: "Members",
             route: `/unions/${props.address}/members`,
         },
         {
-            name: "Заявки на кредит",
+            name: "Loan applications",
             route: `/unions/${props.address}/credit-requests`
         },
         {
-            name: "Кредиты",
+            name: "Credits",
             route: `/unions/${props.address}/credits`,
         },
         {
-            name: "Запросы на вступление",
+            name: "Join applications",
             route: `/unions/${props.address}/join`
         },
         {
-            name: "История",
+            name: "History",
             route: `/unions/${props.address}/history`
         }
     ]

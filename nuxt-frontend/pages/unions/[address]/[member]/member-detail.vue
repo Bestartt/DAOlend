@@ -7,12 +7,13 @@
     let route = useRoute();
     // @ts-ignore
     let address: string = route.params.address; 
+    // @ts-ignore
     let member: string = route.params.member;
 
     let contract = new Contract(address);
 
 
-    let { data, status, pending } = useAsyncData(async() => await contract.getMember(member));
+    let { data, status, pending, refresh, error } = useAsyncData(async() => await contract.getMember(member));
  
 
 </script>
@@ -23,7 +24,7 @@
     <div>
         <!-- header -->
         <div flex justify-between>
-            <h4>Данные</h4>
+            <h4>Member details</h4>
             <button @click="refresh()" class="btn btn-dark">refresh</button>
         </div>
 
@@ -46,13 +47,13 @@
                 <h2>{{ data.name }}</h2>
 
                 <dl class="row">
-                    <dt class="col-sm-3">адрес: </dt>
+                    <dt class="col-sm-3">address: </dt>
                     <dd class="col-sm-9">{{ data.member }}</dd>
 
-                    <dt class="col-sm-3">дата вступление: </dt>
+                    <dt class="col-sm-3">joined date: </dt>
                     <dd class="col-sm-9">{{ new Date(data.joinedAt.toNumber()).toLocaleString("ru") }}</dd>
 
-                    <dt class="col-sm-3">сумма депозита: </dt>
+                    <dt class="col-sm-3">total deposit: </dt>
                     <dd class="col-sm-9">{{ data.contribution }}</dd>
 
                     

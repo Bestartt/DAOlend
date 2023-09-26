@@ -21,9 +21,9 @@
         try {
             let contract = new Contract(address);
             await contract.approveJoin(requestAddress);
-            notif.notify("Транзакция в очереди", "скоро вы будете в списке подтвердивших");            
+            notif.notify("The transaction will be completed soon", "Soon you will be in the list of approved members")          
         } catch (e) {
-            alert("отменена или ошибка")
+            alert("Canceled or error. Make sure that you have logged to Metamask");
         } finally {
             loading.value = false;
         }
@@ -50,7 +50,7 @@
         </div>
 
         <div v-if="data && data.length == 0 && !pending">
-            <h2 text-gray>Пусто</h2>
+            <h2 text-gray>Empty</h2>
         </div>
 
         <div v-if="!pending" v-auto-animate>
@@ -67,10 +67,10 @@
                     </div>
                     
                     <div class="card-body">
-                        <b v-if="request.approvedMembers.length == 0" class="text-gray">пока никто не подтвердил</b>
+                        <b v-if="request.approvedMembers.length == 0" class="text-gray">Nobody approved yet</b>
                         
                         <div v-else>
-                            <b>подтвердившие члены</b>
+                            <b>Approved members</b>
 
                             <members-list 
                                 :approved-members="request.approvedMembers" 
@@ -80,7 +80,7 @@
                         </div>
                         <br>    
                         <button max-w-200px class="btn btn-dark mt-3" @click="approve(request.member)">
-                            <button-loading :loading="loading">Подтвердить</button-loading>
+                            <button-loading :loading="loading">approve</button-loading>
                         </button>
                     </div>
                 </div>

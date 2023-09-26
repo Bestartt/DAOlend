@@ -27,10 +27,10 @@
     <div>
         <!-- header -->
         <div flex justify-between>
-            <h4>Заявки на кредит</h4>
+            <h4>Loan applications</h4>
             <div flex gap-2>
                 <button class="btn btn-outline-dark" @click="modal.open()">
-                    добавить
+                    add
                 </button>
                 <button class="btn btn-dark" @click="refresh()">refresh</button>
             </div>   
@@ -50,7 +50,7 @@
         >
             <!-- empty -->
             <div v-if="data && data.length == 0">
-                <h2 text-gray>Пусто</h2>
+                <h2 text-gray>Empty</h2>
             </div>
             
             
@@ -58,16 +58,16 @@
             <template v-for="credit_request in data">
                 <div class="card max-w-400px mt-3">
                     <div class="card-header">
-                        <b>заемщик: {{ credit_request.name }}</b>
+                        <b>borrower: {{ credit_request.name }}</b>
                     </div>
 
                     <div class="card-body">
                         <p>
-                            сумма: {{ credit_request.amount }} <br>
-                            срок: {{ credit_request.term }} <br>
+                            amount: {{ credit_request.amount }} <br>
+                            term: {{ credit_request.term }} <br>
 
 
-                            подтвердившие участники: 
+                            approved members: 
                             <members-list
                                 :contract="address"  
                                 :members="credit_request.approvedMembers">
@@ -77,12 +77,12 @@
                         
                         <!-- buttons -->
                         <button v-if="credit_request.confirmed" disabled class="btn btn-dark">
-                            кредит создан
+                            credit has been created
                         </button>
 
                         <button v-else-if="currentUser !== credit_request.member.toLocaleLowerCase()"
                             @click="approve(credit_request[0], address)" 
-                            class="btn btn-dark">подтвердить
+                            class="btn btn-dark">approve
                         </button>                        
                     </div>
 

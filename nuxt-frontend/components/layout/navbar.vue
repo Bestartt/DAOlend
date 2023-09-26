@@ -24,7 +24,7 @@
 
             <!-- logo -->
             <router-link to="/" class="navbar-brand ms-20 flex">
-                Daolend
+                DAOlend
             </router-link>
 
             <!-- navbar toggle button (mobile only) -->

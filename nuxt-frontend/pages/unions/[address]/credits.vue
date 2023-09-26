@@ -25,7 +25,7 @@
     <div>
         <!-- head -->
         <div flex justify-between>
-            <h4>Кредиты</h4>
+            <h4>Credits</h4>
             <button @click="refresh()" class="btn btn-dark">refresh</button>
         </div>
         <br>
@@ -39,7 +39,7 @@
 
         <!-- empty -->
         <div v-if="data && data.length == 0">
-            <h2 text-gray>Пусто</h2>
+            <h2 text-gray>Empty</h2>
         </div>
 
         <!-- credit list -->
@@ -48,16 +48,16 @@
             <template v-for="credit in data">
                 <div class="card max-w-500px">
                     <h5 class="card-header">
-                        <b>заемщик: {{ credit.name }}</b>
+                        <b>borrower: {{ credit.name }}</b>
                     </h5>
 
                     <!-- data -->
                     <div class="card-body">
-                        сумма: {{ credit.amount }} <br>  
-                        срок: {{ credit.term }} месяцев <br>
-                        погашено: {{ credit.repaid }} <br>
+                        amount: {{ credit.amount }} <br>  
+                        term: {{ credit.term }} months <br>
+                        repaid: {{ credit.repaid }} <br>
 
-                        <b v-if="credit.amount <= credit.repaid" my-2>Кредит полностью погашен ✅</b>
+                        <b v-if="credit.amount <= credit.repaid" my-2>Credit is fully repaid ✅</b>
 
                         <br>
 
@@ -65,7 +65,7 @@
                         <nuxt-link prefetch :to="`/unions/${address}/repayments/${credit.id}/`" 
                             class="btn btn-outline-dark me-1 mt-3"
                         >
-                            погашения
+                            repayments
                         </nuxt-link>
 
                     </div>

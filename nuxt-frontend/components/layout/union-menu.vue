@@ -4,7 +4,7 @@
 
     let menu = computed(() => [
             {
-                name: "Main",
+                name: "Organization",
                 route: `/unions/${route.params.address}/`, 
                 class: ''
             },

@@ -21,9 +21,9 @@
     <div class="center px-12 py-6">
         <!-- header -->
         <div class="min-w-430px flex justify-between">
-            <h4>Ваши запросы</h4>
+            <h4>Your join requests</h4>
             <button @click="clear()" class="btn btn-danger">
-                очистить
+                clear
             </button>
         </div>
 
@@ -45,19 +45,19 @@
                 </div>
                 
                 <!-- data -->
-                <p>основатель: {{ union.ownerName }}</p>
-                <p>адрес: {{ union.address }}</p>
+                <p>creator: {{ union.ownerName }}</p>
+                <p>address: {{ union.address }}</p>
 
                 <!-- status -->
-                <p>статус: 
+                <p>status: 
                     <span v-if="union.joined" text-green>
                         <span class="badge rounded-pill text-bg-success">
-                            вы вступили
+                            you have joined
                         </span>
                     </span>
                     <span v-else>
                         <span class="badge rounded-pill text-bg-warning">
-                            ожидание
+                            waiting
                         </span>
                     </span>
                 </p>
@@ -68,7 +68,7 @@
                     class="btn btn-dark" 
                     v-if="union.joined"
                 >
-                    перейти
+                    go to
                 </router-link>
             </div>            
         </div>

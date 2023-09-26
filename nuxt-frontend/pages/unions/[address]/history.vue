@@ -71,15 +71,15 @@
         <!-- history not available -->
         <div v-if="networkIsLocal">
             <h4 text-gray>
-                Нельзя видить историю локально
+                Impossible to get history on local network
             </h4>
-            <span text-gray>К сожалению просмотр транзакции в локальной сети не работает</span>            
+            <span text-gray>Unfortunately local network history view does not work</span>            
         </div>
 
 
         <div v-if="transactions.length == 0 && !loading && !networkIsLocal">
-            <h3 text-gray>Пусто</h3>
-            <b text-gray>пока никаких действий нету</b>
+            <h3 text-gray>Empty</h3>
+            <b text-gray>No actions yet</b>
         </div>
 
         <div v-auto-animate>
@@ -87,7 +87,7 @@
 
                 <div class="card-header flex justify-between">
                     <div class="">
-                        <span class="text-sm text-gray">действие</span> <br>
+                        <span class="text-sm text-gray">action</span> <br>
                         <b>{{ actions_dict[transaction.methodName] }}</b>   
                     </div>
                     

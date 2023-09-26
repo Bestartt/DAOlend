@@ -11,9 +11,9 @@
         loading.value = true;
         try {
             await contract.createDeposit(quantity.value);
-            notification.notify("Транзакция в очереди", "Скоро появится в списке депозитов");            
+            notification.notify("The transaction will be completed soon", "Soon will be in the list of deposits");            
         } catch (e) {
-            notification.notify("Произошла ошибка или отменена");   
+            alert("Canceled or error. Make sure that you have logged to Metamask");
         }
         loading.value = false;
     }

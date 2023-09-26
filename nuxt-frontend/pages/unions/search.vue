@@ -53,7 +53,7 @@
             router.push("/requests");
 
         } catch (e) {
-            alert("Произошла ошибка или отменена");
+            alert("Canceled or error. Make sure that you have logged to Metamask");
         }
 
         joinLoading.value = false;
@@ -81,12 +81,12 @@
         <full-loading :loading="joinLoading" />
 
         <div class="card card-body mt-26 form" v-auto-animate>
-            <h3>Найти организацию</h3>
+            <h3>Find organization</h3>
 
             <!-- input -->
             <div min-w-500px flex gap-3>
-                <input v-model="contract_address" class="form-control" placeholder="введите адрес контракта"/>
-                <button class="btn btn-dark" @click="find()">найти</button>
+                <input v-model="contract_address" class="form-control" placeholder="enter contract address"/>
+                <button class="btn btn-dark" @click="find()">find</button>
             </div>   
 
             
@@ -96,10 +96,10 @@
             <div v-if="data !== null"  class="card card-body mt-5 min-w-500px">
 
                 <h4>{{ data.name }}</h4>
-                <p>создатель: {{ data.ownerName }}</p>
+                <p>create: {{ data.ownerName }}</p>
             
                 <template v-if="has_joined">
-                    <b>Вы уже член организации</b>
+                    <b>You are already a member of the organization</b>
 
 
                     <div mt-3>
@@ -108,18 +108,18 @@
                         </router-link>
 
                         <button class="btn btn-dark ms-2" v-if="!unions.includes(contract_address)" @click="add_to_joined_unions()">
-                            добавить в организации
+                            add to registry
                         </button>
                     </div>
                 </template>
 
                 <button v-else  class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#join">
-                    присоединиться
+                    join
                 </button>
 
             </div>
 
-            <h5 v-if="not_found">Не найдено</h5>    
+            <h5 v-if="not_found">Not found</h5>    
 
             <!-- loading -->
             <div class="spinner-border mt-[10%] ms-[50%]" role="status" v-if="loading">
@@ -133,16 +133,16 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5">create запрос на вступление</h1>
+                    <h1 class="modal-title fs-5">create join request</h1>
                     <button class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <label class="form-label" for="quantity">Введите ваше имя</label>
+                    <label class="form-label" for="quantity">Enter your name</label>
                     <input v-model="username" id="quantity" class="form-control">
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                    <button class="btn btn-dark" data-bs-dismiss="modal" @click="callJoin()">Отправить</button>
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-dark" data-bs-dismiss="modal" @click="callJoin()">Send</button>
                 </div>
                 </div>
             </div>

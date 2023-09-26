@@ -24,7 +24,7 @@
       await connection.requestMetamask();
       metamask_connected.value = true;
     } catch(e) {
-      notif.notify("Не удалось подключить Metamask", "похоже вы отменили");
+      notif.notify("Could not connect to Metamask", "looks like it was canceled");
     }
 
     loading.value = false;
@@ -39,7 +39,7 @@
       <div>
 
         <!-- title -->
-        <h1 mt-24>Daolend</h1>
+        <h1 mt-24>DAOlend</h1>
         <h3>Connecting Wallets to Profits - <br> Your Bridge to the Future of Finance</h3>
     
         <br>
@@ -47,11 +47,11 @@
         <!-- connect to metamask -->
         <div mt-3 v-if="!metamask_connected">
           <hr>
-          <b>Войдите в свой Metamask прежде чем начать</b>
+          <b>Enter your Metamask wallet before enter</b>
           <br>
           <button class="btn btn-dark mt-2" @click="connectMetamask()">
             <button-loading :loading="loading">
-              подключить метамаск
+              connect metamask
             </button-loading>
           </button>
         </div>
@@ -62,14 +62,14 @@
             v-if="my_union_exists && metamask_connected" 
             class="btn btn-outline-dark mt-3"
         >
-          перейти к моей организации
+          go to my organization
         </nuxt-link>
    
       </div>  
     
       
       <!-- options -->
-      <h3 mt-24>С чего начать?</h3>
+      <h3 mt-24>What is next?</h3>
     
       <div>
         <div max-w-800px class="row gap-2">
@@ -77,8 +77,7 @@
           <!-- create own -->
           <div class="col-5 card card-body">
             <p class="card-text">
-              Хотите использовать собственную систему?
-              создайте свою организацию за пару кликов        
+              Want to create own osystem? Create your own organization in few clicks
             </p>
   
           
@@ -88,10 +87,10 @@
           <!-- find -->
           <div class="col-5 card card-body">
             <p class="card-text">
-              Или можете вступить в другую организацию. Просто введите адрес организации
+              Or you can join another organization. Just type organization address
             </p>
     
-            <nuxt-link prefetch to="/unions/search" class="btn btn-dark">найти</nuxt-link>
+            <nuxt-link prefetch to="/unions/search" class="btn btn-dark">find</nuxt-link>
           </div>
         </div> 
       </div>        

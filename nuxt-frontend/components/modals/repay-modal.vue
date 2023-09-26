@@ -23,11 +23,11 @@
                 month.value
             );
 
-            notif.notify("Транзакция в очереди", "погашение скоро будет в создано")
+            notif.notify("The transaction will be completed soon", "The repayment will be created soon");   
         }catch (e) {
             console.error("Error occured while calling repay function");
             console.error(e);
-            notif.notify("Произошла ошибка", "не удалось создать транзакцию или отменена")
+            alert("Canceled or error. Make sure that you have logged to Metamask");
         }
 
         loading.value = false;

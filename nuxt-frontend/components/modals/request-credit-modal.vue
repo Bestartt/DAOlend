@@ -17,13 +17,12 @@
             await contract.createCredit(amount.value, term.value);
             
             notif.notify(
-                "Транзакция в очереди", 
-                "скоро запрос на кредит будет создан"
+                "The transaction will be completed soon", 
+                "The join application will be created soon"
             )            
         } catch (e) {
             console.error(e);
-
-            alert("Произошла ошибка или транзакция отменена");
+            alert("Canceled or error. Make sure that you have logged to Metamask");
         }
 
         loading.value = false;
@@ -38,12 +37,11 @@
         <hr>
 
         <p text-gray>
-            Кредит будет одобрен если участники имеющие в общем счете больше 60% депозита
-            подтвердять эту заявку
+            The loan (credit) will be approved if more than 60% of deposit weight of members approve
         </p>
 
 
-        <label class="form-label" for="amount">Сумма</label>
+        <label class="form-label" for="amount">amount</label>
         <input v-model="amount" id="amount" class="form-control">
 
         <label class="form-label" for="term">Срок</label>

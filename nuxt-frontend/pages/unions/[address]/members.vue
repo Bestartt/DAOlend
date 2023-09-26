@@ -10,7 +10,7 @@
 
     let contract: Contract = new Contract(address);
 
-    let { data, pending, refresh } = useAsyncData("members", async () => {
+    let { data, pending, refresh, status } = useAsyncData("members", async () => {
         let members = await contract.getMembers();
         return members.filter(m => m.confirmed);
     });
@@ -32,14 +32,14 @@
 <template>
     <div>
         <div flex justify-between>
-            <h4>Участники организации</h4>
+            <h4>Members</h4>
 
             <button class="btn btn-dark" @click="refresh()">
                 refresh
             </button>
         </div>
         
-        <span text-gray>и их вложения</span>
+        <span text-gray>and their's deposits</span>
         <br>
 
         <b v-if="status == 'error'">
@@ -47,7 +47,7 @@
         </b> 
 
         <div class="card card-body mt-3" v-auto-animate>
-            <h4>Таблица участников</h4>
+            <h4>The table of members</h4>
 
             <div class="w-full h-10vh flex justify-center items-center" v-if="pending">
                 <div class="spinner-border" role="status">
@@ -58,10 +58,10 @@
             <table class="table table-hover table-bordered" v-else>
                 <thead>
                     <tr>
-                        <th>Имя</th>
-                        <th>Вложение</th>
-                        <th>Процент вложения</th>
-                        <th>Дата вступления</th>
+                        <th>Name</th>
+                        <th>Deposit</th>
+                        <th>Percent of deposit</th>
+                        <th>Joined date</th>
                     </tr>
                 </thead>
 

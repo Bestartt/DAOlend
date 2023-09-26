@@ -11,15 +11,15 @@
 
 <template>
     <div class="alert alert-danger my-3" role="alert">
-        <h5><b>Ошибка!</b></h5>
+        <h5><b>Error!</b></h5>
 
         <p>
-            Не удалось загрузить данные, проверьте подключен ли Metamask или интернет-подключение
+            Could not load data, check if Metamask connection and internet
             <br>    
-            Или попробуйте перезагрузить страницу
+            Or try to reload the page
         </p>
 
-        <button class="btn btn-outline-danger" @click="reload()">перезагрузить</button>
+        <button class="btn btn-outline-danger" @click="reload()">reload</button>
     </div>
 </template>
 

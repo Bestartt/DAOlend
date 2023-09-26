@@ -31,7 +31,7 @@
         let network_name = (await connection.getNetwork()).name;
 
         if (network_name == "unknown") {
-            network.value = "локальная"
+            network.value = "local"
         }else if (network_name == "homestead") {
             network.value = "ethereum"
         } else {
@@ -67,7 +67,7 @@
                     <template v-if="myUnionExists">
                         <h4>
                             <nuxt-link prefetch :to="`/unions/${my_union.get()}/`" class="dark-link">
-                               моя организация
+                               my organization
                             </nuxt-link >
                         </h4>
                         <i text-gray>{{ my_union.get() }}</i>
@@ -91,7 +91,7 @@
                     </template>
                     <br>
 
-                    <h4 v-if="unions.length == 0 && !myUnionExists"><b text-gray>Пусто</b></h4>
+                    <h4 v-if="unions.length == 0 && !myUnionExists"><b text-gray>Empty</b></h4>
 
                     <button class="btn btn-dark" @click="update()">refresh</button>              
                 </div>

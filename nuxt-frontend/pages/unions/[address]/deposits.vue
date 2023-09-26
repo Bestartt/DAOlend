@@ -22,10 +22,10 @@
         approveLoading.value = true;
         try {
             await contract.approveDeposit(id);
-            notif.notify("Транзакция скоро выполниться", "Подтверждение депозита отправлена успешно")
+            notif.notify("The transaction will be completed soon", "Deposit approval sent successfully")
         } catch(e) {
             console.error(e);
-            notif.notify("Ошибка или операция отменена");
+            alert("Canceled or error. Make sure that you have logged to Metamask");
         }
         approveLoading.value = false;
     }
@@ -41,10 +41,10 @@
     <div>
         <!-- head -->
         <div flex justify-between>
-            <h4>Депозиты</h4>
+            <h4>Deposits</h4>
 
             <div>
-                <button @click="modal.open()"  class="btn btn-outline-dark me-1" > Добавить</button>
+                <button @click="modal.open()"  class="btn btn-outline-dark me-1" >add</button>
                 <button @click="refresh()" class="btn btn-dark">refresh</button>
             </div>
         </div>
@@ -56,7 +56,7 @@
 
         <!-- empty -->
         <div v-if="data && data.length == 0 && !pending">
-            <h2 text-gray>Пусто</h2>
+            <h2 text-gray>Empty</h2>
         </div>
 
         <!-- loading -->
@@ -72,18 +72,17 @@
             <template v-for="(deposit, index) in data">
                 <div class="card max-w-500px mt-2">
                     <!-- card header -->
-                    <div class="card-header"><b>участник: {{ deposit.name }}</b></div>
+                    <div class="card-header"><b>member: {{ deposit.name }}</b></div>
 
                     <!-- info -->
                     <div class="card-body py-2 pb-0">
-                        сумма: {{ deposit.amount }} <br>
-                        подтвержден: {{ deposit.confirmed ? "✅" : "❌" }}  
+                        amount: {{ deposit.amount }} <br>
+                        approved: {{ deposit.confirmed ? "✅" : "❌" }}  
                     </div>
                     <hr>
 
                     <div class="card-body py-0 pb-3">
-                        <!-- approved members -->
-                        <b>Подтвердившие участники</b>
+                        <b>Approved members</b>
                         <members-list 
                             :members="deposit.approvedMembers" 
                             :contract="address" 
@@ -98,12 +97,12 @@
                                 @click="confirm(index)"
                             >
                                 <button-loading :loading="approveLoading">
-                                    подтвердить
+                                    approve
                                 </button-loading>
                             </button>
 
                             <button class="btn btn-dark" disabled v-else>
-                                вы подтвердили
+                                you already have approved
                             </button>
                         </template>
 

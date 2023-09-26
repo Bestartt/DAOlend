@@ -56,7 +56,7 @@
 
         } catch(e) {
             console.error(e);
-            alert("Отменена или ошибка. Удостовертесь что вы вошли в свой Metamask");
+            alert("Canceled or error. Make sure that you have logged to Metamask");
         } 
 
         loading.value = false; 
@@ -67,8 +67,8 @@
         let myUnionExists = await connection.contractExists(my_union.get());
         if (myUnionExists) {
             notif.notify(
-                "У вас уже есть организация!", 
-                "нажмите на 'организации' в меню и перейдите в 'моя организация'"
+                "You already have organization!", 
+                "Click 'organizations' on top bar then click 'my organization'"
             )
         }
     })
@@ -81,25 +81,25 @@
         
 
         <div class="card card-body form">
-            <h3>create организацию</h3>
+            <h3>create organization</h3>
 
             <!-- basic info form -->
-            <input v-model="union_name" class="form-control" placeholder="имя вашей организации">
-            <input v-model="owner_name" class="form-control mt-3" placeholder="ваше имя">
+            <input v-model="union_name" class="form-control" placeholder="organization name">
+            <input v-model="owner_name" class="form-control mt-3" placeholder="your name">
 
-            <label mt-5 for="member_id" class="form-label">Добавить участников</label>
+            <label mt-5 for="member_id" class="form-label">Add members</label>
 
             <!-- add member_addresses -->
 
             <div flex gap-2>
-                <input  v-model="members.address" class="form-control" placeholder="адрес">
-                <input v-model="members.name" class="form-control" placeholder="имя">
+                <input  v-model="members.address" class="form-control" placeholder="address">
+                <input v-model="members.name" class="form-control" placeholder="name">
 
-                <button @click="addMember()" class="btn btn-dark">Добавить</button>
+                <button @click="addMember()" class="btn btn-dark">add</button>
             </div>
 
             <div class="form-text">
-                Введите адрес счета участника в сети ethereum
+                Enter the address of a member in the network
             </div>        
 
 
@@ -111,7 +111,7 @@
                         <div flex justify-between>
                             <b>{{ members.names[i] }} </b>
                             <button @click="removeMember(i)"  class="btn btn-danger btn-sm">
-                                удалить
+                                delete
                             </button>
                         </div>
 

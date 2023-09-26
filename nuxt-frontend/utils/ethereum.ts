@@ -7,7 +7,7 @@ export const connection = {
             // @ts-ignore
             return new ethers.providers.Web3Provider(window.ethereum);
         } catch(e) {
-            alert("Похоже у вас не установлен Metamask. Пожалуйста скачайте и установите метамаск");
+            alert("Looks like you don't have Metamask. Please, install Metamask first");
             console.error("Couldn't connect to Metamask or get ethereum object");
         }
         return null;
