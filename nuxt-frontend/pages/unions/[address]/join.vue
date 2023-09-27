@@ -56,7 +56,7 @@
         <div v-if="!pending" v-auto-animate>
             <template v-for="request in data">
                 <div max-w-700px class="card">
-                    <div class="card-header flex justify-between items-center">
+                    <div class="card-header md:flex justify-between items-center">
                         <div>
                             <span tex-gray text-sm>Имя: </span>
                             <h5>{{ request.name }}</h5>

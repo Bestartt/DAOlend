@@ -18,9 +18,9 @@
 
 <template>
 
-    <div class="center px-12 py-6">
+    <div class="center px:2 md:px-12 py-6">
         <!-- header -->
-        <div class="min-w-430px flex justify-between">
+        <div class="w-full md:w-480px flex justify-between">
             <h4>Your join requests</h4>
             <button @click="clear()" class="btn btn-danger">
                 clear
@@ -35,8 +35,8 @@
             <error-alert></error-alert>     
         </b> 
         
-        <div v-auto-animate v-if="status == 'success'">
-            <div v-for="(union, i) in data" class="card card-body mt-3 max-w-700px">
+        <div v-auto-animate v-if="status == 'success'" max-w-90vw>
+            <div v-for="(union, i) in data" class="card card-body mt-3">
                 
                 <!-- card header -->
                 <div flex justify-between>

@@ -74,7 +74,7 @@
             <hr>
 
             <!-- options -->
-            <div class="row g-4 px-3 row-cols-1 row-cols-lg-3 text-center" v-if="info !== null && data !== null && !infoPending">
+            <div class="row g-4 px-3 row-cols-1 row-cols-lg-3 md:text-center" v-if="info !== null && data !== null && !infoPending">
                 <!-- credits -->
                 <div class="feature col block">
                     <h4>Credits</h4>

@@ -72,10 +72,10 @@
       <h3 mt-24>What is next?</h3>
     
       <div>
-        <div max-w-800px class="row gap-2">
+        <div max-w-800px class="row gap-2 mb-3">
 
           <!-- create own -->
-          <div class="col-5 card card-body">
+          <div class="col-12 col-md-5 card card-body">
             <p class="card-text">
               Want to create own osystem? Create your own organization in few clicks
             </p>
@@ -85,7 +85,7 @@
           </div>
     
           <!-- find -->
-          <div class="col-5 card card-body">
+          <div class="col-12 col-md-5 card card-body">
             <p class="card-text">
               Or you can join another organization. Just type organization address
             </p>

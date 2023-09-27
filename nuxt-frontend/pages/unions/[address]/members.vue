@@ -55,32 +55,35 @@
                 </div>            
             </div>
 
-            <table class="table table-hover table-bordered" v-else>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Deposit</th>
-                        <th>Percent of deposit</th>
-                        <th>Joined date</th>
-                    </tr>
-                </thead>
+            <div class="table-responsive" v-else>
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Deposit</th>
+                            <th>Percent of deposit</th>
+                            <th>Joined date</th>
+                        </tr>
+                    </thead>
 
-                <tbody>
+                    <tbody>
 
-                    <tr v-for="member in data">
-                        <td>
-                            <nuxt-link 
-                                class="dark-link"
-                                :to="`/unions/${address}/${member.member}/member-detail`">
-                                {{ member.name }}
-                            </nuxt-link>
-                        </td>
-                        <td>{{ member.contribution }}</td>
-                        <td>{{ getPercent(member.contribution) }}%</td>
-                        <td>{{ new Date(member.joinedAt.toNumber()).toLocaleString("ru") }}</td>
-                    </tr>
-                </tbody>
-            </table>              
+                        <tr v-for="member in data">
+                            <td>
+                                <nuxt-link 
+                                    class="dark-link"
+                                    :to="`/unions/${address}/${member.member}/member-detail`">
+                                    {{ member.name }}
+                                </nuxt-link>
+                            </td>
+                            <td>{{ member.contribution }}</td>
+                            <td>{{ getPercent(member.contribution) }}%</td>
+                            <td>{{ new Date(member.joinedAt.toNumber()).toLocaleString("ru") }}</td>
+                        </tr>
+                    </tbody>
+                </table>                 
+            </div>
+             
         </div>
          
     </div>

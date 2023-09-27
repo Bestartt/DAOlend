@@ -76,15 +76,15 @@
 
 <template>
 
-    <div px-16 class="center">
+    <div px-0 md:px-16 class="center">
 
         <full-loading :loading="joinLoading" />
 
-        <div class="card card-body mt-26 form" v-auto-animate>
+        <div class="card card-body mt-26 md:w-500px md:px-5" v-auto-animate>
             <h3>Find organization</h3>
 
             <!-- input -->
-            <div min-w-500px flex gap-3>
+            <div flex gap-3>
                 <input v-model="contract_address" class="form-control" placeholder="enter contract address"/>
                 <button class="btn btn-dark" @click="find()">find</button>
             </div>   
@@ -93,7 +93,7 @@
 
 
             <!-- results -->
-            <div v-if="data !== null"  class="card card-body mt-5 min-w-500px">
+            <div v-if="data !== null"  class="card card-body mt-5">
 
                 <h4>{{ data.name }}</h4>
                 <p>create: {{ data.ownerName }}</p>

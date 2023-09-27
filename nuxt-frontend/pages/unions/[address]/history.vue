@@ -96,7 +96,7 @@
                 
                 <div class="card-body row items-center">
 
-                    <div class="flex flex-col col-3">
+                    <div class="flex flex-col col-12 col-md-3">
                         <template v-if="transaction.methodName == 'createRepayment'">
                             <i>month: {{ transaction.argument.month }}</i>
                             <i>amount: {{ transaction.argument.amount }}</i>

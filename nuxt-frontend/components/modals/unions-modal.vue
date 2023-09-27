@@ -59,7 +59,7 @@
                 <div flex justify-end>
                     <button @click="$emit('onClose')"  class="btn btn-close"></button>
                 </div>
-                <div px-10 py-1 pb-10>
+                <div px-3 md:px-10 py-1 pb-10>
 
                     <spinner :pending="loading"></spinner>
 

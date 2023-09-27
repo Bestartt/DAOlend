@@ -42,10 +42,20 @@
 
     watchEffect(updateMenu);
 
+    let mobileSidenavBottom = ref("-315px");
+
+    function triggerSidenav() {
+        if (mobileSidenavBottom.value !== "0") {
+            mobileSidenavBottom.value = "0";
+        } else {
+            mobileSidenavBottom.value = "-315px";
+        }
+    }
+
 </script>
 
 <template>
-    <ul class="nav nav-pills sidenav card card-body mt-17" style="height: fit-content;">
+    <ul class="nav nav-pills sidenav card card-body mt-17 hidden md:block">
 
         <li v-for="item in menu" class="nav-item">
 
@@ -58,17 +68,51 @@
             
         </li>   
     </ul>
+
+    <div block md:hidden class="mobile-sidenav card card-body" :style="{bottom: mobileSidenavBottom}">
+        <button class="btn btn-dark mb-2 mt-0" @click="triggerSidenav()">menu</button>
+        <ul class="nav nav-pills block">
+
+            <li v-for="item in menu" class="nav-item">
+
+                <nuxt-link prefetch
+                    :to="item.route" 
+                    :class="('nav-link ' + item.class)"
+                >
+                {{ item.name }}
+                </nuxt-link>
+                
+            </li>   
+        </ul>
+    </div>
 </template>
+
 
 <style>
     .nav-pills .nav-link.active {
         background-color: #474b4f;
     }
 
-    .sidenav .nav-link {
+    .sidenav .nav-link, .nav-pills .nav-link {
         color: black;
         background-color: white;
         flex-direction: column;
+    }
+
+    .sidenav {
+        height: fit-content;
+        min-width: 220px;
+    }
+
+    .mobile-sidenav {
+        position: fixed;
+        left: 0;
+        z-index: 10;
+        width: 100vw;
+    }
+
+    .mobile-sidenav .btn {
+        box-shadow: none;
     }
 </style>
 

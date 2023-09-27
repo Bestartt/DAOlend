@@ -166,7 +166,7 @@ export async function createContract(
  */
 export async function checkRequestStatus(address: string, userAddress: string): Promise<boolean> {
     let contract = new Contract(address);
-    debugger;
+    
 
     try {
         let member = await contract.getMember(userAddress);

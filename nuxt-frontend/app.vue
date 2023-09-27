@@ -123,7 +123,13 @@
     .my-dialog-active {
         height: auto;
         z-index: 9999;
-        width: 500px;
+        width: 40vw;
+    }
+
+    @media screen and (max-width: 720px) {
+      .my-dialog-active {
+        width: 90vw;
+    }
     }
 
     .btn-close {

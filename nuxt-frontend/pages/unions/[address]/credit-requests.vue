@@ -28,7 +28,7 @@
         <!-- header -->
         <div flex justify-between>
             <h4>Loan applications</h4>
-            <div flex gap-2>
+            <div flex gap-2 max-h-40px>
                 <button class="btn btn-outline-dark" @click="modal.open()">
                     add
                 </button>
